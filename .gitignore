@@ -185,3 +185,5 @@ Desktop.ini
 *.exp
 *.VC.*
 apps/myApps/build-vierFarben-Desktop-Debug/qtc_Desktop_Debug/qtc_Desktop_Debug\.bg
+
+apps/tetris/build-Tetris-Desktop-Debug/qtc_Desktop_Debug/qtc_Desktop_Debug\.bg
