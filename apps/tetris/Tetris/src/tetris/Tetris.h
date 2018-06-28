@@ -20,9 +20,8 @@ namespace ofxModule {
         void stopModule();
         void draw();
 
-    protected:
-        
-    private:
-    };
+	protected:
+		void proceedModuleEvent(ModuleEvent &e);
+	};
     
 }

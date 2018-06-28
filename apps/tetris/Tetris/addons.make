@@ -4,3 +4,5 @@ ofxModule
 ofxOpenCv
 ofxOsc
 ofxOscEvent
+ofxBox2d
+ofxSerial

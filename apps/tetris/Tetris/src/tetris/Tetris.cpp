@@ -32,3 +32,10 @@ void Tetris::draw() {
 	ofDrawBitmapString(" I am the Tetris game", 300,300);
 }
 
+void Tetris::proceedModuleEvent(ModuleEvent &e)
+{
+	if(e.message["value"] != nullptr){
+		//do something
+	}
+}
+

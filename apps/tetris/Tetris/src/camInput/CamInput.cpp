@@ -42,3 +42,11 @@ void CamInput::draw() {
 
 }
 
+/// \brief sends message to connected modules
+void CamInput::sendPositions()
+{
+	ofJson out;
+	out["key"] = "value";
+	notifyEvent(out);
+}
+

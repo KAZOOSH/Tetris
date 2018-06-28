@@ -21,6 +21,7 @@ namespace ofxModule {
         void update();
         void stopModule();
         void draw();
+		void sendPositions();
 
     protected:
         

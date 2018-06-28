@@ -28,6 +28,8 @@ Project{
             'ofxOpenCv',
             'ofxOsc',
             'ofxOscEvent',
+            'ofxBox2d',
+            'ofxSerial',
         ]
 
         // This project is using addons.make to include the addons
