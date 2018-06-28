@@ -3,7 +3,8 @@
 #include "ofMain.h"
 #include "ModuleControl.h"
 #include "CamInput.h"
-#include "tetris/Tetris.h"
+#include "MouseInput.h"
+#include "Tetris.h"
 
 using namespace ofxModule;
 

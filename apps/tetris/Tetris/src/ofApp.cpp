@@ -11,9 +11,13 @@ void ofApp::setup(){
 	ofSetLogLevel(OF_LOG_NOTICE);
 	ofLogToConsole();
 
-	//init app
+	//init app and connect modules
 	if (moduleControl.getXmlLoader()->xmlHasModule("CamInput")) {
 		CamInput* mod = new CamInput();
+		moduleControl.getXmlLoader()->addModule(mod);
+	}
+	if (moduleControl.getXmlLoader()->xmlHasModule("MouseInput")) {
+		MouseInput* mod = new MouseInput();
 		moduleControl.getXmlLoader()->addModule(mod);
 	}
 	if (moduleControl.getXmlLoader()->xmlHasModule("Tetris")) {

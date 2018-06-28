@@ -1,8 +1,10 @@
+ofxBox2d
 ofxCv
 ofxGui
+ofxIO
 ofxModule
 ofxOpenCv
 ofxOsc
 ofxOscEvent
-ofxBox2d
+ofxPoco
 ofxSerial
