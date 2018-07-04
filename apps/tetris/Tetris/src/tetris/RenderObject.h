@@ -12,7 +12,7 @@ public:
 	virtual void render() = 0;
 	void setParameters(ofJson parameters);
 
-private:
+protected:
 	ofJson parameters;
 };
 
