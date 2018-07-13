@@ -1,6 +1,6 @@
 #pragma once
 #include "ofMain.h"
-#include "GameObjects.h"
+#include "GameObjectContainer.h"
 
 //renderer
 #include "RenderObject.h"
@@ -15,7 +15,7 @@
 class GameFactory
 {
 public:
-	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjects> objects, ofJson config);
-	static shared_ptr<BasicStone> makeBasicStone(shared_ptr<GameObjects> objects, ofJson config, shared_ptr<PolygonRenderer> renderer);
+	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, ofJson config = ofJson());
+	static shared_ptr<BasicStone> makeBasicStone(shared_ptr<GameObjectContainer> objects, ofJson config, shared_ptr<PolygonRenderer> renderer);
 };
 

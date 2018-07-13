@@ -5,14 +5,15 @@
 class RenderObject
 {
 public:
-	RenderObject();
-	RenderObject(ofJson parameters);
+	RenderObject(string name);
 	~RenderObject();
 	
 	virtual void render() = 0;
-	void setParameters(ofJson parameters);
+	string getName();
 
 protected:
-	ofJson parameters;
+
+private:
+	string name;
 };
 

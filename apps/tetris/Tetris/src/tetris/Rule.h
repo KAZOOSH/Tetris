@@ -5,15 +5,14 @@
 class Rule
 {
 public:
-	Rule();
-	Rule(ofJson parameters);
+	Rule(string name);
 	~Rule();
 
+	string getName();
 
-	virtual void applyRule() = 0;
-	void setParameters(ofJson parameters);
+	virtual void applyRules() = 0;
 
 private:
-	ofJson parameters;
+	string name;
 };
 

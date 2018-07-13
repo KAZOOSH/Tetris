@@ -5,7 +5,7 @@
 
 #include "ofMain.h"
 #include "ModuleDrawable.h"
-#include "GameObjects.h"
+#include "GameObject.h"
 #include "GameFactory.h"
 #include "GameControl.h"
 
@@ -29,7 +29,7 @@ namespace ofxModule {
 
 	private:
 		shared_ptr<GameControl> gameControl;
-		shared_ptr<GameObjects> objects;
+		shared_ptr<GameObjectContainer> objects;
 
 		ofParameter<int> width;
 		ofParameter<int> height;

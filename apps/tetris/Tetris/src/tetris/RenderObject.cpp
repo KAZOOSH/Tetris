@@ -2,21 +2,17 @@
 
 
 
-RenderObject::RenderObject()
+RenderObject::RenderObject(string name_)
 {
+	name = name_;
 }
-
-RenderObject::RenderObject(ofJson parameters_)
-{
-	parameters = parameters_;
-}
-
 
 RenderObject::~RenderObject()
 {
 }
 
-void RenderObject::setParameters(ofJson parameters_)
+string RenderObject::getName()
 {
-	parameters = parameters_;
+	return name;
 }
+

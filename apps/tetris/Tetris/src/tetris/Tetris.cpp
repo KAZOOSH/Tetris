@@ -13,7 +13,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	parameters.add(height.set("height", ofGetHeight()));
 	loadSettings();
 
-	objects = shared_ptr<GameObjects>(new GameObjects());
+	objects = shared_ptr<GameObjectContainer>(new GameObjectContainer());
 	objects->initPhysics();
 
 	//create GameControl
@@ -40,9 +40,7 @@ void Tetris::update() {
 //------------------------------------------------------------------
 void Tetris::draw() {
 	ofSetColor(255);
-	for (auto& renderObject : objects->renderObjects) {
-		renderObject->render();
-	}
+	gameControl->render();
 }
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)

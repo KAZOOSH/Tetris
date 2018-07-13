@@ -2,21 +2,19 @@
 
 
 
-Rule::Rule()
+Rule::Rule(string name_)
 {
+	name = name_;
 }
 
-Rule::Rule(ofJson parameters_)
-{
-	parameters = parameters_;
-}
 
 
 Rule::~Rule()
 {
 }
 
-void Rule::setParameters(ofJson parameters_)
+string Rule::getName()
 {
-	parameters = parameters_;
+	return name;
 }
+

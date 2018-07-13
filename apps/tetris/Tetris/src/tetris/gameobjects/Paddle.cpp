@@ -2,10 +2,11 @@
 
 
 
-Paddle::Paddle(ofJson params):RenderObject()
+Paddle::Paddle(string name):GameObject(name)
 {
-	body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
+	shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
 	body->enableGravity(false);
+	addBody(body);
 }
 
 Paddle::~Paddle()
@@ -14,11 +15,12 @@ Paddle::~Paddle()
 
 void Paddle::render()
 {
-	body->draw();
+	//static_pointer_cast<ofxBox2dRect>(body.begin())->draw();
+
 }
 
 void Paddle::setPosition(int x, int y, float rotation)
 {
-	body->setPosition(x, y);
-	body->setRotation(rotation);
+	//body->setPosition(x, y);
+	//body->setRotation(rotation);
 }
