@@ -5,6 +5,7 @@
 GameObject::GameObject(string name_)
 {
 	name = name_;
+	id = ofGetElapsedTimeMicros();
 }
 
 
@@ -12,12 +13,22 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::applyRules()
+string GameObject::getName()
+{
+	return name;
+}
+
+long GameObject::getId()
+{
+	return id;
+}
+
+/*void GameObject::applyRules()
 {
 	for (auto& rule : rules) {
 		rule->applyRules();
 	}
-}
+}*/
 
 void GameObject::render()
 {
@@ -56,6 +67,7 @@ void GameObject::removeRenderer(string rendererName)
 void GameObject::addBody(shared_ptr<ofxBox2dBaseShape> body_)
 {
 	body.push_back(body_);
+	onBodyAdded(body.back());
 }
 
 void GameObject::removeBody(shared_ptr<ofxBox2dBaseShape> body_)
@@ -74,7 +86,12 @@ void GameObject::removeBody(string bodyName)
 	}
 }
 
-void GameObject::addRule(shared_ptr<Rule> rule_)
+vector<shared_ptr<ofxBox2dBaseShape>> GameObject::getBody()
+{
+	return body;
+}
+
+/*void GameObject::addRule(shared_ptr<Rule> rule_)
 {
 	rules.push_back(rule_);
 }
@@ -93,4 +110,11 @@ void GameObject::removeRule(string ruleName)
 	if (position != rules.end()) {
 		rules.erase(position);
 	}
+}*/
+
+void GameObject::erase()
+{
+	renderer.clear();
+	body.clear();
+	ofNotifyEvent(eraseEvent, id);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "ofMain.h"
+#include "GameObject.h"
 
 /// \brief abstract definition of a rule
 class Rule
@@ -10,9 +11,14 @@ public:
 
 	string getName();
 
-	virtual void applyRules() = 0;
+	void addObject(shared_ptr<GameObject> obj);
+	void removeObject(shared_ptr<GameObject> obj);
+	void removeObject(long id);
 
-private:
+	virtual void applyRule() = 0;
+
+protected:
+	vector<shared_ptr<GameObject>> objects;
 	string name;
 };
 

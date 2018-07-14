@@ -11,7 +11,7 @@
 
 using namespace ofxModule;
 
-MouseInput::MouseInput(string moduleName):ModuleDrawable("MouseInput",moduleName){
+MouseInput::MouseInput(string moduleName):ModuleDrawable("MouseInput",moduleName,false){
 
 	loadSettings();
 

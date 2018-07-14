@@ -4,23 +4,31 @@
 
 Paddle::Paddle(string name):GameObject(name)
 {
-	shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
-	body->enableGravity(false);
-	addBody(body);
 }
 
 Paddle::~Paddle()
 {
 }
 
+///\brief for testing perpuses, we should finally use a renderer for this
 void Paddle::render()
 {
-	//static_pointer_cast<ofxBox2dRect>(body.begin())->draw();
+	static_pointer_cast<ofxBox2dRect>(body[0])->draw();
 
 }
 
 void Paddle::setPosition(int x, int y, float rotation)
 {
-	//body->setPosition(x, y);
-	//body->setRotation(rotation);
+	position.position = ofVec2f(x, y);
+	position.rotation = rotation;
+	position.hasChanged = true;
+}
+
+void Paddle::updatePosition()
+{
+	if (position.hasChanged) {
+		static_pointer_cast<ofxBox2dRect>(body[0])->setPosition(position.position.x, position.position.y);
+		static_pointer_cast<ofxBox2dRect>(body[0])->setRotation(position.rotation);
+		position.hasChanged = false;
+	}
 }

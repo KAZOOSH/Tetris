@@ -9,7 +9,6 @@
 #include "GameFactory.h"
 #include "GameControl.h"
 
-
 namespace ofxModule {
     
 	/// \brief the main game class
@@ -22,6 +21,9 @@ namespace ofxModule {
         void update();
         void stopModule();
         void draw();
+
+		void keyPressed(ofKeyEventArgs & key);
+		void keyReleased(ofKeyEventArgs & key) {};
 
 	protected:
 		void proceedModuleEvent(ModuleEvent &e);

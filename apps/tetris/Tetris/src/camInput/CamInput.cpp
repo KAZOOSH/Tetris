@@ -11,7 +11,7 @@
 
 using namespace ofxModule;
 
-CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName){
+CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false){
 
 	parameters.add(deviceId.set("deviceId",2));
 	parameters.add(width.set("width",320));

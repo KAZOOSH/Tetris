@@ -379,7 +379,7 @@ namespace ofxCv {
 		virtual ~Follower(){};
 		virtual void setup(const T& track) {}
 		virtual void update(const T& track) {}
-		virtual void kill() {
+		virtual void erase() {
 			dead = true;
 		}
 		
@@ -410,7 +410,7 @@ namespace ofxCv {
 				unsigned int curLabel = labels[i];
 				F& curFollower = followers[i];
 				if(!Tracker<T>::existsCurrent(curLabel)) {
-					curFollower.kill();
+					curFollower.erase();
 				} else {
 					curFollower.update(Tracker<T>::getCurrent(curLabel));
 				}

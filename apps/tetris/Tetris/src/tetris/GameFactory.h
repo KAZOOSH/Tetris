@@ -10,12 +10,18 @@
 #include "Paddle.h"
 #include "BasicStone.h"
 
+//rules
+#include "DeleteOutOfScreenRule.h"
 
 /// \brief creates all Game Elements
 class GameFactory
 {
 public:
-	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, ofJson config = ofJson());
-	static shared_ptr<BasicStone> makeBasicStone(shared_ptr<GameObjectContainer> objects, ofJson config, shared_ptr<PolygonRenderer> renderer);
+	//Gameobjects
+	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name);
+	static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
+
+	//rules
+	static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule();
 };
 

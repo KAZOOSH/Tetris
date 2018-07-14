@@ -1,22 +1,45 @@
 #include "GameFactory.h"
 
-shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objects, ofJson config)
+shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objects, string name)
 {
-	shared_ptr<Paddle> ret = shared_ptr<Paddle>(new Paddle(ofJson()));
-	ret->body->setup(objects->physics.getWorld(), 10, 10, 150, 10);
-	objects->addRenderObject(ret);
-	objects->paddles.push_back(ret);
+	shared_ptr<Paddle> ret = shared_ptr<Paddle>(new Paddle(name));
+	shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
+	body->enableGravity(false);
+	body->setup(objects->physics.getWorld(), 10, 10, 150, 10);
+	ret->addBody(body);
+
 	return ret;
 }
 
-shared_ptr<BasicStone> GameFactory::makeBasicStone(shared_ptr<GameObjectContainer> objects, ofJson config, shared_ptr<PolygonRenderer> renderer)
+shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContainer> objects)
 {
-	shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
-	body->setup(objects->physics.getWorld(), 10, 10, 150, 10);
+	//create the game object
+	shared_ptr<GameObject> basicStone = shared_ptr<GameObject>(new GameObject("BasicStone_" + ofGetElapsedTimeMillis()));
 
-	shared_ptr<BasicStone> ret = shared_ptr<BasicStone>(new BasicStone(body, renderer));
+	//create some points to form the shape
+	vector <ofDefaultVertexType> pts;
+	pts.push_back(ofDefaultVertexType(0, 0, 0));
+	pts.push_back(ofDefaultVertexType(100, 0, 0));
+	pts.push_back(ofDefaultVertexType(100, 100, 0));
+	pts.push_back(ofDefaultVertexType(0, 100, 0));
 
-	objects->addRenderObject(renderer);
-	//  add to game objects objects->paddles.push_back(ret);
-	return ret;
+	//create the physics object and add it to the physics world
+	auto body = shared_ptr<ofxBox2dPolygon>(new ofxBox2dPolygon);
+	body->addVertices(pts);
+	body->setPhysics(1.0, 0.3, 0.3);
+	body->triangulatePoly();
+	body->create(objects->physics.getWorld());
+	//add the body to the object
+	basicStone->addBody(body);
+
+	//create and add the renderer
+	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+	basicStone->addRenderer(renderer);
+
+	return basicStone;
+}
+
+shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule()
+{
+	return shared_ptr<DeleteOutOfScreenRule>(new DeleteOutOfScreenRule());
 }

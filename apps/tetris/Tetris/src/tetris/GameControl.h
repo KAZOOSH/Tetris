@@ -11,8 +11,15 @@ public:
 	void update();
 	void render();
 
+	void onEraseEvent(long& id);
+
+protected:
+	void removeErasedElements();
+
 private:
 	long tGameStarted;
 	shared_ptr<GameObjectContainer> objects;
+
+	vector<long> toDeleteIds;
 };
 
