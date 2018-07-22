@@ -7,7 +7,6 @@ shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objec
 	body->enableGravity(false);
 	body->setup(objects->physics.getWorld(), 10, 10, 150, 10);
 	ret->addBody(body);
-
 	return ret;
 }
 
@@ -29,6 +28,7 @@ shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContaine
 	body->setPhysics(1.0, 0.3, 0.3);
 	body->triangulatePoly();
 	body->create(objects->physics.getWorld());
+    
 	//add the body to the object
 	basicStone->addBody(body);
 
