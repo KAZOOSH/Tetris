@@ -21,7 +21,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 
 	//add paddles
 	objects->addPaddle( GameFactory::makePaddle(objects,"paddle1"));
-	objects->addPaddle(GameFactory::makePaddle(objects, "paddle2"));
+	objects->addPaddle( GameFactory::makePaddle(objects, "paddle2"));
 	
 	//add rules
 	objects->addRule(GameFactory::makeDeleteOutOfScreenRule());
@@ -57,6 +57,11 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
 		objects->addGameObject(stone);
 		objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
 	}
+    if (key.key == 'b') {
+        auto stone = GameFactory::makeTetrisStone(objects);
+        objects->addGameObject(stone);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+    }
 }
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)
