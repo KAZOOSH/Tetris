@@ -1,12 +1,13 @@
 #pragma once
 #include "ofMain.h"
 #include "GameObject.h"
+#include "GameParameters.h"
 
 /// \brief abstract definition of a rule
 class Rule
 {
 public:
-	Rule(string name);
+	Rule(string name, GameParameters* params);
 	~Rule();
 
 	string getName();
@@ -20,5 +21,6 @@ public:
 protected:
 	vector<shared_ptr<GameObject>> objects;
 	string name;
+	GameParameters* params;
 };
 

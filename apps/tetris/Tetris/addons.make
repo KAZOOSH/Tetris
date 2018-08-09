@@ -6,3 +6,4 @@ ofxOpenCv
 ofxOsc
 ofxOscEvent
 ofxPoco
+ofxQuadWarp

@@ -39,7 +39,7 @@ shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContaine
 	return basicStone;
 }
 
-shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule()
+shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule(GameParameters* params)
 {
-	return shared_ptr<DeleteOutOfScreenRule>(new DeleteOutOfScreenRule());
+	return shared_ptr<DeleteOutOfScreenRule>(new DeleteOutOfScreenRule(params));
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "ofMain.h"
 #include "GameObjectContainer.h"
+#include "GameParameters.h"
 
 //renderer
 #include "RenderObject.h"
@@ -22,6 +23,6 @@ public:
 	static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
 
 	//rules
-	static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule();
+	static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
 };
 

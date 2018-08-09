@@ -2,9 +2,10 @@
 
 
 
-Rule::Rule(string name_)
+Rule::Rule(string name_, GameParameters* params_)
 {
 	name = name_;
+	params = params_;
 }
 
 
