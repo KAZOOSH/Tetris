@@ -33,6 +33,10 @@ void GameControl::render()
 	for (auto& obj : objects->gameObjects) {
 		obj->render();
 	}
+
+	for (auto& rule : objects->rules) {
+		rule->draw();
+	}
 }
 
 void GameControl::onEraseEvent(long & id)

@@ -16,3 +16,8 @@ GameParameters::GameParameters()
 GameParameters::~GameParameters()
 {
 }
+
+void GameParameters::notifyGameEvent(ofJson eventText)
+{
+	ofNotifyEvent(gameEvent, eventText);
+}

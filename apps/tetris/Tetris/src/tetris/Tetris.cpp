@@ -29,7 +29,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	gameControl = shared_ptr<GameControl>(new GameControl(objects));
 
 	//add paddles
-	objects->addPaddle( GameFactory::makePaddle(objects,"paddle1"));
+	objects->addPaddle(GameFactory::makePaddle(objects,"paddle1"));
 	objects->addPaddle(GameFactory::makePaddle(objects, "paddle2"));
 	
 	//add rules

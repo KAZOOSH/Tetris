@@ -9,6 +9,7 @@
 #include "GameFactory.h"
 #include "GameControl.h"
 #include "GameParameters.h"
+#include "PlayerControl.h"
 
 #include "ofxQuadWarp.h"
 
@@ -36,6 +37,7 @@ namespace ofxModule {
 		shared_ptr<GameControl> gameControl;
 		shared_ptr<GameObjectContainer> objects;
 		GameParameters params;
+		PlayerControl playerControl;
 
 		ofxQuadWarp warperLeft;
 		ofxQuadWarp warperRight;

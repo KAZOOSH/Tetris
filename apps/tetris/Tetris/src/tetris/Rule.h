@@ -17,6 +17,7 @@ public:
 	void removeObject(long id);
 
 	virtual void applyRule() = 0;
+	virtual void draw() {}; //used to draw rule specific information
 
 protected:
 	vector<shared_ptr<GameObject>> objects;
