@@ -15,7 +15,7 @@ void GameObjectContainer::initPhysics()
 {
 	physics.init();
 	physics.setGravity(0, 10);
-	physics.createGround();
+	//physics.createGround();
 	physics.setFPS(60.0);
 }
 

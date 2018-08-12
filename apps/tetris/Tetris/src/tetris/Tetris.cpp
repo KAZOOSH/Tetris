@@ -20,25 +20,64 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	gameControl = shared_ptr<GameControl>(new GameControl(objects));
 
 	//add paddles
-	objects->addPaddle( GameFactory::makePaddle(objects,"paddle1"));
-	objects->addPaddle( GameFactory::makePaddle(objects, "paddle2"));
+    shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,"paddle1");
+    p1->setPosition(200,600);
+	objects->addPaddle(p1);
+    
+    shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,"paddle1");
+    p2->setPosition(600,600);
+	objects->addPaddle(p2);
 	
 	//add rules
 	objects->addRule(GameFactory::makeDeleteOutOfScreenRule());
-
 	ofRegisterKeyEvents(this);
 }
 //------------------------------------------------------------------
 void Tetris::stopModule() {
 
+}
 
+//------------------------------------------------------------------
+void Tetris::produceStoneByIntervall(UInt64 intervall) {
+
+    if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
+        lastStoneProductionTime = ofGetElapsedTimeMillis();
+        
+        // left Player
+        auto stone = GameFactory::makeTetrisStone(objects);
+        stone->setPlayer(1);
+        objects->addGameObject(stone);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+        
+        // right Player
+        auto stone2 = GameFactory::makeTetrisStone(objects);
+        stone2->setPosition(ofVec2f(600,0));
+        stone2->setPlayer(2);
+        objects->addGameObject(stone2);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
+        
+        
+    }
+}
+
+shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
+    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
+        if(objects->gameObjects[i]->getName() == "TetrisStone"){
+            int pId = objects->gameObjects[i]->getPlayerId();
+            if(pId == playerId) {
+                return objects->gameObjects[i];
+            }
+        };
+    }
 }
 
 
 //------------------------------------------------------------------
 void Tetris::update() {
 	gameControl->update();
+    produceStoneByIntervall(produceStoneIntervallInMillis);
 }
+
 
 
 //------------------------------------------------------------------
@@ -61,6 +100,23 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
         auto stone = GameFactory::makeTetrisStone(objects);
         objects->addGameObject(stone);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+    }
+    
+    if (key.key == '1') {
+        getLastCreatedStone(1)->makeHeavy();
+    }
+    if (key.key == '2') {
+        getLastCreatedStone(1)->makeBouncy();
+    }
+    
+    
+    // rotate last stone for player 1
+    if (key.key == 'r') {
+        getLastCreatedStone(1)->rotateRight();
+    }
+    
+    if (key.key == 'e') {
+        getLastCreatedStone(1)->rotateLeft();
     }
     
     // for testing

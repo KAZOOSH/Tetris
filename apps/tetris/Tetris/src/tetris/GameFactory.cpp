@@ -10,7 +10,7 @@ shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objec
 shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects)
 {
     shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone"));
-    stone->createBody(objects->physics.getWorld());
+    stone->addToWorld(objects->physics.getWorld());
     return stone;
 }
 
@@ -42,6 +42,7 @@ shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContaine
 
 	return basicStone;
 }
+
 
 shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule()
 {
