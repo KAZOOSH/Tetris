@@ -14,3 +14,7 @@ GameControlRule::~GameControlRule()
 void GameControlRule::applyRule()
 {
 }
+
+void GameControlRule::draw()
+{
+}
