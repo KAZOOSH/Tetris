@@ -32,9 +32,16 @@ private:
 	PaddlePosition position;
     ofxBox2dCircle anchorLeft;
     ofxBox2dCircle anchorRight;
+    ofxBox2dCircle anchorLeftStatic;
+    ofxBox2dCircle anchorRightStatic;
+    ofxBox2dCircle anchorBottom;
+    
     ofxBox2dJoint anchorJointLeft;
     ofxBox2dJoint anchorJointRight;
-    
+    ofxBox2dJoint anchorJointLeftStatic;
+    ofxBox2dJoint anchorJointRightStatic;
+    ofxBox2dJoint anchorJointBottom;
+ 
     int paddleWidth = 250;
     int paddleHeight = 100;
     float frequencyHz = 1.0f;
