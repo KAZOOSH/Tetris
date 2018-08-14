@@ -1,4 +1,10 @@
 {
 	"width":2080,
-	"height":1920
+	"height":1920,
+	"paddleArea":[900,500],
+	"serial":{
+		"buzzerId":"",
+		"player1Button":"",
+		"player2Button":""
+	}
 }

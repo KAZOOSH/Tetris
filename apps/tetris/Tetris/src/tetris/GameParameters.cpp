@@ -21,3 +21,8 @@ void GameParameters::notifyGameEvent(ofJson eventText)
 {
 	ofNotifyEvent(gameEvent, eventText);
 }
+
+void GameParameters::notifyControlEvent(ofJson eventText)
+{
+	ofNotifyEvent(controlEvent, eventText);
+}

@@ -12,6 +12,8 @@ public:
 	void applyRule();
 	void draw();
 
+	void onGamestateChange(ofJson& message);
+
 private:
 	string gamestate = "idle";
 };

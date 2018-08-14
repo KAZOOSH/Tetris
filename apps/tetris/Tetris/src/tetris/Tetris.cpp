@@ -31,6 +31,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	//add paddles
 	objects->addPaddle(GameFactory::makePaddle(objects,"paddle1"));
 	objects->addPaddle(GameFactory::makePaddle(objects, "paddle2"));
+	playerControl.setup(objects->paddles, &params);
 	
 	//add rules
 	objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
@@ -95,16 +96,9 @@ void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
 	//set paddle position
 	if(e.message["function"] != nullptr && e.message["function"] == "paddlePosition"){
-		for (size_t i = 0; i < 2; ++i) {
-			objects->paddles[i]->setPosition(
-				ofMap( e.message["paddle"][i]["x"].get<float>(),0.0,1.0,0, params.params["width"]),
-				ofMap(e.message["paddle"][i]["y"].get<float>(), 0.0, 1.0, 0, params.params["height"]),
-				e.message["paddle"][i]["rot"]);
-		}
-	
+		playerControl.onPaddleMove(e.message);
 	}
 
-	
 }
 
 void ofxModule::Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)

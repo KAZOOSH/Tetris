@@ -18,3 +18,7 @@ void GameControlRule::applyRule()
 void GameControlRule::draw()
 {
 }
+
+void GameControlRule::onGamestateChange(ofJson & message)
+{
+}
