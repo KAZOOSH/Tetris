@@ -90,6 +90,11 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
 		warperLeft.save("_Tetris/warper_left.json");
 		warperRight.save("_Tetris/warper_right.json");
 	}
+    if (key.key == 'b') {
+        auto stone = GameFactory::makeTetrisStone(objects);
+        objects->addGameObject(stone);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+    }
 }
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)

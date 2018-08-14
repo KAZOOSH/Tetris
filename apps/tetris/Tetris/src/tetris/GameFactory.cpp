@@ -11,6 +11,13 @@ shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objec
 	return ret;
 }
 
+shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects)
+{
+    shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone"));
+    stone->createBody(objects);
+    return stone;
+}
+
 shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContainer> objects)
 {
 	//create the game object
