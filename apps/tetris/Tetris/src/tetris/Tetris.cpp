@@ -95,6 +95,38 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
         objects->addGameObject(stone);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
     }
+    
+    // for testing
+    if (key.key == 'q') {
+        for (size_t i = 0; i < 2; ++i) {
+            objects->paddles[i]->setRotationDiff(-6);
+        }
+    }
+    if (key.key == 'w') {
+        for (size_t i = 0; i < 2; ++i) {
+            objects->paddles[i]->setRotationDiff(6);
+        }
+    }
+    if (key.key == 'i') {
+        for (size_t i = 0; i < 2; ++i) {
+            objects->paddles[i]->setDampingDiff(0.1f);
+        }
+    }
+    if (key.key == 'k') {
+        for (size_t i = 0; i < 2; ++i) {
+            objects->paddles[i]->setDampingDiff(-0.1f);
+        }
+    }
+    if (key.key == 'o') {
+        for (size_t i = 0; i < 2; ++i) {
+            objects->paddles[i]->setFrequencyDiff(0.1f);
+        }
+    }
+    if (key.key == 'l') {
+        for (size_t i = 0; i < 2; ++i) {
+            objects->paddles[i]->setFrequencyDiff(-0.1f);
+        }
+    }
 }
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)
