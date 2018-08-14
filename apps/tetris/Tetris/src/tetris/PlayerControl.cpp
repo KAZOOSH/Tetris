@@ -46,8 +46,7 @@ void PlayerControl::onPaddleMove(ofJson & json)
 		
 		paddles[i]->setPosition(
 			ofMap(json["paddle"][i]["x"].get<float>(), 0.0, 1.0, x_min, x_max),
-			ofMap(json["paddle"][i]["y"].get<float>(), 0.0, 1.0, y_min, y_max),
-			json["paddle"][i]["rot"]);
+			ofMap(json["paddle"][i]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
 
 		out["paddle" + ofToString(i)] = {
 			{"x" , pos.x},
