@@ -61,7 +61,7 @@ using namespace ofxModule;
 		ofParameter<int> blurValue;
 
 		shared_ptr<ColinearPoints> colinearPoints;
-		vector<Point> foundPoints;
+        vector<cv::Point> foundPoints;
 		ofParameter<double> slopeError;
 		ofParameter<double> interceptError;
 

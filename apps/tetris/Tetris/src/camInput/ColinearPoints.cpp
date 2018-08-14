@@ -4,7 +4,7 @@ ColinearPoints::ColinearPoints()
 {
 }
 
-void ColinearPoints::addPoint(Point point) {
+void ColinearPoints::addPoint(cv::Point point) {
 	points.push_back(point);
 }
 
@@ -24,14 +24,14 @@ void ColinearPoints::setInterceptPrecision(double intercept) {
 	precisionIntercept = intercept;
 }
 
-vector<vector<Point>> ColinearPoints::computeColinearPoints()
+vector<vector<cv::Point>> ColinearPoints::computeColinearPoints()
 {
 	vector<Edge> edgeList;
-	vector <Point> tempPoints;
+	vector <cv::Point> tempPoints;
 	tempPoints = points;
 
-	for each(Point a in points) {
-		for each(Point b in tempPoints) {
+    for(cv::Point& a : points) {
+        for(cv::Point& b : tempPoints) {
 			if (a != b) edgeList.push_back(Edge(a, b, precisionSlope, precisionIntercept));
 		}
 		tempPoints.erase(tempPoints.begin());
@@ -44,7 +44,7 @@ vector<vector<Point>> ColinearPoints::computeColinearPoints()
 	// Find collinear points
 	//O(K), where K is N^2 elements
 	vector<Edge> matchedEdges;
-	vector<vector<Point>> answerList;
+	vector<vector<cv::Point>> answerList;
 	// Don't bother looking for groups of collinear points if there aren't
 	// at least 3 edges. This check also makes sure there are enough
 	// items in the list to avoid accessing an element that doesn't exist.
@@ -88,7 +88,7 @@ vector<vector<Point>> ColinearPoints::computeColinearPoints()
 	}
 	else {
 		int n = 1;
-		for each (vector<Point> v in answerList) {
+        for(vector<cv::Point>& v : answerList) {
 			cout << "Line " << n << " has "
 				<< v.size() << " collinear points: ";
 			int p = 0;
@@ -111,16 +111,16 @@ vector<vector<Point>> ColinearPoints::computeColinearPoints()
 	return answerList;
 }
 
-vector<Point> ColinearPoints::edgesToPoints(vector<Edge> edgeList)
+vector<cv::Point> ColinearPoints::edgesToPoints(vector<Edge> edgeList)
 {
-	vector<Point> answers;
-	for each (Edge e in edgeList) {
+	vector<cv::Point> answers;
+    for(Edge& e : edgeList) {
 		bool oneInList(false);
 		bool twoInList(false);
 		if (answers.empty()) {
 			answers.push_back(e.get1());
 		}
-		for each (Point p in answers) {
+        for(cv::Point& p : answers) {
 			if (p == e.get1()) {
 				oneInList = true;
 			}

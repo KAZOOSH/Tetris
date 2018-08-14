@@ -98,9 +98,9 @@ void CamInput::update() {
 
 		RectTracker& tracker = contourFinder.getTracker();
 		double d = 0.04;
-		vector<Point> approx;
+        vector<cv::Point> approx;
 		for (int i = 0; i < contourFinder.size(); i++) {
-			vector<Point> contour = contourFinder.getContour(i);
+			vector<cv::Point> contour = contourFinder.getContour(i);
 			double peri = arcLength(contour, true);
 			approxPolyDP(contour, approx, d * peri, true);
 			if (approx.size() > 3 && approx.size() < 6) {
@@ -110,7 +110,7 @@ void CamInput::update() {
 
 		cout << colinearPoints->getPointListSize();
 		if (colinearPoints->getPointListSize() >= 3) {
-			vector<vector<Point>> computedPointLists = colinearPoints->computeColinearPoints();
+			vector<vector<cv::Point>> computedPointLists = colinearPoints->computeColinearPoints();
 			if (computedPointLists.size() > 0) {
 				// take first List of 3 Items
 				foundPoints = computedPointLists[0];

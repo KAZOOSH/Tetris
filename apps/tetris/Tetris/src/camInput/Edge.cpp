@@ -4,13 +4,13 @@
 #include "Edge.h"
 
 Edge::Edge() {
-	_one = Point();
-	_two = Point();
+	_one = cv::Point();
+	_two = cv::Point();
 	_slope = 0.0;
 	_intercept = 0.0;
 }
 
-Edge::Edge(Point one, Point two) {
+Edge::Edge(cv::Point one, cv::Point two) {
 	_one = one;
 	_two = two;
 	setSlope();
@@ -18,7 +18,7 @@ Edge::Edge(Point one, Point two) {
 	_intercept = one.y - (_slope * one.x);
 }
 
-Edge::Edge(Point one, Point two, double slope, double intercept) {
+Edge::Edge(cv::Point one, cv::Point two, double slope, double intercept) {
 	_one = one;
 	_two = two;
 	setSlope();
@@ -29,11 +29,11 @@ Edge::Edge(Point one, Point two, double slope, double intercept) {
 }
 
 
-void Edge::set1(Point one) {
+void Edge::set1(cv::Point one) {
 	_one = one;
 }
 
-void Edge::set2(Point two) {
+void Edge::set2(cv::Point two) {
 	_two = two;
 }
 
@@ -53,11 +53,11 @@ void Edge::setSlope() {
 	_slope = slope;
 }
 
-Point Edge::get1() const {
+cv::Point Edge::get1() const {
 	return _one;
 }
 
-Point Edge::get2() const {
+cv::Point Edge::get2() const {
 	return _two;
 }
 

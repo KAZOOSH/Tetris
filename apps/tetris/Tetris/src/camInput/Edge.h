@@ -17,20 +17,20 @@ using std::ostream;
 class Edge {
 public:
 	Edge();
-	Edge(Point one, Point two);
-	Edge(Point one, Point two, double slope, double intercept);
-	void set1(Point one);
-	void set2(Point two);
+	Edge(cv::Point one, cv::Point two);
+	Edge(cv::Point one, cv::Point two, double slope, double intercept);
+	void set1(cv::Point one);
+	void set2(cv::Point two);
 	void setSlope();
-	Point get1() const;
-	Point get2() const;
+	cv::Point get1() const;
+	cv::Point get2() const;
 	double getSlope() const;
 	double getIntercept() const;
 	bool operator== (const Edge& rhs);
 
 private:
-	Point _one;
-	Point _two;
+	cv::Point _one;
+	cv::Point _two;
 	double _slope;
 	double _intercept; // "b" value
 	double _precisionSlope = 0.05; // Acceptable error in slope calculations

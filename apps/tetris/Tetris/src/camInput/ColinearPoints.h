@@ -14,8 +14,8 @@ class ColinearPoints
 		ColinearPoints();
 		~ColinearPoints();
 
-		vector<vector<Point>> computeColinearPoints();
-		void addPoint(Point point);
+    vector<vector<cv::Point>> computeColinearPoints();
+    void addPoint(cv::Point point);
 		void clearPointList();
 		int getPointListSize();
 
@@ -23,8 +23,8 @@ class ColinearPoints
 		void setInterceptPrecision(double intercept);
 
 	private:
-		vector<Point> edgesToPoints(vector<Edge> edgeList);
-		vector<Point> points;
+    vector<cv::Point> edgesToPoints(vector<Edge> edgeList);
+    vector<cv::Point> points;
 		double precisionSlope = 0.05; // Acceptable error in slope calculations
 		double precisionIntercept = 10; // Acceptable error in intercept calculations
 
