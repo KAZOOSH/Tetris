@@ -15,7 +15,7 @@ void GameObjectContainer::initPhysics()
 {
 	physics.init();
 	physics.setGravity(0, 10);
-	physics.createGround();
+	//physics.createGround();
 	physics.setFPS(60.0);
 }
 
@@ -26,9 +26,9 @@ void GameObjectContainer::addGameObject(shared_ptr<GameObject> object)
 
 void GameObjectContainer::addPaddle(shared_ptr<Paddle> object)
 {
-	paddles.push_back(object);
-	gameObjects.push_back(object);
-	
+    paddles.push_back(object);
+    gameObjects.push_back(object);
+
 }
 
 void GameObjectContainer::addRule(shared_ptr<Rule> rule)

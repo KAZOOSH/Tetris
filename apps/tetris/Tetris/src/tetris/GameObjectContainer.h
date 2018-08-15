@@ -21,7 +21,6 @@ public:
 	void addRule(shared_ptr<Rule> rule);
 
 	shared_ptr<Rule> getRule(string name);
-
 	vector<shared_ptr<Paddle>> paddles;
 
 	//all objects

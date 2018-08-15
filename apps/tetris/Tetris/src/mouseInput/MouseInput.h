@@ -22,9 +22,14 @@ namespace ofxModule {
         void stopModule();
         void draw();
 
+		void keyPressed(ofKeyEventArgs & key);
+		void keyReleased(ofKeyEventArgs & key) {};
+
     protected:
         
     private:
+		int y0 = 0;
+		int y1 = 0;
 
     };
     

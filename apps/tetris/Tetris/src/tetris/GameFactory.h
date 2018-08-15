@@ -9,7 +9,7 @@
 
 //game objects
 #include "Paddle.h"
-#include "BasicStone.h"
+#include "TetrisStone.h"
 
 //rules
 #include "DeleteOutOfScreenRule.h"
@@ -22,7 +22,9 @@ public:
 	//Gameobjects
 	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name);
 	static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
-
+    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameObjectContainer> objects);
+    
+    
 	//rules
 	static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
 	static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params);

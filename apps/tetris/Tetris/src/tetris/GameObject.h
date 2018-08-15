@@ -34,7 +34,14 @@ public:
 	void erase();
 
 	virtual void onBodyAdded(shared_ptr<ofxBox2dBaseShape> body) {};
-
+    
+    // used in Tetrisstones
+    virtual int getPlayerId() { return (0); };
+    virtual void rotateRight() {};
+    virtual void rotateLeft() {};
+    virtual void makeHeavy() {};
+    virtual void makeBouncy() {};
+    virtual void makeLarge() {};
 	ofEvent<long> eraseEvent;
 protected:
 
@@ -42,7 +49,7 @@ protected:
 	vector<shared_ptr<ofxBox2dBaseShape>> body;
 	//vector<shared_ptr<Rule>> rules;
 
-	string name;
+	string name ="";
 	long id;
 };
 

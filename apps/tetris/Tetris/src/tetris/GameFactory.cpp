@@ -2,13 +2,16 @@
 
 shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objects, string name)
 {
-	shared_ptr<Paddle> ret = shared_ptr<Paddle>(new Paddle(name));
-	shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
-	body->enableGravity(false);
-	body->setup(objects->physics.getWorld(), 10, 10, 150, 10);
-	ret->addBody(body);
+	shared_ptr<Paddle> paddle = shared_ptr<Paddle>(new Paddle(name));
+    paddle->createBody(objects->physics.getWorld());
+    return paddle;
+}
 
-	return ret;
+shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects)
+{
+    shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone"));
+    stone->addToWorld(objects->physics.getWorld());
+    return stone;
 }
 
 shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContainer> objects)

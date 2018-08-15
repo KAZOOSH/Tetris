@@ -15,6 +15,7 @@ MouseInput::MouseInput(string moduleName):ModuleDrawable("MouseInput",moduleName
 
 	loadSettings();
 
+	ofRegisterKeyEvents(this);
 	startThread();
 }
 //------------------------------------------------------------------
@@ -31,17 +32,24 @@ void MouseInput::update() {
 	ofJson send;
 	send["function"] = "paddlePosition";
 	send["paddle"] = 
-	{{
+	{ {{
 			{"x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0)},
-			{"y", ofMap(ofGetMouseY(),0,ofGetHeight(),0.0,1.0)},
-			{ "rot", 0.0f }
+			{"y", ofMap(ofGetMouseY()+y0,0,ofGetHeight(),0.0,1.0)}
 		},{
-			{ "x", ofMap(ofGetMouseX()+300,0,ofGetWidth(),0.0,1.0) },
-			{ "y", ofMap(ofGetMouseY(),0,ofGetHeight(),0.0,1.0) },
-			{ "rot", 0.2f }
+			{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
+			{ "y", ofMap(ofGetMouseY()+y1,0,ofGetHeight(),0.0,1.0) }
 		}
-		
+		},{ {
+				{ "x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0) },
+				{ "y", ofMap(ofGetMouseY()+y0,0,ofGetHeight(),0.0,1.0) }
+			},{
+				{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
+				{ "y", ofMap(ofGetMouseY()+y1,0,ofGetHeight(),0.0,1.0) }
+			}
+	}
+
 	};
+
 	notifyEvent(send);
 }
 
@@ -49,5 +57,18 @@ void MouseInput::update() {
 //------------------------------------------------------------------
 void MouseInput::draw() {
 
+}
+
+void ofxModule::MouseInput::keyPressed(ofKeyEventArgs & key)
+{
+	if (key.key == 'q') {
+		y0 += 20;
+		y1 -= 20;
+	}
+
+	if (key.key == 'w') {
+		y0 -= 20;
+		y1 += 20;
+	}
 }
 
