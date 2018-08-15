@@ -31,15 +31,24 @@ void MouseInput::update() {
 	ofJson send;
 	send["function"] = "paddlePosition";
 	send["paddle"] = 
-	{{
+	{ {{
 			{"x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0)},
 			{"y", ofMap(ofGetMouseY(),0,ofGetHeight(),0.0,1.0)}
 		},{
-			{ "x", ofMap(ofGetMouseX()+500,0,ofGetWidth(),0.0,1.0) },
+			{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
 			{ "y", ofMap(ofGetMouseY(),0,ofGetHeight(),0.0,1.0) }
 		}
-		
+		},{ {
+				{ "x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0) },
+				{ "y", ofMap(ofGetMouseY(),0,ofGetHeight(),0.0,1.0) }
+			},{
+				{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
+				{ "y", ofMap(ofGetMouseY(),0,ofGetHeight(),0.0,1.0) }
+			}
+	}
+
 	};
+
 	notifyEvent(send);
 }
 

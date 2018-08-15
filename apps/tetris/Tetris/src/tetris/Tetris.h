@@ -26,7 +26,7 @@ namespace ofxModule {
         void stopModule();
         void draw();
 
-        void produceStoneByIntervall(UInt64 intervall);
+        void produceStoneByIntervall(uint64 intervall);
         
 		void keyPressed(ofKeyEventArgs & key);
 		void keyReleased(ofKeyEventArgs & key) {};
@@ -49,10 +49,10 @@ namespace ofxModule {
 		ofParameter<int> width;
 		ofParameter<int> height;
         
-        UInt64 lastStoneProductionTime = ofGetElapsedTimeMillis();
-        UInt64 produceStoneIntervallInMillis = 2000;
-        Boolean makeHeavyStone = false;
-        Boolean makeBouncyStone = false;
+        uint64 lastStoneProductionTime = ofGetElapsedTimeMillis();
+		uint64 produceStoneIntervallInMillis = 2000;
+        bool makeHeavyStone = false;
+		bool makeBouncyStone = false;
 	};
     
 }

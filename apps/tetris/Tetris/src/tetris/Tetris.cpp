@@ -30,11 +30,11 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 
 	//add paddles
     shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,"paddle1");
-    p1->setPosition(200,600);
+    //p1->setPosition(200,600);
 	objects->addPaddle(p1);
     
     shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,"paddle1");
-    p2->setPosition(600,600);
+   // p2->setPosition(600,600);
 	objects->addPaddle(p2);
 
 	playerControl.setup(objects->paddles, &params);
@@ -50,7 +50,7 @@ void Tetris::stopModule() {
 }
 
 //------------------------------------------------------------------
-void Tetris::produceStoneByIntervall(UInt64 intervall) {
+void Tetris::produceStoneByIntervall(uint64 intervall) {
 
     if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
         lastStoneProductionTime = ofGetElapsedTimeMillis();
@@ -155,7 +155,7 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
     }
     
     // for testing
-    if (key.key == 'q') {
+    /*if (key.key == 'q') {
         for (size_t i = 0; i < 2; ++i) {
             objects->paddles[i]->setRotationDiff(-6);
         }
@@ -164,7 +164,7 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
         for (size_t i = 0; i < 2; ++i) {
             objects->paddles[i]->setRotationDiff(6);
         }
-    }
+    }*/
     if (key.key == 'i') {
         for (size_t i = 0; i < 2; ++i) {
             objects->paddles[i]->setDampingDiff(0.1f);

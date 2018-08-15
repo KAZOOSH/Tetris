@@ -40,18 +40,25 @@ void PlayerControl::onPaddleMove(ofJson & json)
 		float y_max = h;
 
 		//map input to movement area
-		ofVec2f pos = ofVec2f(ofMap(json["paddle"][i]["x"].get<float>(), 0.0,1.0,x_min,x_max),
-			ofMap(json["paddle"][i]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
-		float rot = json["paddle"][i]["rot"];
+		ofVec2f pos1 = ofVec2f(ofMap(json["paddle"][i][0]["x"].get<float>(), 0.0,1.0,x_min,x_max),
+			ofMap(json["paddle"][i][0]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
 		
-		paddles[i]->setPosition(
-			ofMap(json["paddle"][i]["x"].get<float>(), 0.0, 1.0, x_min, x_max),
-			ofMap(json["paddle"][i]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
+		ofVec2f pos2 = ofVec2f(ofMap(json["paddle"][i][1]["x"].get<float>(), 0.0, 1.0, x_min, x_max),
+			ofMap(json["paddle"][i][1]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
 
+		paddles[i]->setAnchorPosition(pos1, pos2);
+			
 		out["paddle" + ofToString(i)] = {
-			{"x" , pos.x},
-			{"y", pos.y},
-			{"rot" , rot}
+			{{
+				{ "x" , pos1.x },
+				{ "y", pos1.y }
+			},
+				{
+					{ "x" , pos2.x },
+					{ "y", pos2.y }
+				}
+			}
+			
 		};
 	}
 	params->notifyControlEvent(out);

@@ -28,8 +28,8 @@ private:
     int playerId;
     shared_ptr<ofxBox2dPolygon> body;
     vector<string> stones;
-    Boolean isBouncy;
-    Boolean isHeavy;
-    Boolean isLarge;
+    bool isBouncy;
+	bool isHeavy;
+	bool isLarge;
 };
 

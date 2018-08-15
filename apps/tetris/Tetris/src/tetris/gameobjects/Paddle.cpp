@@ -88,31 +88,38 @@ void Paddle::setFrequencyDiff(float diffFrequency)
     anchorJointBottom.setFrequency(frequencyHz);
 }
 
-void Paddle::setPosition(int x, int y)
+void Paddle::setAnchorPosition(ofVec2f anchorLeft, ofVec2f anchorRight)
 {
-	position.position = ofVec2f(x, y);
-	position.hasChanged = true;
+
+	anchorLeftPosition = anchorLeft;
+	anchorRightPosition = anchorRight;
+
+	position = anchorLeft + 0.5*(anchorLeft - anchorRight);
+	positionChanged = true;
+
 }
 
-void Paddle::setRotation(float rotation)
-{
-    position.rotation = rotation;
-}
+//void Paddle::setRotation(float rotation)
+//{
+//    position.rotation = rotation;
+//}
 
-void Paddle::setRotationDiff(float rotDiff){
-    position.rotation +=rotDiff;
-}
+//void Paddle::setRotationDiff(float rotDiff){
+//    position.rotation +=rotDiff;
+//}
 
 void Paddle::updatePosition()
 {
-    
-    anchorLeft.setPosition(position.position.x, position.position.y - position.rotation);
-    anchorRight.setPosition(position.position.x + 250, position.position.y + position.rotation);
-    
-    anchorLeftStatic.setPosition(position.position.x - 100, position.position.y);
-    anchorRightStatic.setPosition(position.position.x + 350, position.position.y);
-    
-    anchorBottom.setPosition(position.position.x + 125, position.position.y+200);
+	if (positionChanged) {
+		anchorLeft.setPosition(anchorLeftPosition.x, anchorLeftPosition.y);
+		anchorRight.setPosition(anchorRightPosition.x + 250, anchorRightPosition.y);
+
+		anchorLeftStatic.setPosition(position.x - 100, position.y);
+		anchorRightStatic.setPosition(position.x + 350, position.y);
+
+		anchorBottom.setPosition(position.x + 125, position.y + 200);
+	}
+
 
 //    anchorWithoutFixture->SetTransform(b2Vec2(b2dNum(position.position.x), b2dNum(position.position.y)), 0);
 //    anchorWithoutFixture->SetLinearVelocity(b2Vec2(0, 0)); // maybe bring this back...
