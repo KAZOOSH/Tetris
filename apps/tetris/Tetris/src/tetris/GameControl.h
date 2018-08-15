@@ -13,6 +13,9 @@ public:
 
 	void onEraseEvent(long& id);
 
+
+	void reloadRenderer();
+
 protected:
 	void removeErasedElements();
 

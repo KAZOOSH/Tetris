@@ -23,9 +23,17 @@ shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContaine
 	pts.push_back(ofDefaultVertexType(100, 100, 0));
 	pts.push_back(ofDefaultVertexType(0, 100, 0));
 
+
+	vector <ofVec2f> texCoords;
+	texCoords.push_back(ofVec2f(0, 0));
+	texCoords.push_back(ofVec2f(1, 0));
+	texCoords.push_back(ofVec2f(1, 1));
+	texCoords.push_back(ofVec2f(0, 1));
+
 	//create the physics object and add it to the physics world
 	auto body = shared_ptr<ofxBox2dPolygon>(new ofxBox2dPolygon);
 	body->addVertices(pts);
+	
 	body->setPhysics(1.0, 0.3, 0.3);
 	body->triangulatePoly();
 	body->create(objects->physics.getWorld());
@@ -42,4 +50,9 @@ shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameObjectContaine
 shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule(GameParameters* params)
 {
 	return shared_ptr<DeleteOutOfScreenRule>(new DeleteOutOfScreenRule(params));
+}
+
+shared_ptr<GameControlRule> GameFactory::makeGameControlRule(GameParameters * params)
+{
+	return shared_ptr<GameControlRule>(new GameControlRule(params));
 }

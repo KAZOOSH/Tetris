@@ -17,6 +17,6 @@ public:
 	ofJson params;
 
 	//params relevant for current game
-	//string gamestate = "idle";
+	//ofParameter<string> gamestate = "idle";
 };
 

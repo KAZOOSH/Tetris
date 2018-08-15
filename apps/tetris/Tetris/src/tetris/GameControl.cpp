@@ -44,6 +44,13 @@ void GameControl::onEraseEvent(long & id)
 	toDeleteIds.push_back(id);
 }
 
+void GameControl::reloadRenderer()
+{
+	for (auto& obj : objects->gameObjects) {
+		obj->reloadRenderer();
+	}
+}
+
 void GameControl::removeErasedElements()
 {
 	for (auto& id : toDeleteIds) {

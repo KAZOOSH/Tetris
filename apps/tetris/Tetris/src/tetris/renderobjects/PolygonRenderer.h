@@ -9,8 +9,11 @@ public:
 	~PolygonRenderer();
 
 	virtual void render();
+	void reload();
 
 protected:
 	shared_ptr<ofxBox2dPolygon> renderObject;
+
+	ofShader shader;
 };
 

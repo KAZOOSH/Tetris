@@ -13,6 +13,7 @@
 
 //rules
 #include "DeleteOutOfScreenRule.h"
+#include "GameControlRule.h"
 
 /// \brief creates all Game Elements
 class GameFactory
@@ -24,5 +25,6 @@ public:
 
 	//rules
 	static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
+	static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params);
 };
 

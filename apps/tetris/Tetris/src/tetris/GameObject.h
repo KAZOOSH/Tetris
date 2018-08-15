@@ -19,6 +19,7 @@ public:
 	void addRenderer(shared_ptr<RenderObject> renderer);
 	void removeRenderer(shared_ptr<RenderObject> renderer);
 	void removeRenderer(string rendererName);
+	void reloadRenderer();
 
 	void addBody(shared_ptr<ofxBox2dBaseShape> body);
 	void removeBody(shared_ptr<ofxBox2dBaseShape> body);

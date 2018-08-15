@@ -64,6 +64,13 @@ void GameObject::removeRenderer(string rendererName)
 	}*/
 }
 
+void GameObject::reloadRenderer()
+{
+	for (auto& r : renderer) {
+		r->reload();
+	}
+}
+
 void GameObject::addBody(shared_ptr<ofxBox2dBaseShape> body_)
 {
 	body.push_back(body_);

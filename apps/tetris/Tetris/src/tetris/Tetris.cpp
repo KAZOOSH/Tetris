@@ -35,6 +35,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	
 	//add rules
 	objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
+	objects->addRule(GameFactory::makeGameControlRule(&params));
 
 	ofRegisterKeyEvents(this);
 }
@@ -89,6 +90,10 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
 	if (key.key == 's') {
 		warperLeft.save("_Tetris/warper_left.json");
 		warperRight.save("_Tetris/warper_right.json");
+	}
+
+	if (key.key == 'r') {
+		gameControl->reloadRenderer();
 	}
 }
 
