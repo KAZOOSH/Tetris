@@ -2,6 +2,7 @@
 	"width":2080,
 	"height":1920,
 	"paddleArea":[900,800],
+	"isOsc":true,
 	"serial":{
 		"buzzerId":"",
 		"player1Button":"",

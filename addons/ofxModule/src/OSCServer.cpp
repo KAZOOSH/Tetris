@@ -18,6 +18,13 @@ OSCServer::OSCServer() {
     ofAddListener(ofxOscEvent::packetIn, this, &OSCServer::onPacketIn);
 }
 
+OSCServer::OSCServer(int port)
+{
+	oscServer.setup(port);
+	//cout << senders.size() << endl;
+	ofAddListener(ofxOscEvent::packetIn, this, &OSCServer::onPacketIn);
+}
+
 /**
  * sends OSC message to specific port and ip
  */

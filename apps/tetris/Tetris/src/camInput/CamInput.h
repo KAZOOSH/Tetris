@@ -72,6 +72,8 @@ using namespace ofxModule;
 		ofParameter<int> deviceId;
 		ofParameter<int> width;
 		ofParameter<int> height;
+		ofParameter<bool> isOsc;
+		ofParameter<string> nPaddle;
 		
 		ofVideoGrabber vidGrabber;
     };

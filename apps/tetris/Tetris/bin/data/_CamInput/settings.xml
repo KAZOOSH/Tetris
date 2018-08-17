@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <parameters>
 	<deviceId>0</deviceId>
-	<width>1920</width>
-	<height>1080</height>
+	<width>640</width>
+	<height>480</height>
+	<isOsc>1</isOsc>
+	<nPaddle>1</nPaddle>
 </parameters>

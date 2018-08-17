@@ -13,7 +13,7 @@
 
 #include "ofxQuadWarp.h"
 
-namespace ofxModule {
+using namespace ofxModule;
     
 	/// \brief the main game class, also does mapping
     class Tetris : public ModuleDrawable{
@@ -32,6 +32,8 @@ namespace ofxModule {
 		void keyReleased(ofKeyEventArgs & key) {};
 
         shared_ptr<GameObject> getLastCreatedStone(int playerId);
+
+		void onOscMessage(ofxOscMessage & message);
         
 	protected:
 		void proceedModuleEvent(ModuleEvent &e);
@@ -55,4 +57,3 @@ namespace ofxModule {
 		bool makeBouncyStone = false;
 	};
     
-}

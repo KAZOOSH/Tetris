@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <settings>
 	<modules>
-		<module type="CamInput">
-		</module>
+		<!--module type="CamInput">
+		</module-->
 		<module type="Tetris">
 			<input id="CamInput" />
 		</module>

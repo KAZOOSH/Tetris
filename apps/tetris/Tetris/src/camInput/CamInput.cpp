@@ -13,11 +13,15 @@ using namespace ofxModule;
 
 CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false){
 	setSingleThreaded();
-	//parameters.add(deviceId.set("deviceId",2));
-	//parameters.add(width.set("width",320));
-	//parameters.add(height.set("height",240));
+	parameters.add(deviceId.set("deviceId",2));
+	parameters.add(width.set("width", 640));
+	parameters.add(height.set("height", 480));
+	parameters.add(isOsc.set("isOsc", false));
+	parameters.add(nPaddle.set("nPaddle", "2"));
 	loadSettings();
 	
+	if(isOsc) addOSCServer(new OSCServer());
+
 
 	colinearPoints = shared_ptr<ColinearPoints>(new ColinearPoints());
 
@@ -43,11 +47,7 @@ CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false
 	gui.add(interceptError.set("InterceptError", 10, 0, 300));
 	gui.add(slopeError.set("SlopeError", 0.05, 0, 1));
 
-	width.set("width", 640);
-	height.set("height", 480);
-
-	cam.listDevices();
-	cam.setDeviceID(1);
+	cam.setDeviceID(deviceId);
 	cam.setup(width, height);
 	thresh.allocate(width, height, OF_IMAGE_GRAYSCALE);
 
@@ -101,6 +101,9 @@ void CamInput::update() {
 		contourFinder.findContours(thresh);
 
 		RectTracker& tracker = contourFinder.getTracker();
+
+
+		//no colinear point check
 		if (contourFinder.size() == 3) {
 			foundPoints.clear();
 			for (size_t i = 0; i < contourFinder.size(); i++)
@@ -110,6 +113,7 @@ void CamInput::update() {
 			sendPositions();
 		}
 
+		//colinear point check
 		/*double d = 0.04;
         vector<cv::Point> approx;
 		for (int i = 0; i < contourFinder.size(); i++) {
@@ -224,20 +228,32 @@ void CamInput::sendPositions()
 		swap(foundPoints[0], foundPoints[2]);
 	if (foundPoints[1].x > foundPoints[2].x)
 		swap(foundPoints[1], foundPoints[2]);
-
-
+	
 	ofJson send;
-	send["function"] = "paddle1Position";
+	send["function"] = "paddle" + nPaddle + "Position";
 	send["paddle"] =
 	{ {
 			{ "x", ofMap(foundPoints[0].x,0,width,0.0,1.0) },
 			{ "y", ofMap(foundPoints[0].y,0,height,0.0,1.0) }
 		},{
 			{ "x", ofMap(foundPoints[1].x,0,width,0.0,1.0) },
-			{ "y", ofMap(foundPoints[1].y,0,height,0.0,1.0) }
+		{ "y", ofMap(foundPoints[1].y,0,height,0.0,1.0) }
 		}
 	};
-	notifyEvent(send);
+	if (!isOsc) {
+		
+		notifyEvent(send);
+	} else {
+		ofxOscMessage message;
+		message.setAddress("paddlePosition");
+		message.addStringArg(send.dump());
+
+		sendOSCMessage(message);
+	}
+	
+
+	
+
 }
 
 void CamInput::contourMinAreaRadiusChanged(int & minRadius)

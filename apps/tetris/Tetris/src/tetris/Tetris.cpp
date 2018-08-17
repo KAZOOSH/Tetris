@@ -10,6 +10,12 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     setSingleThreaded();
 	loadSettings();
 
+	//create osc
+	if (params.params["isOsc"]) {
+		addOSCServer(new OSCServer(12346));
+		ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
+	}
+
 	//create Warper
 	gameFbo.allocate(params.params["width"], params.params["height"]);
 	warperLeft.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth()/2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
@@ -45,6 +51,8 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	objects->addRule(GameFactory::makeGameControlRule(&params));
 
 	ofRegisterKeyEvents(this);
+
+
 }
 //------------------------------------------------------------------
 void Tetris::stopModule() {
@@ -83,6 +91,13 @@ shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
     }
 }
 
+void Tetris::onOscMessage(ofxOscMessage & message)
+{
+	if (message.getAddress() == "paddlePosition") {
+		playerControl.onPaddleMove(ofJson::parse(message.getArgAsString(0)));
+	}
+}
+
 
 //------------------------------------------------------------------
 void Tetris::update() {
@@ -109,7 +124,7 @@ void Tetris::draw() {
 	
 }
 
-void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
+void Tetris::keyPressed(ofKeyEventArgs & key)
 {
 	if (key.key == 'a') {
 		auto stone = GameFactory::makeBasicStone(objects);
@@ -194,7 +209,7 @@ void Tetris::proceedModuleEvent(ModuleEvent &e)
 
 }
 
-void ofxModule::Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)
+void Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)
 {
 	//======================== get our quad warp matrix.
 

@@ -25,6 +25,7 @@ class OSCServer : public ofxOscEventListener{
 	
   public:
     OSCServer();
+	OSCServer(int port);
     ~OSCServer(){
     };
 	
