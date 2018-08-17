@@ -49,9 +49,9 @@ vector<vector<cv::Point>> ColinearPoints::computeColinearPoints()
 	// at least 3 edges. This check also makes sure there are enough
 	// items in the list to avoid accessing an element that doesn't exist.
 	if (edgeList.size() < 3) {
-		cout << endl
+	/*	cout << endl
 			<< "Not enough input points to find collinear points."
-			<< endl;
+			<< endl;*/
 		exit(1);
 	}
 
@@ -82,29 +82,29 @@ vector<vector<cv::Point>> ColinearPoints::computeColinearPoints()
 	}
 
 	// Print the lines with collinear points
-	cout << endl;
+	//cout << endl;
 	if (answerList.size() <= 0) {
-		cout << "No groups of 3 or more collinear points." << endl;
+		//cout << "No groups of 3 or more collinear points." << endl;
 	}
 	else {
 		int n = 1;
         for(vector<cv::Point>& v : answerList) {
-			cout << "Line " << n << " has "
-				<< v.size() << " collinear points: ";
+			/*cout << "Line " << n << " has "
+				<< v.size() << " collinear points: ";*/
 			int p = 0;
 			// Print first two points directly beside text
 			// This is safe because any v will have at least 4 points
-			cout << v[p] << ", ";
+			//cout << v[p] << ", ";
 			p++;
-			cout << v[p] << ", ";
+			//cout << v[p] << ", ";
 			p++;
 			// Print the rest of the points, 3 per line, indented
 			while (p < v.size()) {
-				if ((p + 1) % 3 == 0) cout << endl << "\t";
-				cout << v[p] << ", ";
+				//if ((p + 1) % 3 == 0) cout << endl << "\t";
+				//cout << v[p] << ", ";
 				p++;
 			}
-			cout << endl << endl;
+			//cout << endl << endl;
 			n++;
 		}
 	}

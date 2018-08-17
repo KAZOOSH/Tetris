@@ -15,11 +15,12 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	warperLeft.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth()/2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
 	warperLeft.setTargetRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
 	warperLeft.setup();
-	//warper.load(); // reload last saved changes.
+	warperLeft.load("_Tetris/warper_left.json");
 
 	warperRight.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
 	warperRight.setTargetRect(ofRectangle(gameFbo.getWidth()/2+10, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
 	warperRight.setup();
+	warperRight.load("_Tetris/warper_right.json");
 
 	//create objects
 	objects = shared_ptr<GameObjectContainer>(new GameObjectContainer());
@@ -53,7 +54,7 @@ void Tetris::stopModule() {
 //------------------------------------------------------------------
 void Tetris::produceStoneByIntervall(uint64 intervall) {
 
-    if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
+  /*  if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
         lastStoneProductionTime = ofGetElapsedTimeMillis();
         
         // left Player
@@ -68,7 +69,7 @@ void Tetris::produceStoneByIntervall(uint64 intervall) {
         stone2->setPlayer(2);
         objects->addGameObject(stone2);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
-    }
+    }*/
 }
 
 shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
@@ -185,8 +186,9 @@ void ofxModule::Tetris::keyPressed(ofKeyEventArgs & key)
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
+	//cout << e.message.dump(4) << endl;
 	//set paddle position
-	if(e.message["function"] != nullptr && e.message["function"] == "paddlePosition"){
+	if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle1Position")){
 		playerControl.onPaddleMove(e.message);
 	}
 

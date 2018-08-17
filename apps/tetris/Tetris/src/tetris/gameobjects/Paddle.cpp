@@ -12,15 +12,15 @@ Paddle::~Paddle()
 
 void Paddle::createBody(b2World* world){
     
-    anchorLeft.setup(world, 1, 1, 4);
-    anchorRight.setup(world, paddleWidth, 1, 4);
+    anchorLeft.setup(world, 1, 1, 10);
+    anchorRight.setup(world, paddleWidth, 1, 10);
     anchorLeftStatic.setup(world, 1, 1, 4);
     anchorRightStatic.setup(world, paddleWidth, 1, 4);
     anchorBottom.setup(world, paddleWidth/2, 1, 4);
 
     shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
     body->enableGravity(false);
-    body->setPhysics(1, 0, 1);
+    body->setPhysics(0.1, 0, 1);
     body->setup(world, 1, 1, paddleWidth, paddleHeight);
     addBody(body);    
 
@@ -54,12 +54,13 @@ void Paddle::createBody(b2World* world){
 void Paddle::render()
 {
 	static_pointer_cast<ofxBox2dRect>(body[0])->draw();
-    ofSetColor(255,100,100);
+    ofSetColor(100,100,255);
     anchorLeft.draw();
     anchorJointLeft.draw();
     anchorRight.draw();
     anchorJointRight.draw();
     
+	ofSetColor(255, 100, 100);
     anchorLeftStatic.draw();
     anchorJointLeftStatic.draw();
     anchorRightStatic.draw();
@@ -90,11 +91,12 @@ void Paddle::setFrequencyDiff(float diffFrequency)
 
 void Paddle::setAnchorPosition(ofVec2f anchorLeft, ofVec2f anchorRight)
 {
-
+	
 	anchorLeftPosition = anchorLeft;
 	anchorRightPosition = anchorRight;
 
-	position = anchorLeft + 0.5*(anchorLeft - anchorRight);
+	position = anchorLeft - 0.5*(anchorLeft - anchorRight) - ofVec2f(0,100);
+
 	positionChanged = true;
 
 }
@@ -114,8 +116,8 @@ void Paddle::updatePosition()
 		anchorLeft.setPosition(anchorLeftPosition.x, anchorLeftPosition.y);
 		anchorRight.setPosition(anchorRightPosition.x + 250, anchorRightPosition.y);
 
-		anchorLeftStatic.setPosition(position.x - 100, position.y);
-		anchorRightStatic.setPosition(position.x + 350, position.y);
+		anchorLeftStatic.setPosition(position.x - 200, position.y);
+		anchorRightStatic.setPosition(position.x + 450, position.y);
 
 		anchorBottom.setPosition(position.x + 125, position.y + 200);
 	}

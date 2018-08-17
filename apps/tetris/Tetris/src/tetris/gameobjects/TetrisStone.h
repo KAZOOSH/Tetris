@@ -23,7 +23,7 @@ private:
     vector <ofDefaultVertexType> getRandomVertecies();
     vector <ofDefaultVertexType> vertecies;
     void createStoneVertecies();
-    int scale= 20;
+    int scale= 40;
     int offsetX = 200;
     int playerId;
     shared_ptr<ofxBox2dPolygon> body;

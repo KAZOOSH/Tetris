@@ -50,7 +50,7 @@ namespace ofxModule {
 		ofParameter<int> height;
         
         uint64 lastStoneProductionTime = ofGetElapsedTimeMillis();
-		uint64 produceStoneIntervallInMillis = 2000;
+		uint64 produceStoneIntervallInMillis = 3000;
         bool makeHeavyStone = false;
 		bool makeBouncyStone = false;
 	};

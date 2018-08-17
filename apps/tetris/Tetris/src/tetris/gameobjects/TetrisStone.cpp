@@ -10,6 +10,10 @@ TetrisStone::TetrisStone(string name):GameObject(name)
     body->addVertices(vertecies);
     body->setPhysics(5, 0, 1);
     body->triangulatePoly();
+
+	//create and add the renderer
+	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+	addRenderer(renderer);
 }
 
 TetrisStone::~TetrisStone()
@@ -17,12 +21,13 @@ TetrisStone::~TetrisStone()
 }
 
 void TetrisStone::render() {
-    if(isBouncy){
+    /*if(isBouncy){
         ofSetColor(255, 0, 0);
     }
     if(isHeavy){
         ofSetColor(0, 255, 0);
-    }
+    }*/
+
     for (auto& r : renderer) {
         r->render();
     }
@@ -82,7 +87,7 @@ void TetrisStone::addToWorld(b2World* world){
     addBody(body);
     //create and add the renderer
     auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
-    addRenderer(renderer);
+   // addRenderer(renderer);
 }
 
 vector <ofDefaultVertexType> TetrisStone::getRandomVertecies()

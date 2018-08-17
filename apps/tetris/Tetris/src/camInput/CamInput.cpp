@@ -28,7 +28,7 @@ CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false
 	slopeError.addListener(this, &CamInput::colinearSlopeErrorChanged);
 	interceptError.addListener(this, &CamInput::colinearInterceptErrorChanged);
 
-	gui.setup("panel"); // most of the time you don't need a name but don't forget to call setup
+	gui.setup("panel"); 
 	gui.add(thresholdValue.set("threshold", 240, 0, 255));
 	gui.add(erodeValue.set("erode", 0, 0, 10));
 	gui.add(dilateValue.set("dilate", 3, 0, 10));
@@ -43,9 +43,13 @@ CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false
 	gui.add(interceptError.set("InterceptError", 10, 0, 300));
 	gui.add(slopeError.set("SlopeError", 0.05, 0, 1));
 
+	width.set("width", 640);
+	height.set("height", 480);
+
+	cam.listDevices();
 	cam.setDeviceID(1);
-	cam.setup(640, 480);
-	thresh.allocate(640, 480, OF_IMAGE_GRAYSCALE);
+	cam.setup(width, height);
+	thresh.allocate(width, height, OF_IMAGE_GRAYSCALE);
 
 	contourFinder.setMinAreaRadius(contourMinAreaRadius);
 	contourFinder.setMaxAreaRadius(contourMaxAreaRadius);
@@ -97,7 +101,16 @@ void CamInput::update() {
 		contourFinder.findContours(thresh);
 
 		RectTracker& tracker = contourFinder.getTracker();
-		double d = 0.04;
+		if (contourFinder.size() == 3) {
+			foundPoints.clear();
+			for (size_t i = 0; i < contourFinder.size(); i++)
+			{
+				foundPoints.push_back(contourFinder.getCenter(i));
+			}
+			sendPositions();
+		}
+
+		/*double d = 0.04;
         vector<cv::Point> approx;
 		for (int i = 0; i < contourFinder.size(); i++) {
 			vector<cv::Point> contour = contourFinder.getContour(i);
@@ -108,17 +121,18 @@ void CamInput::update() {
 			}
 		}
 
-		cout << colinearPoints->getPointListSize();
+		//cout << colinearPoints->getPointListSize();
 		if (colinearPoints->getPointListSize() >= 3) {
 			vector<vector<cv::Point>> computedPointLists = colinearPoints->computeColinearPoints();
 			if (computedPointLists.size() > 0) {
 				// take first List of 3 Items
 				foundPoints = computedPointLists[0];
-				cout << "# ColinearPoints: " << foundPoints.size() << endl;
+				sendPositions();
+				//cout << "# ColinearPoints: " << foundPoints.size() << endl;
 			} else {
-				cout << "No Group found" << endl;
+				//cout << "No Group found" << endl;
 			}
-		}
+		}*/
 
 	}
 }
@@ -198,14 +212,32 @@ void CamInput::draw() {
 		}
 	}
 
+	ofDrawBitmapString("found points : " + ofToString(foundPoints.size()), 30, 500);
 }
 
 /// \brief sends message to connected modules
 void CamInput::sendPositions()
 {
-	ofJson out;
-	out["key"] = "value";
-	notifyEvent(out);
+	if (foundPoints[0].x > foundPoints[1].x)
+		swap(foundPoints[0], foundPoints[1]);
+	if (foundPoints[0].x > foundPoints[2].x)
+		swap(foundPoints[0], foundPoints[2]);
+	if (foundPoints[1].x > foundPoints[2].x)
+		swap(foundPoints[1], foundPoints[2]);
+
+
+	ofJson send;
+	send["function"] = "paddle1Position";
+	send["paddle"] =
+	{ {
+			{ "x", ofMap(foundPoints[0].x,0,width,0.0,1.0) },
+			{ "y", ofMap(foundPoints[0].y,0,height,0.0,1.0) }
+		},{
+			{ "x", ofMap(foundPoints[1].x,0,width,0.0,1.0) },
+			{ "y", ofMap(foundPoints[1].y,0,height,0.0,1.0) }
+		}
+	};
+	notifyEvent(send);
 }
 
 void CamInput::contourMinAreaRadiusChanged(int & minRadius)

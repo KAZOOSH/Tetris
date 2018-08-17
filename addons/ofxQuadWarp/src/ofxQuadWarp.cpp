@@ -488,6 +488,7 @@ void ofxQuadWarp::load(const string& path) {
     if(file.exists()){
         file >> json;
     }
+
     for (int i=0; i<4; ++i) {
         srcPoints[i].x = json["src"]["point" + ofToString(i)]["x"].get<float>();
         srcPoints[i].y = json["src"]["point" + ofToString(i)]["y"].get<float>();
