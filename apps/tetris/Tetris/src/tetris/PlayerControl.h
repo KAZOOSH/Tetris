@@ -13,7 +13,7 @@ public:
 	void setup(vector<shared_ptr<Paddle>> paddles, GameParameters* params);
 
 	//callbacks
-	void onPaddleMove(ofJson& json);
+	void onPaddleMove(const ofJson& json);
 	void onBuzzer(const ofxIO::SerialBufferEventArgs& args);
 	void onPlayer1(const ofxIO::SerialBufferEventArgs& args);
 	void onPlayer2(const ofxIO::SerialBufferEventArgs& args);

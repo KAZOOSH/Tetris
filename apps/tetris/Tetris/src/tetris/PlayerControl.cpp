@@ -25,7 +25,7 @@ void PlayerControl::setup(vector<shared_ptr<Paddle>> paddles_, GameParameters * 
 }
 
 //TODO : add martin control
-void PlayerControl::onPaddleMove(ofJson & json)
+void PlayerControl::onPaddleMove(const ofJson & json)
 {
 	ofJson out;
 	out["control"] = "paddle";
