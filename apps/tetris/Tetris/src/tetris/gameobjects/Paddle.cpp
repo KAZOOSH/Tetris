@@ -1,9 +1,11 @@
 #include "Paddle.h"
 
 
-
-Paddle::Paddle(string name):GameObject(name)
+Paddle::Paddle(string name, GameParameters* params_):GameObject(name)
 {
+    params = params_;
+    isPaddleLeft = name == paddleNameLeft;
+    isPaddleRight = name == paddleNameRight;
 }
 
 Paddle::~Paddle()
@@ -11,17 +13,33 @@ Paddle::~Paddle()
 }
 
 void Paddle::createBody(b2World* world){
+    int x = 1;
+    int y = 1;
+    if(isPaddleLeft){
+        int x = params->params["paddle"]["leftStartPosition"]["x"].get<int>();
+        int y = params->params["paddle"]["leftStartPosition"]["y"].get<int>();
+    } else if(isPaddleRight){
+        int x = params->params["paddle"]["rightStartPosition"]["x"].get<int>();
+        int y = params->params["paddle"]["rightStartPosition"]["y"].get<int>();
+    }
+    position.x = x;
+    position.y = y;
+    // load from params and overwrite defaults
+    paddleWidth = params->params["paddle"]["width"].get<int>();
+    paddleWidth = params->params["paddle"]["width"].get<int>();
     
-    anchorLeft.setup(world, 1, 1, 10);
-    anchorRight.setup(world, paddleWidth, 1, 10);
-    anchorLeftStatic.setup(world, 1, 1, 4);
-    anchorRightStatic.setup(world, paddleWidth, 1, 4);
-    anchorBottom.setup(world, paddleWidth/2, 1, 4);
+    anchorMargin = params->params["paddle"]["width"].get<int>();
+    
+    anchorLeft.setup(world, x, y, 10);
+    anchorRight.setup(world, x+ paddleWidth, y, 10);
+    anchorLeftStatic.setup(world, x - anchorMargin, 1, 4);
+    anchorRightStatic.setup(world, paddleWidth + anchorMargin, 1, 4);
+    anchorBottom.setup(world, paddleWidth/2, -anchorMargin, 4);
 
     shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
     body->enableGravity(false);
     body->setPhysics(0.1, 0, 1);
-    body->setup(world, 1, 1, paddleWidth, paddleHeight);
+    body->setup(world, x, y, paddleWidth, paddleHeight);
     addBody(body);    
 
     

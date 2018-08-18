@@ -2,11 +2,12 @@
 #include "PolygonRenderer.h"
 #include "ofxBox2d.h"
 #include "GameObject.h"
+#include "GameParameters.h"
 
 class TetrisStone : public GameObject
 {
 public:
-    TetrisStone(string name);
+    TetrisStone(string name, GameParameters* params);
     ~TetrisStone();
     void addToWorld(b2World* world);
     void setPosition(ofVec2f position);
@@ -28,6 +29,8 @@ private:
     int playerId;
     shared_ptr<ofxBox2dPolygon> body;
     vector<string> stones;
+    
+    GameParameters* params;
     bool isBouncy;
 	bool isHeavy;
 	bool isLarge;

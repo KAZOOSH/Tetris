@@ -36,11 +36,11 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	gameControl = shared_ptr<GameControl>(new GameControl(objects));
 
 	//add paddles
-    shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,"paddle1");
+    shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,Paddle::paddleNameLeft,&params);
     //p1->setPosition(200,600);
 	objects->addPaddle(p1);
     
-    shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,"paddle1");
+    shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,Paddle::paddleNameRight,&params);
    // p2->setPosition(600,600);
 	objects->addPaddle(p2);
 
@@ -152,7 +152,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 	}
 
     if (key.key == 'b') {
-        auto stone = GameFactory::makeTetrisStone(objects);
+        auto stone = GameFactory::makeTetrisStone(objects, &params);
         objects->addGameObject(stone);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
     }

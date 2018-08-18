@@ -1,8 +1,9 @@
 #include "TetrisStone.h"
 
 
-TetrisStone::TetrisStone(string name):GameObject(name)
+TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
 {
+    params = params_;
     createStoneVertecies();
     body = shared_ptr<ofxBox2dPolygon>(new ofxBox2dPolygon);
     

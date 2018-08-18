@@ -1,15 +1,15 @@
 #include "GameFactory.h"
 
-shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objects, string name)
+shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objects, string name, GameParameters* params)
 {
-	shared_ptr<Paddle> paddle = shared_ptr<Paddle>(new Paddle(name));
+	shared_ptr<Paddle> paddle = shared_ptr<Paddle>(new Paddle(name, params));
     paddle->createBody(objects->physics.getWorld());
     return paddle;
 }
 
-shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects)
+shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params)
 {
-    shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone"));
+    shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone", params));
     stone->addToWorld(objects->physics.getWorld());
 
     return stone;

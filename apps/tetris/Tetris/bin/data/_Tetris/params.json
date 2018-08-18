@@ -7,5 +7,17 @@
 		"buzzerId":"",
 		"player1Button":"",
 		"player2Button":""
+	},
+	"paddle": {
+		"width": 600,
+		"height": 100,
+		"leftStartPosition": {
+			"x": 200,
+			"y": 300
+		},
+		"rightStartPosition": {
+			"x": 1000,
+			"y": 300
+		}
 	}
 }
