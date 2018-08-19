@@ -6,7 +6,7 @@ PolygonRenderer::PolygonRenderer(shared_ptr<ofxBox2dPolygon> renderObject_):Rend
 
 	auto coords = renderObject->mesh.getTexCoords();
 
-	shader.load("shaders/tetrisStone");
+	//shader.load("shaders/tetrisStone");
 }
 
 PolygonRenderer::~PolygonRenderer()
