@@ -9,7 +9,8 @@
 		"player2Button":""
 	},
 	"tetrisStone": {
-		"density": 0.1
+		"density": 0.1,
+		"produceEveryMilliseconds": 5000
 	},
 	"paddle": {
 		"width": 300,

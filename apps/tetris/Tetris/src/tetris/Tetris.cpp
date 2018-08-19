@@ -16,6 +16,9 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 		ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
 	}
 
+    produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<UInt64>();
+
+
 	//create Warper
 	gameFbo.allocate(params.params["width"], params.params["height"]);
 	warperLeft.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth()/2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
@@ -53,6 +56,9 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	objects->addRule(GameFactory::makeGameControlRule(&params));
 
 	ofRegisterKeyEvents(this);
+    
+    produceStone(1);
+    produceStone(2);
 }
 
 void Tetris::contactStart(ofxBox2dContactArgs &e) {
@@ -60,10 +66,27 @@ void Tetris::contactStart(ofxBox2dContactArgs &e) {
         TetrisStone * stoneA = (TetrisStone*)e.a->GetBody()->GetUserData();
         TetrisStone * stoneB = (TetrisStone*)e.b->GetBody()->GetUserData();
         if(stoneA) {
-            stoneA->collide();
+            if(!stoneA->collided){
+                //produceStone(stoneA->getPlayerId());
+                if(stoneA->getPlayerId()==1){
+                    lastStoneProductionTimePlayer1 =0;
+                } else if(stoneA->getPlayerId()==2){
+                    lastStoneProductionTimePlayer2 =0;
+                }
+                stoneA->collide();
+            }
         }
         if(stoneB) {
-            stoneB->collide();
+            if(!stoneB->collided){
+                //produceStone(stoneB->getPlayerId());
+                if(stoneB->getPlayerId()==1){
+                    lastStoneProductionTimePlayer1 =0;
+                } else if(stoneB->getPlayerId()==2){
+                    lastStoneProductionTimePlayer2 =0;
+                }
+                stoneB->collide();
+            }
+            //produceStone(stoneB->getPlayerId());
         }
     }
 }
@@ -74,25 +97,32 @@ void Tetris::stopModule() {
 }
 
 //------------------------------------------------------------------
-void Tetris::produceStoneByIntervall(uint64 intervall) {
-
-if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
-        lastStoneProductionTime = ofGetElapsedTimeMillis();
-        
-        // left Player
-        auto stone = GameFactory::makeTetrisStone(objects,&params);
-        stone->setPlayer(1);
-        objects->addGameObject(stone);
-        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
-        
-        // right Player
-        auto stone2 = GameFactory::makeTetrisStone(objects,&params);
-        stone2->setPosition(ofVec2f(600,0));
-        stone2->setPlayer(2);
-        objects->addGameObject(stone2);
-        objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
+void Tetris::produceStoneByIntervall() {
+    if(lastStoneProductionTimePlayer1 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()){
+            produceStone(1);
+        }
+    if(lastStoneProductionTimePlayer2 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()){
+        produceStone(2);
     }
 }
+
+void Tetris::produceStone(int player) {
+    
+    auto stone = GameFactory::makeTetrisStone(objects,&params);
+    stone->setPlayer(player);
+    
+    if(player == 1) {
+        lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
+    }
+    if(player == 2){
+      lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
+      stone->setPosition(ofVec2f(1500,0));
+    }
+    objects->addGameObject(stone);
+    objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+}
+
+
 
 shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
     for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
@@ -116,7 +146,7 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 //------------------------------------------------------------------
 void Tetris::update() {
 	gameControl->update();
-    produceStoneByIntervall(produceStoneIntervallInMillis);
+    produceStoneByIntervall();
 }
 
 

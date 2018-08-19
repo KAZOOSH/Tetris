@@ -26,7 +26,7 @@ using namespace ofxModule;
         void stopModule();
         void draw();
 
-        void produceStoneByIntervall(uint64 intervall);
+        void produceStoneByIntervall();
         
 		void keyPressed(ofKeyEventArgs & key);
 		void keyReleased(ofKeyEventArgs & key) {};
@@ -45,15 +45,16 @@ using namespace ofxModule;
 		shared_ptr<GameObjectContainer> objects;
 		GameParameters params;
 		PlayerControl playerControl;
-
+        void produceStone(int player);
 		ofxQuadWarp warperLeft;
 		ofxQuadWarp warperRight;
 		ofFbo gameFbo;
 		ofParameter<int> width;
 		ofParameter<int> height;
+        uint64 produceStoneIntervallInMillis= 3000;
+        uint64 lastStoneProductionTimePlayer1 = 0;
+		uint64 lastStoneProductionTimePlayer2 = 0;
         
-        uint64 lastStoneProductionTime = ofGetElapsedTimeMillis();
-		uint64 produceStoneIntervallInMillis = 3000;
         bool makeHeavyStone = false;
 		bool makeBouncyStone = false;
 	};
