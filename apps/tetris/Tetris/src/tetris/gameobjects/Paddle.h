@@ -46,14 +46,15 @@ private:
     ofxBox2dCircle anchorRight;
     ofxBox2dCircle anchorLeftStatic;
     ofxBox2dCircle anchorRightStatic;
-    ofxBox2dCircle anchorBottom;
+    ofxBox2dCircle anchorBottomStatic;
     
     ofxBox2dJoint anchorJointLeft;
     ofxBox2dJoint anchorJointRight;
     ofxBox2dJoint anchorJointLeftStatic;
     ofxBox2dJoint anchorJointRightStatic;
-    ofxBox2dJoint anchorJointBottom;
-
+    ofxBox2dJoint anchorJointBottomLeftStatic;
+    ofxBox2dJoint anchorJointBottomRightStatic;
+    
     GameParameters* params;
     
 	bool positionChanged = false;
