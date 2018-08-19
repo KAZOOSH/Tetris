@@ -31,6 +31,7 @@ void Paddle::createBody(b2World* world){
     
     frequencyHz = params->params["paddle"]["frequency"].get<float>();
     damping = params->params["paddle"]["damping"].get<float>();
+    density = params->params["paddle"]["density"].get<float>();
     
     shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
     body->enableGravity(false);

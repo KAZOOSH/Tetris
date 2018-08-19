@@ -18,6 +18,9 @@ public:
     void rotateLeft();
     void makeHeavy();
     void makeBouncy();
+    bool isTetrisStone = true;
+    bool collided = false;
+    void collide();
     //void makeLarge();
     
 private:

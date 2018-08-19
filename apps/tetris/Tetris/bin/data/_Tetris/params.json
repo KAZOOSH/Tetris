@@ -8,12 +8,16 @@
 		"player1Button":"",
 		"player2Button":""
 	},
+	"tetrisStone": {
+		"density": 0.1
+	},
 	"paddle": {
 		"width": 300,
 		"height": 100,
 		"anchorMargin":600,
-		"frequency": 3,
+		"frequency": 4,
 		"damping" :3,
+		"density" :5,
 		"leftStartPosition": {
 			"x": 400,
 			"y": 1500

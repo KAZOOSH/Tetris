@@ -35,13 +35,15 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	//create GameControl
 	gameControl = shared_ptr<GameControl>(new GameControl(objects));
 
+    // add contact listener
+    objects->physics.enableEvents();
+    ofAddListener(objects->physics.contactStartEvents, this, &Tetris::contactStart);
+    
 	//add paddles
     shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,Paddle::paddleNameLeft,&params);
-    //p1->setPosition(200,600);
 	objects->addPaddle(p1);
     
     shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,Paddle::paddleNameRight,&params);
-   // p2->setPosition(600,600);
 	objects->addPaddle(p2);
 
 	playerControl.setup(objects->paddles, &params);
@@ -51,9 +53,21 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	objects->addRule(GameFactory::makeGameControlRule(&params));
 
 	ofRegisterKeyEvents(this);
-
-
 }
+
+void Tetris::contactStart(ofxBox2dContactArgs &e) {
+    if(e.a != NULL && e.b != NULL) {
+        TetrisStone * stoneA = (TetrisStone*)e.a->GetBody()->GetUserData();
+        TetrisStone * stoneB = (TetrisStone*)e.b->GetBody()->GetUserData();
+        if(stoneA) {
+            stoneA->collide();
+        }
+        if(stoneB) {
+            stoneB->collide();
+        }
+    }
+}
+
 //------------------------------------------------------------------
 void Tetris::stopModule() {
 
@@ -62,22 +76,22 @@ void Tetris::stopModule() {
 //------------------------------------------------------------------
 void Tetris::produceStoneByIntervall(uint64 intervall) {
 
-  /*  if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
+if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
         lastStoneProductionTime = ofGetElapsedTimeMillis();
         
         // left Player
-        auto stone = GameFactory::makeTetrisStone(objects);
+        auto stone = GameFactory::makeTetrisStone(objects,&params);
         stone->setPlayer(1);
         objects->addGameObject(stone);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
         
         // right Player
-        auto stone2 = GameFactory::makeTetrisStone(objects);
+        auto stone2 = GameFactory::makeTetrisStone(objects,&params);
         stone2->setPosition(ofVec2f(600,0));
         stone2->setPlayer(2);
         objects->addGameObject(stone2);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
-    }*/
+    }
 }
 
 shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){

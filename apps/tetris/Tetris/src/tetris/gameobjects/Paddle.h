@@ -62,7 +62,7 @@ private:
     int paddleHeight = 100;
     float frequencyHz = 1.0f;
     float damping = 5.0f;
-    
+    float density = 0.5f;
     int anchorMargin = 100;
     // positionen ausgehend von der linken oberen ecke des paddles
     ofVec2f anchorLeftStaticRelativePosition = ofVec2f(-anchorMargin, 0);

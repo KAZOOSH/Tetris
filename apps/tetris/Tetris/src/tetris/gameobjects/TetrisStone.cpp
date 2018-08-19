@@ -3,18 +3,35 @@
 
 TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
 {
+    //isTetrisStone= true;
+    //collided = false;
     params = params_;
     createStoneVertecies();
     body = shared_ptr<ofxBox2dPolygon>(new ofxBox2dPolygon);
     
+    float density = params->params["tetrisStone"]["density"].get<float>();
+    
     vertecies = getRandomVertecies();
     body->addVertices(vertecies);
-    body->setPhysics(5, 0, 1);
+    body->setPhysics(density, 0, 1);
     body->triangulatePoly();
 
+    //body->body->SetUserData(this->body);
+    //body->setData(new TetrisStone(name,params_));
+    
+//    int myInt = 123;
+//    body.get()->setData(this);
+//    TetrisStone * stone = (TetrisStone*)body.get()->getData();
+//    body->body->SetUserData(<#void *data#>)
+//    body->body->SetUserData((void*)myInt);
+    
 	//create and add the renderer
 	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
 	addRenderer(renderer);
+}
+
+void TetrisStone::collide(){
+    collided = true;
 }
 
 TetrisStone::~TetrisStone()
@@ -22,23 +39,29 @@ TetrisStone::~TetrisStone()
 }
 
 void TetrisStone::render() {
-    /*if(isBouncy){
+    if(isBouncy){
         ofSetColor(255, 0, 0);
     }
     if(isHeavy){
         ofSetColor(0, 255, 0);
-    }*/
-
-    for (auto& r : renderer) {
-        r->render();
     }
+    if(collided){
+        ofSetColor(0, 0, 255);
+    }
+
+    body->draw();
+    //    for (auto& r : renderer) {
+    //        r->render();
+    //    }
     ofSetColor(255, 255, 255);
 };
 
 
 void TetrisStone::makeHeavy() {
     isHeavy = true;
-    body->body->GetFixtureList()->SetDensity(500.0f);
+//    not working todo: check this out dude
+//    body->body->GetFixtureList()->SetDensity(10.0f);
+//    body->body->ResetMassData();
 }
 
 void TetrisStone::makeBouncy() {
@@ -49,8 +72,6 @@ void TetrisStone::makeBouncy() {
 void TetrisStone::setPosition(ofVec2f position){
     body->setPosition(position);
 }
-
-
 
 void TetrisStone::setPlayer(int player){
     playerId = player;

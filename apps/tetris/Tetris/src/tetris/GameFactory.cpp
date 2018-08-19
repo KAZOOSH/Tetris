@@ -12,6 +12,7 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContai
     shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone", params));
     stone->addToWorld(objects->physics.getWorld());
 
+    stone->getBody()[0]->setData(stone.get());
     return stone;
 }
 
