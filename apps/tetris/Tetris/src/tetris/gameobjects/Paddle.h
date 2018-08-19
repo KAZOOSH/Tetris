@@ -29,9 +29,10 @@ public:
 	void updatePosition();
     void setDampingDiff(float damping);
     void setFrequencyDiff(float frequency);
-    
+    ofVec2f getPaddleBodyPosition();
     bool isPaddleLeft;
     bool isPaddleRight;
+    int towerHeight =0;
     
     //statics
     static constexpr const char * paddleNameLeft = "leftPaddle";
@@ -64,6 +65,7 @@ private:
     float damping = 5.0f;
     float density = 0.5f;
     int anchorMargin = 100;
+    shared_ptr<ofxBox2dRect> body;
     // positionen ausgehend von der linken oberen ecke des paddles
     ofVec2f anchorLeftStaticRelativePosition = ofVec2f(-anchorMargin, 0);
     ofVec2f anchorRightStaticRelativePosition = ofVec2f(paddleWidth + anchorMargin, 0);

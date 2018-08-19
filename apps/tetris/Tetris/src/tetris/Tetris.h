@@ -32,7 +32,6 @@ using namespace ofxModule;
 		void keyReleased(ofKeyEventArgs & key) {};
 
         shared_ptr<GameObject> getLastCreatedStone(int playerId);
-
 		void onOscMessage(ofxOscMessage & message);
         
 	protected:
@@ -43,6 +42,7 @@ using namespace ofxModule;
 	private:
 		shared_ptr<GameControl> gameControl;
 		shared_ptr<GameObjectContainer> objects;
+        void setTetrisStoneRelativeToPaddlePosition();
 		GameParameters params;
 		PlayerControl playerControl;
         void produceStone(int player);

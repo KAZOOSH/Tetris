@@ -33,7 +33,7 @@ void Paddle::createBody(b2World* world){
     damping = params->params["paddle"]["damping"].get<float>();
     density = params->params["paddle"]["density"].get<float>();
     
-    shared_ptr<ofxBox2dRect> body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
+    body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
     body->enableGravity(false);
     body->setPhysics(0.1, 0, 1);
     body->setup(world, x, y, paddleWidth, paddleHeight);
@@ -90,7 +90,12 @@ void Paddle::createBody(b2World* world){
 ///\brief for testing perpuses, we should finally use a renderer for this
 void Paddle::render()
 {
-	static_pointer_cast<ofxBox2dRect>(body[0])->draw();
+    // draw towerheight
+    float x = getPaddleBodyPosition().x;
+    float y = getPaddleBodyPosition().y - towerHeight - paddleHeight/2;
+    ofDrawLine(x-200, y,x + 200, y);
+    
+    body->draw();
     ofSetColor(100,100,255);
     anchorLeft.draw();
     anchorJointLeft.draw();
@@ -110,6 +115,10 @@ void Paddle::render()
     // draw values
     ofDrawBitmapString("frequencyHz: "+ ofToString(frequencyHz), 10, 10);
     ofDrawBitmapString("damping: " + ofToString(damping), 10, 40);
+}
+
+ofVec2f Paddle::getPaddleBodyPosition(){
+    return body->getPosition();
 }
 
 void Paddle::setDampingDiff(float diffDamping)

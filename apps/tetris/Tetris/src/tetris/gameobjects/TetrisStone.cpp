@@ -16,18 +16,42 @@ TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
     body->setPhysics(density, 0, 1);
     body->triangulatePoly();
 
-    //body->body->SetUserData(this->body);
-    //body->setData(new TetrisStone(name,params_));
-    
-//    int myInt = 123;
-//    body.get()->setData(this);
-//    TetrisStone * stone = (TetrisStone*)body.get()->getData();
-//    body->body->SetUserData(<#void *data#>)
-//    body->body->SetUserData((void*)myInt);
-    
 	//create and add the renderer
 	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
 	addRenderer(renderer);
+}
+
+bool TetrisStone::getIsPartOfTower(){
+    return isPartOfTower;
+}
+
+float TetrisStone::getDistanceToPaddle(){
+    return distanceToPaddle;
+}
+
+void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition){
+    
+    //check every 300ms
+    if(lastCheckedRelativeToPaddleTime + 300 < ofGetElapsedTimeMillis()){
+        
+        ofVec2f vectorStoneToPaddle = body->getPosition() - paddlePosition;
+        float newDistanceToPaddle = vectorStoneToPaddle.length();
+        
+        if(distanceToPaddle){
+            positionChangeRelativeToPaddle = distanceToPaddle - newDistanceToPaddle;
+        }
+        distanceToPaddle = newDistanceToPaddle;
+        
+        positionChangeRelativeToPaddleSmoothed = 0.95 * positionChangeRelativeToPaddle + 0.05 * positionChangeRelativeToPaddleSmoothed;
+        
+        if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 ){
+            isPartOfTower = true;
+        } else {
+            isPartOfTower = false;
+        }
+        
+        lastCheckedRelativeToPaddleTime=ofGetElapsedTimeMillis();
+    }
 }
 
 void TetrisStone::collide(){
@@ -49,6 +73,10 @@ void TetrisStone::render() {
         ofSetColor(0, 0, 255);
     }
 
+    if(isPartOfTower){
+         ofSetColor(255, 255, 0);
+    }
+    
     body->draw();
     //    for (auto& r : renderer) {
     //        r->render();

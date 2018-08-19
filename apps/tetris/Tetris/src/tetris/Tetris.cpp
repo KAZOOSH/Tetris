@@ -56,18 +56,16 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	objects->addRule(GameFactory::makeGameControlRule(&params));
 
 	ofRegisterKeyEvents(this);
-    
-    produceStone(1);
-    produceStone(2);
 }
 
 void Tetris::contactStart(ofxBox2dContactArgs &e) {
     if(e.a != NULL && e.b != NULL) {
         TetrisStone * stoneA = (TetrisStone*)e.a->GetBody()->GetUserData();
         TetrisStone * stoneB = (TetrisStone*)e.b->GetBody()->GetUserData();
+        
+        //check colliding objects produce new stone immediately on first collision of last created stone
         if(stoneA) {
             if(!stoneA->collided){
-                //produceStone(stoneA->getPlayerId());
                 if(stoneA->getPlayerId()==1){
                     lastStoneProductionTimePlayer1 =0;
                 } else if(stoneA->getPlayerId()==2){
@@ -78,7 +76,6 @@ void Tetris::contactStart(ofxBox2dContactArgs &e) {
         }
         if(stoneB) {
             if(!stoneB->collided){
-                //produceStone(stoneB->getPlayerId());
                 if(stoneB->getPlayerId()==1){
                     lastStoneProductionTimePlayer1 =0;
                 } else if(stoneB->getPlayerId()==2){
@@ -86,7 +83,6 @@ void Tetris::contactStart(ofxBox2dContactArgs &e) {
                 }
                 stoneB->collide();
             }
-            //produceStone(stoneB->getPlayerId());
         }
     }
 }
@@ -122,6 +118,38 @@ void Tetris::produceStone(int player) {
     objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
 }
 
+void Tetris::setTetrisStoneRelativeToPaddlePosition() {
+    
+    int towerHeightPaddleLeft = 0;
+    int towerHeightPaddleRight = 0;
+
+    shared_ptr<Paddle> paddleLeft = objects->getPaddle(Paddle::paddleNameLeft);
+    shared_ptr<Paddle> paddleRight = objects->getPaddle(Paddle::paddleNameRight);
+    
+    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
+        if(objects->gameObjects[i]->getName() == "TetrisStone"){
+            int pId = objects->gameObjects[i]->getPlayerId();
+            int y = 10000;
+            if(objects->gameObjects[i]->getIsPartOfTower()){
+                y = objects->gameObjects[i]->getBody()[0]->getPosition().y;
+            }
+           
+            if(pId == 1) {
+                ofVec2f plp =paddleLeft->getPaddleBodyPosition();
+                objects->gameObjects[i]->updateRelativeToPaddlePosition(plp);
+                towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
+                paddleLeft->towerHeight = towerHeightPaddleLeft;
+            }else if(pId == 2) {
+                ofVec2f prp =paddleRight->getPaddleBodyPosition();
+                objects->gameObjects[i]->updateRelativeToPaddlePosition(paddleRight->getPaddleBodyPosition());
+                towerHeightPaddleRight = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
+                 paddleRight->towerHeight = towerHeightPaddleRight;
+            }
+            
+            
+        };
+    }
+}
 
 
 shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
@@ -147,6 +175,7 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 void Tetris::update() {
 	gameControl->update();
     produceStoneByIntervall();
+    setTetrisStoneRelativeToPaddlePosition();
 }
 
 

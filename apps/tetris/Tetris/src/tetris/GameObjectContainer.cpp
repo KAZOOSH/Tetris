@@ -30,6 +30,17 @@ void GameObjectContainer::addPaddle(shared_ptr<Paddle> object)
     gameObjects.push_back(object);
 
 }
+shared_ptr<Paddle> GameObjectContainer::getPaddle(string name)
+{
+    for (auto& p : paddles) {
+        if(name == Paddle::paddleNameLeft && p->isPaddleLeft){
+            return p;
+        }else if(name == Paddle::paddleNameRight && p->isPaddleRight){
+            return p;
+        }
+    }
+    
+}
 
 void GameObjectContainer::addRule(shared_ptr<Rule> rule)
 {
