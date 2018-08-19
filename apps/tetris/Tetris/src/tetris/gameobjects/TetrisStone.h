@@ -1,5 +1,4 @@
 #pragma once
-#include "PolygonRenderer.h"
 #include "ofxBox2d.h"
 #include "GameObject.h"
 #include "GameParameters.h"
@@ -21,17 +20,22 @@ public:
     bool isTetrisStone = true;
     bool collided = false;
     void collide();
+
+	int getScale();
+
+	string getType();
     //void makeLarge();
     
 private:
-    vector <ofDefaultVertexType> getRandomVertecies();
+    pair<string,vector <ofDefaultVertexType>> getRandomVertecies();
     vector <ofDefaultVertexType> vertecies;
+	string stoneType;
     void createStoneVertecies();
-    int scale= 40;
+    int scale= 80;
     int offsetX = 200;
     int playerId;
     shared_ptr<ofxBox2dPolygon> body;
-    vector<string> stones;
+    map<string,string> stones;
     
     GameParameters* params;
     bool isBouncy;

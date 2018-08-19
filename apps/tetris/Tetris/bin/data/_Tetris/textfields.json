@@ -41,5 +41,11 @@
 		"main":"Игрок 2 побеждает",
 		"sub":"(Spieler 2 gewinnt)",
 		"time": 3000
+	},
+	{
+		"state":"endEven",
+		"main":"Игрок 2 побеждает",
+		"sub":"(unentschieden)",
+		"time": 3000
 	}
 ]
