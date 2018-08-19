@@ -170,6 +170,14 @@ void Tetris::draw() {
 
 void Tetris::keyPressed(ofKeyEventArgs & key)
 {
+	if (key.key == 'y') {
+		ofJson state = ofJson{
+			{ "function","gamestate" },
+			{ "gamestate" , "end1" }
+		};
+		params.notifyGameEvent(state);
+	}
+
 	if (key.key == 'a') {
 		auto stone = GameFactory::makeBasicStone(objects);
 		objects->addGameObject(stone);
@@ -247,7 +255,7 @@ void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
 	//cout << e.message.dump(4) << endl;
 	//set paddle position
-	if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle1Position")){
+	if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle2Position")){
 		playerControl.onPaddleMove(e.message);
 	}
 

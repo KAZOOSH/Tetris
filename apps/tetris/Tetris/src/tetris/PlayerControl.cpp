@@ -50,17 +50,16 @@ void PlayerControl::onPaddleMove(const ofJson & json)
 
 		paddles[nPaddle]->setAnchorPosition(pos1, pos2);
 			
-		out["paddle" + ofToString(nPaddle)] = {
-			{{
+		out["id"] = nPaddle + 1; 
+		out["p1"]=
+			{
 				{ "x" , pos1.x },
 				{ "y", pos1.y }
-			},
-				{
-					{ "x" , pos2.x },
-					{ "y", pos2.y }
-				}
-			}
-			
+		};
+		out["p2"] =
+		{
+			{ "x" , pos2.x },
+			{ "y", pos2.y }
 		};
 	
 	params->notifyControlEvent(out);
