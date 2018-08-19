@@ -2,10 +2,24 @@
 	"width":2080,
 	"height":1920,
 	"paddleArea":[900,800],
-	"isOsc":true,
+	"isOsc":false,
 	"serial":{
 		"buzzerId":"",
 		"player1Button":"",
 		"player2Button":""
+	},
+	"fonts":{
+		"main":"fonts/tetris.ttf",
+		"sub":"fonts/Arial Unicode.ttf"
+	},
+	"textFields":{
+		"main":{
+			"y":500,
+			"h":120
+		},
+		"sub":{
+			"y":1700,
+			"h":50
+		}
 	}
 }

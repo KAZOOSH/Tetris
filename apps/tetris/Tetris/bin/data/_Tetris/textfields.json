@@ -1,0 +1,45 @@
+﻿[
+	{
+		"state":"idle",
+		"main":"Тетрис",
+		"sub":"(Tetris)",
+		"time": 6000,
+		"height":200
+	},
+	{
+		"state":"waiting_for_players",
+		"main":"поднимите бары",
+		"sub":"(bitte Stäbe anheben)",
+		"time": 6000
+	},
+	{
+		"state":"countdown3",
+		"main":"3",
+		"sub":"(3)",
+		"time": 1000
+	},
+	{
+		"state":"countdown2",
+		"main":"2",
+		"sub":"(2)",
+		"time": 1000
+	},
+	{
+		"state":"countdown1",
+		"main":"1",
+		"sub":"(1)",
+		"time": 1000
+	},
+	{
+		"state":"end1",
+		"main":"Игрок 1 побеждает",
+		"sub":"(Spieler 1 gewinnt)",
+		"time": 3000
+	},
+	{
+		"state":"end2",
+		"main":"Игрок 2 побеждает",
+		"sub":"(Spieler 2 gewinnt)",
+		"time": 3000
+	}
+]

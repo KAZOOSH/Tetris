@@ -6,6 +6,9 @@
 #include "MouseInput.h"
 #include "Tetris.h"
 
+
+#include "ofxFontStash.h"
+
 using namespace ofxModule;
 
 class ofApp : public ofBaseApp{

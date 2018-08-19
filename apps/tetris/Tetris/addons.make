@@ -1,5 +1,7 @@
 ofxBox2d
 ofxCv
+ofxEasing
+ofxFontStash
 ofxGui
 ofxIO
 ofxModule

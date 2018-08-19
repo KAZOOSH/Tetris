@@ -62,7 +62,7 @@ void Tetris::stopModule() {
 //------------------------------------------------------------------
 void Tetris::produceStoneByIntervall(uint64 intervall) {
 
-  /*  if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
+    if(lastStoneProductionTime + intervall < ofGetElapsedTimeMillis()){
         lastStoneProductionTime = ofGetElapsedTimeMillis();
         
         // left Player
@@ -77,7 +77,7 @@ void Tetris::produceStoneByIntervall(uint64 intervall) {
         stone2->setPlayer(2);
         objects->addGameObject(stone2);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
-    }*/
+    }
 }
 
 shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
@@ -102,7 +102,7 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 //------------------------------------------------------------------
 void Tetris::update() {
 	gameControl->update();
-    produceStoneByIntervall(produceStoneIntervallInMillis);
+ //   produceStoneByIntervall(produceStoneIntervallInMillis);
 }
 
 
@@ -126,6 +126,14 @@ void Tetris::draw() {
 
 void Tetris::keyPressed(ofKeyEventArgs & key)
 {
+	if (key.key == 'y') {
+		ofJson state = ofJson{
+			{ "function","gamestate" },
+			{ "gamestate" , "end1" }
+		};
+		params.notifyGameEvent(state);
+	}
+
 	if (key.key == 'a') {
 		auto stone = GameFactory::makeBasicStone(objects);
 		objects->addGameObject(stone);
@@ -203,7 +211,7 @@ void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
 	//cout << e.message.dump(4) << endl;
 	//set paddle position
-	if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle1Position")){
+	if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle2Position")){
 		playerControl.onPaddleMove(e.message);
 	}
 

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <settings>
 	<modules>
-		<!--module type="CamInput">
-		</module-->
+		<module type="MouseInput">
+		</module>
 		<module type="Tetris">
-			<input id="CamInput" />
+			<input id="MouseInput" />
 		</module>
 	</modules>
 </settings>

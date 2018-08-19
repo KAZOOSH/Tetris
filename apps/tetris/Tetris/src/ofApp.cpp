@@ -1,4 +1,4 @@
-#include "ofApp.h"
+﻿#include "ofApp.h"
 
 using namespace ofxModule;
 
@@ -6,7 +6,7 @@ using namespace ofxModule;
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-
+	ofEnableAlphaBlending();
 
 	ofSetLogLevel(OF_LOG_NOTICE);
 	ofLogToConsole();
@@ -37,6 +37,8 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	moduleControl.getModuleRunner()->drawModules();
+
+	ofSetColor(255);
 }
 
 //--------------------------------------------------------------
