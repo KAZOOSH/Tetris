@@ -122,8 +122,8 @@ void GameControlRule::onPaddleMove(ofJson & message)
 
 		float y_min = params->params["height"].get<float>()- params->params["paddleArea"][1].get<float>();
 		float y_max = params->params["height"].get<float>();
-		if (ofMap(p, y_max, y_min, 0.0, 1.0) > 0.7) paddleReady[message["id"] - 1] = true;
-		else paddleReady[message["id"] - 1] = false;
+		if (ofMap(p, y_max, y_min, 0.0, 1.0) > 0.7) paddleReady[message["id"].get<int>() - 1] = true;
+		else paddleReady[message["id"].get<int>() - 1] = false;
 	}
 }
 
