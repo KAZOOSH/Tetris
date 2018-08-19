@@ -38,7 +38,8 @@ using namespace ofxModule;
 	protected:
 		void proceedModuleEvent(ModuleEvent &e);
 		void drawWarpedFbo(ofxQuadWarp warper, bool isRight);
-
+        void contactStart(ofxBox2dContactArgs &e);
+        
 	private:
 		shared_ptr<GameControl> gameControl;
 		shared_ptr<GameObjectContainer> objects;
