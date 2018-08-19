@@ -102,7 +102,7 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 //------------------------------------------------------------------
 void Tetris::update() {
 	gameControl->update();
- //   produceStoneByIntervall(produceStoneIntervallInMillis);
+    produceStoneByIntervall(produceStoneIntervallInMillis);
 }
 
 
