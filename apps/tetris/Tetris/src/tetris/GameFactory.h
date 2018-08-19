@@ -20,9 +20,9 @@ class GameFactory
 {
 public:
 	//Gameobjects
-	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name);
+	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name, GameParameters* params);
 	static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
-    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameObjectContainer> objects);
+    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params);
     
     
 	//rules

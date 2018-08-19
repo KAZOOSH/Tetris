@@ -36,7 +36,7 @@ void MouseInput::update() {
 			{"x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0)},
 			{"y", ofMap(ofGetMouseY()+y0,0,ofGetHeight(),0.0,1.0)}
 		},{
-			{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
+			{ "x", ofMap(ofGetMouseX() + 500,0,ofGetWidth(),0.0,1.0) },
 			{ "y", ofMap(ofGetMouseY()+y1,0,ofGetHeight(),0.0,1.0) }
 		}
 	};
@@ -49,7 +49,7 @@ void MouseInput::update() {
 		{ "x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0) },
 	{ "y", ofMap(ofGetMouseY() + y0,0,ofGetHeight(),0.0,1.0) }
 		},{
-			{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
+			{ "x", ofMap(ofGetMouseX() + 400,0,ofGetWidth(),0.0,1.0) },
 	{ "y", ofMap(ofGetMouseY() + y1,0,ofGetHeight(),0.0,1.0) }
 		}
 	};
