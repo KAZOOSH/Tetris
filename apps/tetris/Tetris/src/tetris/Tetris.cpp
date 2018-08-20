@@ -131,9 +131,16 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
             int pId = objects->gameObjects[i]->getPlayerId();
             int y = 10000;
             if(objects->gameObjects[i]->getIsPartOfTower()){
-                y = objects->gameObjects[i]->getBody()[0]->getPosition().y;
+                
+                if(objects->gameObjects[i]){
+                    if(objects->gameObjects[i]->getBody().size()>0){
+                         y = objects->gameObjects[i]->getBody()[0]->getPosition().y;
+                    }
+                  
+                }
+                
             }
-           
+
             if(pId == 1) {
                 ofVec2f plp =paddleLeft->getPaddleBodyPosition();
                 objects->gameObjects[i]->updateRelativeToPaddlePosition(plp);
