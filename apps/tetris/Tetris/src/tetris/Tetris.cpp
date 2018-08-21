@@ -18,6 +18,9 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 
     produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
 
+	//add creation rules
+	params.nextCreationRules.push_back(new CreationRules());
+	params.nextCreationRules.push_back(new CreationRules());
 
 	//create Warper
 	gameFbo.allocate(params.params["width"], params.params["height"]);
@@ -36,12 +39,16 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	objects->initPhysics();
 
 	//create GameControl
-	gameControl = shared_ptr<GameControl>(new GameControl(objects));
+	gameObjects = shared_ptr<GameControl>(new GameControl(objects));
 
     // add contact listener
     objects->physics.enableEvents();
     ofAddListener(objects->physics.contactStartEvents, this, &Tetris::contactStart);
     
+	//add Background
+	objects->addGameObject(GameFactory::makeBackgroundObject(objects, &params));
+
+
 	//add paddles
     shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,Paddle::paddleNameLeft,&params);
 	objects->addPaddle(p1);
@@ -53,7 +60,8 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	
 	//add rules
 	objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
-	objects->addRule(GameFactory::makeGameControlRule(&params));
+	objects->addRule(GameFactory::makeGameControlRule(&params,objects.get()));
+
 
 	ofRegisterKeyEvents(this);
 }
@@ -180,7 +188,7 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 
 //------------------------------------------------------------------
 void Tetris::update() {
-	gameControl->update();
+	gameObjects->update();
     produceStoneByIntervall();
     setTetrisStoneRelativeToPaddlePosition();
 }
@@ -193,7 +201,7 @@ void Tetris::draw() {
 	//draw game
 	gameFbo.begin();
 	ofClear(0, 0);
-	gameControl->render();
+	gameObjects->render();
 	gameFbo.end();
 
 	//do warping
@@ -245,7 +253,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 	}
 
 	if (key.key == '#') {
-		gameControl->reloadRenderer();
+		gameObjects->reloadRenderer();
 	}
 
     if (key.key == 'b') {

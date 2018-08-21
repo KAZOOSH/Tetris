@@ -3,15 +3,15 @@
   "height": 1920,
   "gameplay":{
   	"winningHeightMin":0.4,
-  	"winningHeightMax":0.9,
+  	"winningHeightMax":0.8,
   	"maxDuration":30000,
   	"startHeightReduction":5000
   },
   "paddleArea": [
-    900,
-    800
+    1150,
+    400
   ],
-  "isOsc": false,
+  "isOsc": true,
   "serial": {
     "buzzerId": "",
     "player1Button": "",
@@ -36,8 +36,8 @@
     "produceEveryMilliseconds": 5000
   },
   "paddle": {
-    "width": 300,
-    "height": 100,
+    "width": 450,
+    "height": 50,
     "anchorMargin": 600,
     "frequency": 4,
     "damping": 3,

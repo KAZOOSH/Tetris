@@ -1,6 +1,9 @@
 #pragma once
-
 #include "ofMain.h"
+//#include "CreationRules.h"
+
+class CreationRules;
+
 class GameParameters
 {
 public:
@@ -23,5 +26,7 @@ public:
 
 	//game params
 	float winningHeight = 0.9;
+	vector<CreationRules*> nextCreationRules;
+
 };
 

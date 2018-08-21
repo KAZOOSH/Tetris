@@ -10,6 +10,8 @@
 #include "GameControl.h"
 #include "GameParameters.h"
 #include "PlayerControl.h"
+#include "CreationRules.h"
+#include "BackgroundObject.h"
 
 #include "ofxQuadWarp.h"
 
@@ -40,7 +42,7 @@ using namespace ofxModule;
         void contactStart(ofxBox2dContactArgs &e);
         
 	private:
-		shared_ptr<GameControl> gameControl;
+		shared_ptr<GameControl> gameObjects;
 		shared_ptr<GameObjectContainer> objects;
         void setTetrisStoneRelativeToPaddlePosition();
 		GameParameters params;
