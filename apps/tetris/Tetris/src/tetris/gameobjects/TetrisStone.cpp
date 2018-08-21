@@ -85,7 +85,7 @@ TetrisStone::~TetrisStone()
 }
 
 void TetrisStone::render() {
-    if(isBouncy){
+    /*if(isBouncy){
         ofSetColor(255, 0, 0);
     }
     if(isHeavy){
@@ -97,12 +97,12 @@ void TetrisStone::render() {
 
     if(isPartOfTower){
          ofSetColor(255, 255, 0);
-    }
+    }*/
     
     body->draw();
-    //    for (auto& r : renderer) {
-    //        r->render();
-    //    }
+        for (auto& r : renderer) {
+            r->render();
+        }
     ofSetColor(255, 255, 255);
 };
 
