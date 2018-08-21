@@ -34,16 +34,6 @@ public:
 	void erase();
 
 	virtual void onBodyAdded(shared_ptr<ofxBox2dBaseShape> body) {};
-    
-    // used in Tetrisstones
-    // virtual int getPlayerId() { return (0); };
-//    virtual void rotateRight() {};
-//    virtual void rotateLeft() {};
-//    virtual void makeHeavy() {};
-//    virtual void makeBouncy() {};
-//    virtual void makeLarge() {};
-//    virtual bool getIsPartOfTower() { return false; };
-//    virtual void updateRelativeToPaddlePosition(ofVec2f paddlePosition) {};
 	ofEvent<long> eraseEvent;
 protected:
 

@@ -60,28 +60,28 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 
 void Tetris::contactStart(ofxBox2dContactArgs &e) {
     if(e.a != NULL && e.b != NULL) {
-        TetrisStone * stoneA = (TetrisStone*)e.a->GetBody()->GetUserData();
-        TetrisStone * stoneB = (TetrisStone*)e.b->GetBody()->GetUserData();
+        TetrisStone * stone;
+        
+        if((TetrisStone*)e.a->GetBody()->GetUserData()){
+            stone = (TetrisStone*)e.a->GetBody()->GetUserData();
+        }
+        if((TetrisStone*)e.b->GetBody()->GetUserData()){
+            stone = (TetrisStone*)e.b->GetBody()->GetUserData();
+        }
+        
+        int minimumYPosToCreateStoneOnCollide = 1000;
         
         //check colliding objects produce new stone immediately on first collision of last created stone
-        if(stoneA) {
-            if(!stoneA->collided){
-                if(stoneA->getPlayerId()==1){
-                    lastStoneProductionTimePlayer1 =0;
-                } else if(stoneA->getPlayerId()==2){
-                    lastStoneProductionTimePlayer2 =0;
+        if(stone->getBody().size()>0) {
+            if(!stone->collided){
+                if(stone->getBody()[0]->getPosition().y > minimumYPosToCreateStoneOnCollide){
+                    if(stone->getPlayerId()==1){
+                        lastStoneProductionTimePlayer1 =0;
+                    } else if(stone->getPlayerId()==2){
+                        lastStoneProductionTimePlayer2 =0;
+                    }
                 }
-                stoneA->collide();
-            }
-        }
-        if(stoneB) {
-            if(!stoneB->collided){
-                if(stoneB->getPlayerId()==1){
-                    lastStoneProductionTimePlayer1 =0;
-                } else if(stoneB->getPlayerId()==2){
-                    lastStoneProductionTimePlayer2 =0;
-                }
-                stoneB->collide();
+                stone->collide();
             }
         }
     }

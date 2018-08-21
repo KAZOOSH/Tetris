@@ -24,9 +24,8 @@ public:
     bool getIsPartOfTower();
     void collide();
     void updateRelativeToPaddlePosition(ofVec2f paddlePosition);
-	  int getScale();
-	  string getType();
-    //void makeLarge();
+    int getScale();
+    string getType();
     
 private:
     pair<string,vector <ofDefaultVertexType>> getRandomVertecies();
