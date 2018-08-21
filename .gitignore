@@ -189,3 +189,7 @@ apps/myApps/*
 apps/tetris/build-Tetris-Desktop-Debug/qtc_Desktop_Debug/qtc_Desktop_Debug\.bg
 
 apps/projectGenerator
+
+projectGenerator/version
+
+projectGenerator/LICENSE
