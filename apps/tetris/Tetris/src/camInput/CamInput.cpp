@@ -201,7 +201,7 @@ void CamInput::draw() {
         }
     }
     
-    ofDrawBitmapString("found points : " + ofToString(foundPoints.size()), 30, 20);
+    ofDrawBitmapString("found points : " + ofToString(foundPoints.size()), 640, 20);
     
     if (!bHide) {
         gui.draw();
@@ -230,7 +230,6 @@ void CamInput::sendPositions()
     }
     };
     
-    cout << send.dump(4)<<endl;
     if (!isOsc) {
         
         notifyEvent(send);
