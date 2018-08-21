@@ -36,7 +36,7 @@ private:
     int scale= 80;
     int offsetX = 200;
     int playerId;
-    UInt64 lastCheckedRelativeToPaddleTime = 0;
+    uint64_t lastCheckedRelativeToPaddleTime = 0;
     shared_ptr<ofxBox2dPolygon> body;
     map<string,string> stones;
     

@@ -16,7 +16,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 		ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
 	}
 
-    produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<UInt64>();
+    produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
 
 
 	//create Warper

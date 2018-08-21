@@ -42,7 +42,7 @@ public:
     virtual void makeHeavy() {};
     virtual void makeBouncy() {};
     virtual void makeLarge() {};
-    virtual bool getIsPartOfTower() {};
+	virtual bool getIsPartOfTower() { return false; };
     virtual void updateRelativeToPaddlePosition(ofVec2f paddlePosition) {};
 	ofEvent<long> eraseEvent;
 protected:
