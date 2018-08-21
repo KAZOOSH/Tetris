@@ -2,6 +2,7 @@
 #include "ofxBox2d.h"
 #include "GameObject.h"
 #include "GameParameters.h"
+#include "PolygonRenderer.h"
 
 class TetrisStone : public GameObject
 {
