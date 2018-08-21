@@ -20,7 +20,7 @@ GameControlRule::GameControlRule(GameParameters* params):Rule("GameControlRule",
 
 	//create InfoPanels
 	for (auto& s : stateDescription) {
-		panels.insert(pair<string, InfoPanel>(s["state"], InfoPanel(params->params, s, &mainFont, &subFont)));
+		panels.insert(pair<string, InfoPanel>(s["state"].get<string>(), InfoPanel(params->params, s, &mainFont, &subFont)));
 	}
 
 	ofAddListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
