@@ -23,7 +23,7 @@ public:
     bool collided = false;
     bool getIsPartOfTower();
     void collide();
-    void updateRelativeToPaddlePosition(ofVec2f paddlePosition);
+    void updateRelativeToPaddlePosition(ofVec2f paddlePosition,float distanceToPaddleOrOtherTetrisStone);
     int getScale();
     string getType();
     

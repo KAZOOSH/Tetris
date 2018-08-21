@@ -131,6 +131,7 @@ void Paddle::setDampingDiff(float diffDamping)
     anchorJointBottomLeftStatic.setDamping(damping);
     anchorJointBottomRightStatic.setDamping(damping);
 }
+
 void Paddle::setFrequencyDiff(float diffFrequency)
 {
     frequencyHz += diffFrequency;

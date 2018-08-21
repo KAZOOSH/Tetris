@@ -41,7 +41,7 @@ float TetrisStone::getDistanceToPaddle(){
     return distanceToPaddle;
 }
 
-void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition){
+void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition, float distanceToPaddleOrOtherTetrisStone){
     
     //check every 300ms
     if(lastCheckedRelativeToPaddleTime + 300 < ofGetElapsedTimeMillis()){
@@ -56,7 +56,7 @@ void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition){
         
         positionChangeRelativeToPaddleSmoothed = 0.95 * positionChangeRelativeToPaddle + 0.05 * positionChangeRelativeToPaddleSmoothed;
         
-        if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 ){
+        if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 && distanceToPaddleOrOtherTetrisStone < 150 ){
             isPartOfTower = true;
         } else {
             isPartOfTower = false;

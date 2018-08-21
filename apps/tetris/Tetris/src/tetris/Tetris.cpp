@@ -118,35 +118,72 @@ void Tetris::produceStone(int player) {
     objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
 }
 
+float Tetris::getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle) {
+    
+    float minimumDistance = 100000;
+    float distance = 0;
+    // check all stones and set sistance if its
+    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
+        if(objects->gameObjects[i]->getName() == "TetrisStone" && objects->gameObjects[i]->getId() != stone->getId()){
+            shared_ptr<TetrisStone> otherStone = std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+            if(otherStone->getBody().size()>0 && otherStone->getIsPartOfTower()){
+                distance = (stone->getBody()[0]->getPosition()-otherStone->getBody()[0]->getPosition()).length();
+                if(distance < minimumDistance){
+                    minimumDistance = distance;
+                }
+            }
+        }
+    }
+    distance = (paddle->getPaddleBodyPosition() - stone->getBody()[0]->getPosition()).length();
+    if(distance < minimumDistance){
+        minimumDistance = distance;
+    }
+    return minimumDistance;
+}
+
+/**
+ * setTetrisStoneRelativeToPaddlePosition
+ * set Stone Position and get towerheight
+ */
 void Tetris::setTetrisStoneRelativeToPaddlePosition() {
     
     int towerHeightPaddleLeft = 0;
     int towerHeightPaddleRight = 0;
 
+    // get Paddles
     shared_ptr<Paddle> paddleLeft = objects->getPaddle(Paddle::paddleNameLeft);
     shared_ptr<Paddle> paddleRight = objects->getPaddle(Paddle::paddleNameRight);
     
+    // iterate over tetrisstones
     for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
         if(objects->gameObjects[i]->getName() == "TetrisStone"){
             if(objects->gameObjects[i]){
-                shared_ptr<TetrisStone> stone= std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+                shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+                
                 int pId = stone->getPlayerId();
                 int y = 10000;
-                if(stone->getIsPartOfTower()){
-                    if(stone->getBody().size()>0){
-                        y = stone->getBody()[0]->getPosition().y;
+                
+                
+                if(stone->getBody().size()>0 && stone->collided){
+                    // get Height if its part of the tower
+                    if(stone->getIsPartOfTower()){
+                       y = stone->getBody()[0]->getPosition().y;
                     }
-                }
-                if(pId == 1) {
-                    ofVec2f plp =paddleLeft->getPaddleBodyPosition();
-                    stone->updateRelativeToPaddlePosition(plp);
-                    towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
-                    paddleLeft->towerHeight = towerHeightPaddleLeft;
-                }else if(pId == 2) {
-                    ofVec2f prp =paddleRight->getPaddleBodyPosition();
-                    stone->updateRelativeToPaddlePosition(paddleRight->getPaddleBodyPosition());
-                    towerHeightPaddleRight = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
-                    paddleRight->towerHeight = towerHeightPaddleRight;
+                    
+                    if(pId == 1) {
+                        ofVec2f plp =paddleLeft->getPaddleBodyPosition();
+                        float distanceToPaddleOrOtherTetrisStone = getMinimalDistanceToOtherTowerStonesOrPaddle(stone,paddleLeft);
+                        stone->updateRelativeToPaddlePosition(plp,distanceToPaddleOrOtherTetrisStone);
+                        towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
+                        paddleLeft->towerHeight = towerHeightPaddleLeft;
+                
+                    }else if(pId == 2) {
+                        ofVec2f prp =paddleRight->getPaddleBodyPosition();
+                        float distanceToPaddleOrOtherTetrisStone = getMinimalDistanceToOtherTowerStonesOrPaddle(stone,paddleRight);
+                        stone->updateRelativeToPaddlePosition(prp,distanceToPaddleOrOtherTetrisStone);
+                        towerHeightPaddleRight  = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
+                        towerHeightPaddleRight = paddleRight->towerHeight;
+                    }
                 }
             }
         };
