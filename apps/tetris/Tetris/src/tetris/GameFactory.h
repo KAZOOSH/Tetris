@@ -6,6 +6,7 @@
 //renderer
 #include "RenderObject.h"
 #include "PolygonRenderer.h"
+#include "TetrisStoneRenderer.h"
 
 //game objects
 #include "Paddle.h"

@@ -34,7 +34,8 @@ GameControlRule::~GameControlRule()
 
 void GameControlRule::applyRule()
 {
-	bool isTSwitch = ofGetElapsedTimeMillis() - startState > getStateTime(gamestate);
+	uint64_t now = ofGetElapsedTimeMillis();
+	bool isTSwitch = now - startState > getStateTime(gamestate);
 
 	if (gamestate == "idle") {
 		if (paddleReady[0] && paddleReady[1]) {
@@ -55,10 +56,20 @@ void GameControlRule::applyRule()
 	} else if (gamestate == "countdown1" && isTSwitch) {
 		changeGamestate("game");
 	} else if (gamestate == "game") {
-
+		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
+			params->winningHeight = 
+				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
+				params->params["gameplay"]["maxDuration"].get<int>(),
+				params->params["gameplay"]["winningHeightMax"].get<float>(),
+				params->params["gameplay"]["winningHeightMin"].get<float>(),true);
+		} else if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
+			changeGamestate("endEven");
+		}
 	} else if (gamestate == "end1" && isTSwitch) {
 		changeGamestate("idle");
 	} else if (gamestate == "end2" && isTSwitch) {
+		changeGamestate("idle");
+	} else if (gamestate == "endEven" && isTSwitch) {
 		changeGamestate("idle");
 	}
 }
@@ -80,6 +91,8 @@ void GameControlRule::draw()
 	}else if (gamestate == "countdown") {
 
 	}else if (gamestate == "game") {
+		ofSetColor(255);
+		ofDrawRectangle(0, (1.0 - params->winningHeight)*params->params["height"].get<int>(), params->params["width"], 10);
 
 	}else if (gamestate == "end1") {
 

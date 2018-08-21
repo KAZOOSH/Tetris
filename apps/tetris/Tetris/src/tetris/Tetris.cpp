@@ -215,9 +215,18 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 	}
 
 	if (key.key == 'a') {
-		auto stone = GameFactory::makeBasicStone(objects);
+		// left Player
+		auto stone = GameFactory::makeTetrisStone(objects, &params);
+		stone->setPlayer(1);
 		objects->addGameObject(stone);
 		objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+
+		// right Player
+		auto stone2 = GameFactory::makeTetrisStone(objects, &params);
+		stone2->setPosition(ofVec2f(600, 0));
+		stone2->setPlayer(2);
+		objects->addGameObject(stone2);
+		objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
 	}
 
 	if (key.key == 't' ) {

@@ -13,10 +13,15 @@ public:
 	void notifyGameEvent(ofJson eventText);
 	void notifyControlEvent(ofJson eventText);
 
+	void getRandomColorScheme(ofColor& base, ofColor& highlight);
+
+	
+
 	//settings
 	ofJson params;
+	ofJson colorSchemes;
 
-	//params relevant for current game
-	//ofParameter<string> gamestate = "idle";
+	//game params
+	float winningHeight = 0.9;
 };
 

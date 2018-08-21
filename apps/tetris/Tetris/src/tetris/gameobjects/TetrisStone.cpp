@@ -11,11 +11,23 @@ TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
     
     float density = params->params["tetrisStone"]["density"].get<float>();
     
-    vertecies = getRandomVertecies();
+	auto vertsAndType = getRandomVertecies();
+	vertecies = vertsAndType.second;
+	stoneType = vertsAndType.first;
+
     body->addVertices(vertecies);
     body->setPhysics(density, 0, 1);
     body->triangulatePoly();
 
+    //body->body->SetUserData(this->body);
+    //body->setData(new TetrisStone(name,params_));
+    
+//    int myInt = 123;
+//    body.get()->setData(this);
+//    TetrisStone * stone = (TetrisStone*)body.get()->getData();
+//    body->body->SetUserData(<#void *data#>)
+//    body->body->SetUserData((void*)myInt);
+    
 	//create and add the renderer
 	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
 	addRenderer(renderer);
@@ -56,6 +68,16 @@ void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition){
 
 void TetrisStone::collide(){
     collided = true;
+}
+
+int TetrisStone::getScale()
+{
+	return scale;
+}
+
+string TetrisStone::getType()
+{
+	return stoneType;
 }
 
 TetrisStone::~TetrisStone()
@@ -124,11 +146,11 @@ void TetrisStone::createStoneVertecies(){
     string stone_I = "0,0;1,0;1,3;0,3";
     string stone_O = "0,0;2,0;2,2;0,2";
     string stone_T = "0,1;1,1;1,0;2,0;2,1;3,1;3,2;0,2";
-    stones.push_back(stone_L);
-    stones.push_back(stone_Z);
-    stones.push_back(stone_I);
-    stones.push_back(stone_O);
-    stones.push_back(stone_T);
+    stones.insert(pair<string,string>("stone_L",stone_L));
+    stones.insert(pair<string, string>("stone_Z", stone_Z));
+    stones.insert(pair<string, string>("stone_I", stone_I));
+    stones.insert(pair<string, string>("stone_O", stone_O));
+    stones.insert(pair<string, string>("stone_T", stone_T));
 }
 
 void TetrisStone::addToWorld(b2World* world){
@@ -136,20 +158,30 @@ void TetrisStone::addToWorld(b2World* world){
     body->create(world);
     addBody(body);
     //create and add the renderer
-    auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+   // auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
    // addRenderer(renderer);
 }
 
-vector <ofDefaultVertexType> TetrisStone::getRandomVertecies()
+pair<string, vector <ofDefaultVertexType>> TetrisStone::getRandomVertecies()
 {
     vector <ofDefaultVertexType> pts;
     
-    string randomStone = stones[ofRandom(stones.size())];
+
+	int max = ofRandom(stones.size());
+	int i = 0;
+
+	pair <string, string> stonePair;
+	for (auto& v:stones){
+		if (i == max) stonePair = v;
+		++i;
+	}
+	
+	string randomStone = stonePair.second;
     vector<string> pairs = ofSplitString(randomStone, ";");
     for(int i=0; i < pairs.size(); i++){
         vector<string> values = ofSplitString(pairs[i], ",");
         pts.push_back(ofDefaultVertexType(ofToInt(values[0]) * scale + offsetX, ofToInt(values[1]) * scale, 0));
     }
-    return pts;
+    return pair<string, vector <ofDefaultVertexType>>(stonePair.first, pts);
 }
 

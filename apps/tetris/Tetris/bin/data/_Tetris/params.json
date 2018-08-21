@@ -1,6 +1,12 @@
 {
   "width": 2080,
   "height": 1920,
+  "gameplay":{
+  	"winningHeightMin":0.4,
+  	"winningHeightMax":0.9,
+  	"maxDuration":30000,
+  	"startHeightReduction":5000
+  },
   "paddleArea": [
     900,
     800
