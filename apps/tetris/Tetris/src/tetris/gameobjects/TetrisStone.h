@@ -33,7 +33,7 @@ private:
     vector <ofDefaultVertexType> vertecies;
 	string stoneType;
     void createStoneVertecies();
-    int scale= 80;
+    int scale= 40;
     int offsetX = 200;
     int playerId;
     uint64_t lastCheckedRelativeToPaddleTime = 0;

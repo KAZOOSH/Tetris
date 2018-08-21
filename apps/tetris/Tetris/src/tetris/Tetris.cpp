@@ -128,43 +128,40 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
     
     for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
         if(objects->gameObjects[i]->getName() == "TetrisStone"){
-            int pId = objects->gameObjects[i]->getPlayerId();
-            int y = 10000;
-            if(objects->gameObjects[i]->getIsPartOfTower()){
-                
-                if(objects->gameObjects[i]){
-                    if(objects->gameObjects[i]->getBody().size()>0){
-                         y = objects->gameObjects[i]->getBody()[0]->getPosition().y;
+            if(objects->gameObjects[i]){
+                shared_ptr<TetrisStone> stone= std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+                int pId = stone->getPlayerId();
+                int y = 10000;
+                if(stone->getIsPartOfTower()){
+                    if(stone->getBody().size()>0){
+                        y = stone->getBody()[0]->getPosition().y;
                     }
-                  
                 }
-                
+                if(pId == 1) {
+                    ofVec2f plp =paddleLeft->getPaddleBodyPosition();
+                    stone->updateRelativeToPaddlePosition(plp);
+                    towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
+                    paddleLeft->towerHeight = towerHeightPaddleLeft;
+                }else if(pId == 2) {
+                    ofVec2f prp =paddleRight->getPaddleBodyPosition();
+                    stone->updateRelativeToPaddlePosition(paddleRight->getPaddleBodyPosition());
+                    towerHeightPaddleRight = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
+                    paddleRight->towerHeight = towerHeightPaddleRight;
+                }
             }
-
-            if(pId == 1) {
-                ofVec2f plp =paddleLeft->getPaddleBodyPosition();
-                objects->gameObjects[i]->updateRelativeToPaddlePosition(plp);
-                towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
-                paddleLeft->towerHeight = towerHeightPaddleLeft;
-            }else if(pId == 2) {
-                ofVec2f prp =paddleRight->getPaddleBodyPosition();
-                objects->gameObjects[i]->updateRelativeToPaddlePosition(paddleRight->getPaddleBodyPosition());
-                towerHeightPaddleRight = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
-                 paddleRight->towerHeight = towerHeightPaddleRight;
-            }
-            
-            
         };
     }
 }
 
 
-shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
+shared_ptr<TetrisStone> Tetris::getLastCreatedStone(int playerId) {
     for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        if(objects->gameObjects[i]->getName() == "TetrisStone"){
-            int pId = objects->gameObjects[i]->getPlayerId();
+        shared_ptr<TetrisStone> stone= std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+        
+        if(stone->getName() == "TetrisStone"){
+            int pId = stone->getPlayerId();
             if(pId == playerId) {
-                return objects->gameObjects[i];
+                return stone;
             }
         };
     }
@@ -260,10 +257,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
     if (key.key == '2') {
         getLastCreatedStone(1)->makeBouncy();
     }
-    if (key.key == '3') {
-        getLastCreatedStone(1)->makeLarge();
-    }
-    
+
     // rotate last stone for player 1
     if (key.key == 'r') {
         getLastCreatedStone(1)->rotateRight();
