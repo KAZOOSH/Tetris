@@ -1,7 +1,7 @@
 #include "TetrisStone.h"
 
 
-TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
+TetrisStone::TetrisStone(string name, GameParameters* params_, GameParameters::effects activeEffect):GameObject(name)
 {
     //isTetrisStone= true;
     //collided = false;
@@ -11,26 +11,40 @@ TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
     
     float density = params->params["tetrisStone"]["density"].get<float>();
     
-	auto vertsAndType = getRandomVertecies();
-	vertecies = vertsAndType.second;
-	stoneType = vertsAndType.first;
-
+    auto vertsAndType = getRandomVertecies();
+    vertecies = vertsAndType.second;
+    stoneType = vertsAndType.first;
+    
     body->addVertices(vertecies);
-    body->setPhysics(density, 0, 1);
+    
+    
+    switch(activeEffect)
+    {
+        case GameParameters::heavy :
+            body->setPhysics(5.0, 0, 1.0);
+            break;
+        case GameParameters::bouncy :
+            body->setPhysics(1.0, 0, 0.5);
+            break;
+        default:
+            body->setPhysics(1.0, 0, 1.0);
+            break;
+    }
+    
     body->triangulatePoly();
-
+    
     //body->body->SetUserData(this->body);
     //body->setData(new TetrisStone(name,params_));
     
-//    int myInt = 123;
-//    body.get()->setData(this);
-//    TetrisStone * stone = (TetrisStone*)body.get()->getData();
-//    body->body->SetUserData(<#void *data#>)
-//    body->body->SetUserData((void*)myInt);
+    //    int myInt = 123;
+    //    body.get()->setData(this);
+    //    TetrisStone * stone = (TetrisStone*)body.get()->getData();
+    //    body->body->SetUserData(<#void *data#>)
+    //    body->body->SetUserData((void*)myInt);
     
-	//create and add the renderer
-	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
-	addRenderer(renderer);
+    //create and add the renderer
+    auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+    addRenderer(renderer);
 }
 
 bool TetrisStone::getIsPartOfTower(){
@@ -72,12 +86,12 @@ void TetrisStone::collide(){
 
 int TetrisStone::getScale()
 {
-	return scale;
+    return scale;
 }
 
 string TetrisStone::getType()
 {
-	return stoneType;
+    return stoneType;
 }
 
 TetrisStone::~TetrisStone()
@@ -109,15 +123,15 @@ void TetrisStone::render() {
 
 void TetrisStone::makeHeavy() {
     isHeavy = true;
-//    not working todo: check this out dude
-//    body->body->GetFixtureList()->SetDensity(10.0f);
-//    body->body->ResetMassData();
+    //    not working todo: check this out dude
+    // body->setPhysics(10.0f, 1.0f, 0.1f);
 }
 
 void TetrisStone::makeBouncy() {
     isBouncy = true;
-    body->body->GetFixtureList()->SetRestitution(0.5f);
+    // body->setPhysics(1.0f, 0.0f, 0.2f);
 }
+
 
 void TetrisStone::setPosition(ofVec2f position){
     body->setPosition(position);
@@ -136,7 +150,7 @@ void TetrisStone::rotateRight() {
 }
 
 void TetrisStone::rotateLeft() {
-     body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
+    body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
     //body->setRotation(body->getRotation() - 90);
 }
 
@@ -158,25 +172,25 @@ void TetrisStone::addToWorld(b2World* world){
     body->create(world);
     addBody(body);
     //create and add the renderer
-   // auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
-   // addRenderer(renderer);
+    // auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+    // addRenderer(renderer);
 }
 
 pair<string, vector <ofDefaultVertexType>> TetrisStone::getRandomVertecies()
 {
     vector <ofDefaultVertexType> pts;
     
-
-	int max = ofRandom(stones.size());
-	int i = 0;
-
-	pair <string, string> stonePair;
-	for (auto& v:stones){
-		if (i == max) stonePair = v;
-		++i;
-	}
-	
-	string randomStone = stonePair.second;
+    
+    int max = ofRandom(stones.size());
+    int i = 0;
+    
+    pair <string, string> stonePair;
+    for (auto& v:stones){
+        if (i == max) stonePair = v;
+        ++i;
+    }
+    
+    string randomStone = stonePair.second;
     vector<string> pairs = ofSplitString(randomStone, ";");
     for(int i=0; i < pairs.size(); i++){
         vector<string> values = ofSplitString(pairs[i], ",");

@@ -44,7 +44,7 @@ void Paddle::createBody(b2World* world){
     anchorLeftStatic.setup(world, x - anchorMargin, y, 4);
     anchorRightStatic.setup(world, x + paddleWidth + anchorMargin, y, 4);
     anchorBottomStatic.setup(world, x-paddleWidth/2, y + anchorMargin, 4);
-
+    
     //destroy fixture to avoid collisions
     anchorLeft.body->DestroyFixture(anchorLeft.body->GetFixtureList());
     anchorRight.body->DestroyFixture(anchorRight.body->GetFixtureList());
@@ -77,7 +77,7 @@ void Paddle::createBody(b2World* world){
     anchorJointRightStatic.setup(world,anchorRightStatic.body,body->body,anchorRightStaticPos,paddleRightTopPos,frequencyHz,damping,false);
     anchorJointBottomLeftStatic.setup(world,anchorBottomStatic.body,body->body,anchorBottomStaticPos,paddleLeftBottomPos, frequencyHz, damping, false);
     anchorJointBottomRightStatic.setup(world, anchorBottomStatic.body, body->body,anchorBottomStaticPos, paddleRightBottomPos, frequencyHz, damping, false);
-
+    
     // Join Length to zero
     anchorJointLeft.setLength(0);
     anchorJointRight.setLength(0);
@@ -102,7 +102,7 @@ void Paddle::render()
     anchorRight.draw();
     anchorJointRight.draw();
     
-	ofSetColor(255, 100, 100);
+    ofSetColor(255, 100, 100);
     anchorLeftStatic.draw();
     anchorJointLeftStatic.draw();
     anchorRightStatic.draw();
@@ -145,23 +145,23 @@ void Paddle::setFrequencyDiff(float diffFrequency)
 
 void Paddle::setAnchorPosition(ofVec2f anchorLeft, ofVec2f anchorRight)
 {
-	anchorLeftPosition = anchorLeft;
-	anchorRightPosition = anchorRight;
+    anchorLeftPosition = anchorLeft;
+    anchorRightPosition = anchorRight;
     
     // get center
-	position = (anchorLeft + anchorRight) /2;
-	positionChanged = true;
+    position = (anchorLeft + anchorRight) /2;
+    positionChanged = true;
 }
 
 void Paddle::updatePosition()
 {
-	if (positionChanged) {
-		anchorLeft.setPosition(anchorLeftPosition.x, anchorLeftPosition.y);
-		anchorRight.setPosition(anchorRightPosition.x, anchorRightPosition.y);
-
+    if (positionChanged) {
+        anchorLeft.setPosition(anchorLeftPosition.x, anchorLeftPosition.y);
+        anchorRight.setPosition(anchorRightPosition.x, anchorRightPosition.y);
+        
         // set anchors relative to paddle center
         anchorLeftStatic.setPosition(position.x - paddleWidth/2 - anchorMargin, position.y);
         anchorRightStatic.setPosition(position.x + paddleWidth/2 + anchorMargin, position.y);
         anchorBottomStatic.setPosition(position.x, position.y + paddleHeight/2 + anchorMargin);
-	}
+    }
 }
