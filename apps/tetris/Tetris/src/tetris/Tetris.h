@@ -10,7 +10,7 @@
 #include "GameControl.h"
 #include "GameParameters.h"
 #include "PlayerControl.h"
-
+#include "TetrisStone.h"
 #include "ofxQuadWarp.h"
 
 using namespace ofxModule;
@@ -31,7 +31,7 @@ using namespace ofxModule;
 		void keyPressed(ofKeyEventArgs & key);
 		void keyReleased(ofKeyEventArgs & key) {};
 
-        shared_ptr<GameObject> getLastCreatedStone(int playerId);
+        shared_ptr<TetrisStone> getLastCreatedStone(int playerId);
 		void onOscMessage(ofxOscMessage & message);
         
 	protected:
@@ -40,6 +40,7 @@ using namespace ofxModule;
         void contactStart(ofxBox2dContactArgs &e);
         
 	private:
+        float getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle);
 		shared_ptr<GameControl> gameControl;
 		shared_ptr<GameObjectContainer> objects;
         void setTetrisStoneRelativeToPaddlePosition();
