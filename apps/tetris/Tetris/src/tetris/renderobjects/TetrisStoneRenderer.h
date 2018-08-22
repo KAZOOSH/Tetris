@@ -23,5 +23,8 @@ private:
 	ofColor baseColor;
 	ofColor highlightColor;
 	uint64_t creationTime;
+
+	bool isPartofTower = false;
+	uint64_t tPartofTower = 0;
 };
 

@@ -2,8 +2,9 @@
 
 
 
-GameControlRule::GameControlRule(GameParameters* params):Rule("GameControlRule",params)
+GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* gameControl_):Rule("GameControlRule",params)
 {
+	gameObjects = gameControl_;
 	mainFont.setup(params->params["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
 	subFont.setup(params->params["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
 	mainFont.setSize(250);
@@ -50,12 +51,23 @@ void GameControlRule::applyRule()
 			changeGamestate("idle");
 		}
 	} else if (gamestate == "countdown3" && isTSwitch) {
+		params->winningHeight = params->params["gameplay"]["winningHeightMax"].get<float>();
 		changeGamestate("countdown2");
 	} else if (gamestate == "countdown2" && isTSwitch) {
 		changeGamestate("countdown1");
 	} else if (gamestate == "countdown1" && isTSwitch) {
 		changeGamestate("game");
 	} else if (gamestate == "game") {
+		int winningHeight = params->winningHeight*params->params["height"].get<float>();
+		//cout << winningHeight << " -> " << gameObjects->paddles[0]->towerHeight << "   |    " << gameObjects->paddles[1]->towerHeight << endl;
+		if (gameObjects->paddles[0]->towerHeight > winningHeight) {
+			changeGamestate("end1");
+		}
+		else if (gameObjects->paddles[1]->towerHeight > winningHeight) {
+			changeGamestate("end2");
+		}
+
+		//reduce winning height
 		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
 			params->winningHeight = 
 				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
@@ -92,8 +104,12 @@ void GameControlRule::draw()
 
 	}else if (gamestate == "game") {
 		ofSetColor(255);
-		ofDrawRectangle(0, (1.0 - params->winningHeight)*params->params["height"].get<int>(), params->params["width"], 10);
-
+		int h = params->params["height"].get<int>();
+		int hBase = (1.0 - params->winningHeight)*h;
+		int y1 = hBase -(h - gameObjects->paddles[0]->getBody()[0]->getPosition().y);
+		int y2 = hBase - (h - gameObjects->paddles[1]->getBody()[0]->getPosition().y);
+		ofDrawRectangle(0, y1, params->params["width"].get<int>()/2, 10);
+		ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 10);
 	}else if (gamestate == "end1") {
 
 	} else if (gamestate == "end2") {

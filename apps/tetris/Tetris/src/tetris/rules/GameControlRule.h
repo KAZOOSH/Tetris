@@ -2,6 +2,7 @@
 #include "Rule.h"
 #include "ofxFontStash.h"
 #include "ofxEasing.h"
+#include "GameObjectContainer.h"
 
 class TextField {
 public:
@@ -38,7 +39,7 @@ class GameControlRule :
 	public Rule
 {
 public:
-	GameControlRule(GameParameters* params);
+	GameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
 	~GameControlRule();
 
 	void applyRule();
@@ -61,5 +62,7 @@ private:
 	map<string, InfoPanel> panels;
 
 	vector<bool> paddleReady;
+	GameObjectContainer* gameObjects;
+
 };
 

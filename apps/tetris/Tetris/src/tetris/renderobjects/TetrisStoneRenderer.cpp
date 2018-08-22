@@ -17,6 +17,11 @@ TetrisStoneRenderer::TetrisStoneRenderer(shared_ptr<TetrisStone> stone_, ofColor
 
 void TetrisStoneRenderer::render()
 {
+	if (stone->getIsPartOfTower() != isPartofTower) {
+		isPartofTower = !isPartofTower;
+		tPartofTower = ofGetElapsedTimeMillis();
+	}
+
 	updateTile();
 
 	int scale = stone->getScale();
@@ -37,20 +42,46 @@ void TetrisStoneRenderer::reload()
 
 void TetrisStoneRenderer::updateTile()
 {
+
 	int w = tile.getWidth();
 	int h = tile.getHeight();
 
-	float t = ((ofGetElapsedTimeMillis()+ creationTime) / 3) % 500 * 2*PI /500;
-	float padding = sin(t) * 5 + 15;
+	//speed
+	float dMax = 25;
+	ofVec2f v = stone->getBody()[0]->getVelocity();
+	ofVec2f d = -ofVec2f(ofxeasing::map_clamp(v.x, 0, 40, 0, dMax,&ofxeasing::sine::easeInOut), 
+		ofxeasing::map_clamp(v.y, 0, 40, 0, dMax, &ofxeasing::sine::easeInOut));
+
+	//line
+	float padding = 15;
 	int wLine = 10;
 
+	if (isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
+		wLine += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 0, 10, &ofxeasing::sine::easeInOut);
+	}
+
+	//color
+	ofColor base = baseColor;
+	ofColor highlight = highlightColor;
+	float damping = 1.0;
+
+	if (isPartofTower) {
+		base.setHsb(baseColor.getHue(), baseColor.getSaturation()*damping, baseColor.getBrightness()*damping);
+		highlight.setHsb(highlightColor.getHue(), highlightColor.getSaturation()*damping, highlightColor.getBrightness()*damping);
+	}
+
 	tile.begin();
-	ofSetColor(baseColor);
+	ofSetColor(base);
 	ofDrawRectangle(0, 0, w, h);
-	ofSetColor(highlightColor);
+	ofTranslate(d);
+	ofSetColor(highlight);
 	ofDrawRectangle(padding, padding, w- padding*2, h- padding*2);
-	ofSetColor(baseColor);
-	ofDrawRectangle(padding+wLine, padding+ wLine, w - (padding+ wLine) *2 , h - (padding + wLine)*2);
+	
+	//full color when part of tower
+	if (!isPartofTower || isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
+		ofSetColor(base);
+		ofDrawRectangle(padding + wLine, padding + wLine, w - (padding + wLine) * 2, h - (padding + wLine) * 2);
+	}
 	tile.end();
 }
 
