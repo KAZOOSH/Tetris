@@ -46,6 +46,6 @@ private:
     bool isBouncy;
 	bool isHeavy;
 	bool isLarge;
-    bool isPartOfTower;
+    bool isPartOfTower = false;
 };
 

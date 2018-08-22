@@ -332,6 +332,9 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
             objects->paddles[i]->setFrequencyDiff(-0.1f);
         }
     }
+	if (key.key == 'm') {
+		gameControl->reloadRenderer();
+	}
 
 }
 

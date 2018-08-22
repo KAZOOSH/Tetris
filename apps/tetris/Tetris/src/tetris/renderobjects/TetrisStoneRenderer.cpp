@@ -53,22 +53,22 @@ void TetrisStoneRenderer::updateTile()
 		ofxeasing::map_clamp(v.y, 0, 40, 0, dMax, &ofxeasing::sine::easeInOut));
 
 	//line
-	float padding = 15;
+	float padding = 20;
 	int wLine = 10;
 
 	if (isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
-		wLine += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 0, 10, &ofxeasing::sine::easeInOut);
+		wLine += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 10, 0, &ofxeasing::sine::easeInOut);
 	}
 
 	//color
 	ofColor base = baseColor;
 	ofColor highlight = highlightColor;
-	float damping = 1.0;
+	/*float damping = 1.0;
 
 	if (isPartofTower) {
 		base.setHsb(baseColor.getHue(), baseColor.getSaturation()*damping, baseColor.getBrightness()*damping);
 		highlight.setHsb(highlightColor.getHue(), highlightColor.getSaturation()*damping, highlightColor.getBrightness()*damping);
-	}
+	}*/
 
 	tile.begin();
 	ofSetColor(base);
@@ -76,9 +76,8 @@ void TetrisStoneRenderer::updateTile()
 	ofTranslate(d);
 	ofSetColor(highlight);
 	ofDrawRectangle(padding, padding, w- padding*2, h- padding*2);
-	
-	//full color when part of tower
-	if (!isPartofTower || isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
+
+	if (isPartofTower){// && ofGetElapsedTimeMillis() - tPartofTower > 500) {
 		ofSetColor(base);
 		ofDrawRectangle(padding + wLine, padding + wLine, w - (padding + wLine) * 2, h - (padding + wLine) * 2);
 	}

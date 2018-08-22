@@ -93,13 +93,13 @@ void TetrisStone::render() {
     }
     if(collided){
         ofSetColor(0, 0, 255);
-    }
+    }*/
 
-    if(isPartOfTower){
+    /*if(isPartOfTower){
          ofSetColor(255, 255, 0);
     }*/
     
-    body->draw();
+    //body->draw();
         for (auto& r : renderer) {
             r->render();
         }

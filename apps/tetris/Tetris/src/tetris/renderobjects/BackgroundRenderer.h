@@ -15,5 +15,6 @@ public:
 private:
 	GameParameters* params;
 	shared_ptr<GameObjectContainer> objects;
+	ofShader shader;
 };
 
