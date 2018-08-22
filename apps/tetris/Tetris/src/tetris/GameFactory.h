@@ -22,15 +22,15 @@
 class GameFactory
 {
 public:
-	//Gameobjects
-	static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name, GameParameters* params);
-	static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
-    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params);
-	static shared_ptr<BackgroundObject> makeBackgroundObject(shared_ptr<GameObjectContainer> objects, GameParameters* params);
+    //Gameobjects
+    static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name, GameParameters* params);
+    static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
+    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params, GameParameters::effects activeEffect);
+    static shared_ptr<BackgroundObject> makeBackgroundObject(shared_ptr<GameObjectContainer> objects, GameParameters* params);
     
     
-	//rules
-	static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
-	static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
+    //rules
+    static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
+    static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
 };
 
