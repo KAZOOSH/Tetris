@@ -164,4 +164,7 @@ void Paddle::updatePosition()
         anchorRightStatic.setPosition(position.x + paddleWidth/2 + anchorMargin, position.y);
         anchorBottomStatic.setPosition(position.x, position.y + paddleHeight/2 + anchorMargin);
     }
+    // add little force to paddle to avoid it gets stuck
+    body->addImpulseForce(body->getB2DPosition()-ofVec2f(1,0), ofVec2f(0,0.1f));
+
 }
