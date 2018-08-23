@@ -74,25 +74,30 @@ void Tetris::contactStart(ofxBox2dContactArgs &e) {
         
         if((TetrisStone*)e.a->GetBody()->GetUserData()){
             stone = (TetrisStone*)e.a->GetBody()->GetUserData();
+            collisionHandler(stone);
         }
+        
         if((TetrisStone*)e.b->GetBody()->GetUserData()){
             stone = (TetrisStone*)e.b->GetBody()->GetUserData();
+            collisionHandler(stone);
         }
+    }
+}
+
+void Tetris::collisionHandler(TetrisStone* stone) {
+    int minimumYPosToCreateStoneOnCollide = 1000;
+    //check colliding objects produce new stone immediately on first collision of last created stone
+    if(stone->getBody().size()>0) {
         
-        int minimumYPosToCreateStoneOnCollide = 1000;
-        
-        //check colliding objects produce new stone immediately on first collision of last created stone
-        if(stone->getBody().size()>0) {
-            if(!stone->collided){
-                if(stone->getBody()[0]->getPosition().y > minimumYPosToCreateStoneOnCollide){
-                    if(stone->getPlayerId()==1){
-                        lastStoneProductionTimePlayer1 =0;
-                    } else if(stone->getPlayerId()==2){
-                        lastStoneProductionTimePlayer2 =0;
-                    }
+        if(!stone->collided){
+            if(stone->getBody()[0]->getPosition().y > minimumYPosToCreateStoneOnCollide){
+                if(stone->getPlayerId()==1){
+                    lastStoneProductionTimePlayer1 =0;
+                } else if(stone->getPlayerId()==2){
+                    lastStoneProductionTimePlayer2 =0;
                 }
-                stone->collide();
             }
+            stone->collide();
         }
     }
 }
@@ -132,6 +137,7 @@ void Tetris::produceStone(int player) {
     
     if(player == 1) {
         lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
+        stone->setPosition(ofVec2f(300,0));
     }
     if(player == 2){
         lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
@@ -326,10 +332,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
         objects->addGameObject(stone);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
     }
-    
-    if (key.key == '1') {
-        getLastCreatedStone(1)->makeHeavy();
-    }
+
     if (key.key == '2') {
         getLastCreatedStone(1)->makeBouncy();
     }

@@ -68,8 +68,8 @@ void GameEventRule::onGameEvent(ofJson & eventMessage)
 {
 	if (eventMessage["function"] != nullptr && eventMessage["function"] == "effect") {
 		if (eventMessage["player"] != nullptr && eventMessage["player"] != 0) {
-			currentEvents[eventMessage["player"]-1].push_back(eventMessage["effect"]);
-			panels[currentEvents[eventMessage["player"] - 1].back()][eventMessage["player"] - 1].start();
+			currentEvents[eventMessage["player"].get<int>()-1].push_back(eventMessage["effect"]);
+			panels[currentEvents[eventMessage["player"].get<int>() - 1].back()][eventMessage["player"].get<int>() - 1].start();
 		} else {
 			currentEvents[0].push_back(eventMessage["effect"]);
 			currentEvents[1].push_back(eventMessage["effect"]);
