@@ -232,6 +232,7 @@ shared_ptr<TetrisStone> Tetris::getLastCreatedStone(int playerId) {
             }
         };
     }
+    return nullptr;
 }
 
 void Tetris::onOscMessage(ofxOscMessage & message)
@@ -245,10 +246,15 @@ void Tetris::onControlEvent(ofJson & event)
 {
 	if (params.gamestate == "game") {
 		if (event["control"] != nullptr && event["control"] == "pedal") {
+            shared_ptr<TetrisStone> stone = getLastCreatedStone(event["player"]);
 			if (event["direction"] == "left") {
-				getLastCreatedStone(event["player"])->rotateLeft();
+                if(getLastCreatedStone(event["player"]) != nullptr){
+                    stone->rotateLeft();
+                }
 			} else {
-				getLastCreatedStone(event["player"])->rotateRight();
+                if(stone!= nullptr){
+                    stone->rotateRight();
+                }
 			}
 		} else if (event["control"] != nullptr && event["control"] == "buzzer") {
 			params.setRandomNextEffect();
@@ -353,11 +359,15 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
     
     // rotate last stone for player 1
     if (key.key == 'r') {
-        getLastCreatedStone(1)->rotateRight();
+        if(getLastCreatedStone(1) != nullptr){
+            getLastCreatedStone(1)->rotateRight();
+        }
     }
     
     if (key.key == 'e') {
-        getLastCreatedStone(1)->rotateLeft();
+        if(getLastCreatedStone(1) != nullptr){
+            getLastCreatedStone(1)->rotateLeft();
+        }
     }
     
     if (key.key == 'i') {
