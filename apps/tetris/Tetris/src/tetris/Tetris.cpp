@@ -366,10 +366,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 	if (key.key == 'm') {
 		gameControl->reloadRenderer();
 	}
-
-    
-    if (key.key == 'n') {
-		
+    if (key.key == 'n') {	
 		params.setRandomNextEffect();
     }
     

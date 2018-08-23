@@ -18,7 +18,7 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContai
     ofColor base;
     ofColor highlight;
 
-	//activeEffect = "bouncy";
+	activeEffect = "bouncy";
 
 	if (activeEffect == "base") {
 		params->getRandomColorScheme(base, highlight);
