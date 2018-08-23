@@ -33,7 +33,8 @@ public:
     
     shared_ptr<TetrisStone> getLastCreatedStone(int playerId);
     void onOscMessage(ofxOscMessage & message);
-void onControlEvent(ofJson& event);
+	void onControlEvent(ofJson& event);
+	void onGameEvent(ofJson& event);
     
 	protected:
 		void proceedModuleEvent(ModuleEvent &e);

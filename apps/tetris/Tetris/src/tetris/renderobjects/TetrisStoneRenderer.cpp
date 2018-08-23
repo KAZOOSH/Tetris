@@ -28,7 +28,7 @@ void TetrisStoneRenderer::render()
 
 	updateTile();
 
-	int scale = stone->getScale();
+	int scale = stone->getScale()*2;
 	auto body = stone->getBody()[0];
 	ofPushStyle();
 	ofPushMatrix();
@@ -56,9 +56,9 @@ void TetrisStoneRenderer::updateTile()
 		ofxeasing::map_clamp(v.y, 0, 40, 0, dMax, &ofxeasing::sine::easeInOut));
 
 	//line
-
+	int wLinet = wLine;
 	if (isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
-		wLine += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 10, 0, &ofxeasing::sine::easeInOut);
+		wLinet += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 10, 0, &ofxeasing::sine::easeInOut);
 	}
 
 
@@ -71,7 +71,7 @@ void TetrisStoneRenderer::updateTile()
 
 	if (isPartofTower){// && ofGetElapsedTimeMillis() - tPartofTower > 500) {
 		ofSetColor(baseColor);
-		ofDrawRectangle(padding + wLine, padding + wLine, w - (padding + wLine) * 2, h - (padding + wLine) * 2);
+		ofDrawRectangle(padding + wLinet, padding + wLinet, w - (padding + wLinet) * 2, h - (padding + wLinet) * 2);
 	}
 	tile.end();
 }

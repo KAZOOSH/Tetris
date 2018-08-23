@@ -37,6 +37,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     //create objects
     objects = shared_ptr<GameObjectContainer>(new GameObjectContainer());
     objects->initPhysics();
+	ofAddListener(params.gameEvent, this, &Tetris::onGameEvent);
     
     //create GameControl
     gameObjects = shared_ptr<GameControl>(new GameControl(objects));
@@ -255,6 +256,19 @@ void Tetris::onControlEvent(ofJson & event)
 	}
 }
 
+void Tetris::onGameEvent(ofJson & event)
+{
+	if (event["function"] != nullptr && event["function"] == "createWorldEffect") {
+		objects->addRule(GameFactory::makeWorldEffect(&params, event["params"]));
+
+		ofJson out;
+		out["function"] = "effect";
+		out["effect"] = event["params"]["state"];
+		out["player"] = 0;
+		params.notifyGameEvent(out);
+	}
+}
+
 
 //------------------------------------------------------------------
 void Tetris::update() {
@@ -370,7 +384,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 		gameControl->reloadRenderer();
 	}
     if (key.key == 'n') {	
-		params.setRandomNextEffect();
+		params.setNextEffect("wind");
     }
     
 }

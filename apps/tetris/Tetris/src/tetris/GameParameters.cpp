@@ -61,7 +61,38 @@ void GameParameters::setRandomNextEffect(){
 		}
 		std::random_shuffle(nextEffectList.begin(), nextEffectList.end());
 	}
-	nextCreationRule[0] = nextEffectList.back();
-	nextCreationRule[1] = nextEffectList.back();
+
+	if (getEffect(nextEffectList.back())["type"] == "world") {
+		ofJson out;
+		out["function"] = "createWorldEffect";
+		out["params"] = getEffect(nextEffectList.back());
+		notifyGameEvent(out);
+
+	} else {
+		nextCreationRule[0] = nextEffectList.back();
+		nextCreationRule[1] = nextEffectList.back();
+	}
 	nextEffectList.pop_back();
+}
+
+void GameParameters::setNextEffect(string name)
+{
+	if (getEffect(name)["type"] == "world") {
+		ofJson out;
+		out["function"] = "createWorldEffect";
+		out["params"] = getEffect(name);
+		notifyGameEvent(out);
+
+	} else {
+		nextCreationRule[0] = name;
+		nextCreationRule[1] = name;
+	}
+}
+
+ofJson GameParameters::getEffect(string effect)
+{
+	for (auto& e : effects) {
+		if (e["state"] == effect) return e;
+	}
+	return ofJson();
 }

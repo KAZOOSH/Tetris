@@ -35,13 +35,6 @@ void HeavyStoneRenderer::updateTile()
 		innerRect.a = 255;
 	}
 
-	/*float damping = 1.0;
-
-	if (isPartofTower) {
-	base.setHsb(baseColor.getHue(), baseColor.getSaturation()*damping, baseColor.getBrightness()*damping);
-	highlight.setHsb(highlightColor.getHue(), highlightColor.getSaturation()*damping, highlightColor.getBrightness()*damping);
-	}*/
-
 	tile.begin();
 	ofSetColor(base);
 	ofDrawRectangle(0, 0, w, h);

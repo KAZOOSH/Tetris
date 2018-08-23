@@ -146,7 +146,7 @@ void GameControlRule::onGamestateChanged(ofJson & message)
 
 void GameControlRule::onPaddleMove(ofJson & message)
 {
-	if (message["control"] == "paddle") {
+	if (message["control"] != nullptr && message["control"] == "paddle") {
 		float p = 0.5*(message["p1"]["y"].get<float>() + message["p2"]["y"].get<float>());
 
 		float y_min = params->params["height"].get<float>()- params->params["paddleArea"][1].get<float>();

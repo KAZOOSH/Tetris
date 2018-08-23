@@ -26,6 +26,9 @@ void GameControl::update()
 
 	//remove Elements erased elements
 	removeErasedElements();
+
+	//remove rules out of runtime
+	removeDeprecatedRules();
 }
 
 void GameControl::render()
@@ -61,4 +64,22 @@ void GameControl::removeErasedElements()
 		}
 	}
 	
+}
+
+void GameControl::removeDeprecatedRules()
+{
+	vector<int> toDel;
+	auto now = ofGetElapsedTimeMillis();
+	size_t i = 0;
+	for (auto& rule : objects->rules) {
+		if (rule->getRuntime() != 0 && now - rule->getCreationTime() > rule->getRuntime()) {
+			toDel.push_back(i);
+		}
+		++i;
+	}
+
+	for (std::vector<int>::size_type i = toDel.size() - 1;
+		i != (std::vector<int>::size_type) - 1; i--) {
+		objects->rules.erase(objects->rules.begin() + toDel[i]);
+	}
 }

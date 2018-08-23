@@ -22,6 +22,7 @@ public:
     
 
 	void setRandomNextEffect();
+	void setNextEffect(string name);
 
 	//util functions
 
@@ -35,6 +36,8 @@ public:
     vector<string> nextCreationRule;
 
 	string gamestate = "idle";
+
+	ofJson getEffect(string effect);
 
 private:
 	vector<string> nextEffectList;

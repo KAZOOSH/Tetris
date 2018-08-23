@@ -18,6 +18,7 @@ public:
 
 protected:
 	void removeErasedElements();
+	void removeDeprecatedRules();
 
 private:
 	long tGameStarted;

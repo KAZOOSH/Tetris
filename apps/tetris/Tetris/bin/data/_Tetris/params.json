@@ -36,7 +36,7 @@
   },
   "paddle": {
     "width": 450,
-    "height": 50,
+    "height": 20,
     "anchorMargin": 600,
     "frequency": 4,
     "damping": 3,
