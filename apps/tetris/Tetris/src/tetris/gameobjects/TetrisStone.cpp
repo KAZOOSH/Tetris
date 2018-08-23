@@ -18,14 +18,16 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffe
     body->addVertices(vertecies);
     
     
-	if (activeEffect == "heavy") {
-		body->setPhysics(5.0, 0, 1.0);
-	}else if (activeEffect == "bouncy") {
-		body->setPhysics(1.0, 0, 0.5);
-	} else {
-		body->setPhysics(1.0, 0, 1.0);
-	}
-
+    if (activeEffect == "heavy") {
+        body->setPhysics(10.0, 0, 1.0);
+    } else if (activeEffect == "bouncy") {
+        body->setPhysics(1.0, 0.1, 1.0);
+    } else if (activeEffect == "icy") {
+        body->setPhysics(1.0, 0, 0.1);
+    } else {
+        body->setPhysics(1.0, 0, 1.0);
+    }
+    
     
     body->triangulatePoly();
     
@@ -96,21 +98,21 @@ TetrisStone::~TetrisStone()
 
 void TetrisStone::render() {
     /*if(isBouncy){
-        ofSetColor(255, 0, 0);
-    }
-
-    if(collided){
-        ofSetColor(0, 0, 255);
-    }*/
-
+     ofSetColor(255, 0, 0);
+     }
+     
+     if(collided){
+     ofSetColor(0, 0, 255);
+     }*/
+    
     /*if(isPartOfTower){
-         ofSetColor(255, 255, 0);
-    }*/
+     ofSetColor(255, 255, 0);
+     }*/
     
     //body->draw();
-        for (auto& r : renderer) {
-            r->render();
-        }
+    for (auto& r : renderer) {
+        r->render();
+    }
     ofSetColor(255, 255, 255);
 };
 
@@ -135,18 +137,18 @@ int TetrisStone::getPlayerId(){
 void TetrisStone::rotateRight() {
     //body->addImpulseForce(body->getB2DPosition()+ofVec2f(10,0), ofVec2f(0,0.2f));
     if(!collided){
-//        body->setFixedRotation(true);
+        //        body->setFixedRotation(true);
         body->setRotation(body->getRotation() + 90);
-//        body->body->SetTransform(b2Vec2(0, 0), DEG_TO_RAD * 90);
-
-   //     body->body->SetTransform(body->body->GetWorldCenter(), DEG_TO_RAD * 90);    }
+        //        body->body->SetTransform(b2Vec2(0, 0), DEG_TO_RAD * 90);
+        
+        //     body->body->SetTransform(body->body->GetWorldCenter(), DEG_TO_RAD * 90);    }
     }
 }
 
 void TetrisStone::rotateLeft() {
-     //body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
+    //body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
     if(!collided){
-     body->setRotation(body->getRotation() - 90);
+        body->setRotation(body->getRotation() - 90);
     }
 }
 

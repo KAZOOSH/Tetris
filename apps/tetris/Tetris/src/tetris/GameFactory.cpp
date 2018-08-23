@@ -11,35 +11,33 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContai
 {
     shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone", params, activeEffect));
     
-    stone->addToWorld(objects->physics.getWorld());
+    stone->addToWorld(objects->physics.world);
     
     //create and add the renderer
-	shared_ptr<TetrisStoneRenderer> renderer;
+    shared_ptr<TetrisStoneRenderer> renderer;
     ofColor base;
     ofColor highlight;
-
-	activeEffect = "small";
-
-	if (activeEffect == "base") {
-		params->getRandomColorScheme(base, highlight);
-		renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight));
-	}else if (activeEffect == "heavy") {
-		ofJson c = params->colorSchemes["heavy"];
-		base = ofColor(c["base"][0], c["base"][1], c["base"][2]);
-		highlight = ofColor(c["highlight"][0], c["highlight"][1], c["highlight"][2]);
-		renderer = shared_ptr<HeavyStoneRenderer>(new HeavyStoneRenderer(stone, base, highlight));
-	} else if (activeEffect == "bouncy") {
-		ofJson c = params->colorSchemes["bouncy"];
-		base = ofColor(c["base"][0], c["base"][1], c["base"][2]);
-		highlight = ofColor(c["highlight"][0], c["highlight"][1], c["highlight"][2]);
-		renderer = shared_ptr<BouncyStoneRenderer>(new BouncyStoneRenderer(stone, base, highlight));
-	} else if (activeEffect == "big") {
-		params->getRandomColorScheme(base, highlight);
-		renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight,"BigStoneRenderer",25,40,5));
-	} else if (activeEffect == "small") {
-		params->getRandomColorScheme(base, highlight);
-		renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight, "SmallStoneRenderer", 25,0,0));
-	}
+    
+    if (activeEffect == "heavy") {
+        ofJson c = params->colorSchemes["heavy"];
+        base = ofColor(c["base"][0], c["base"][1], c["base"][2]);
+        highlight = ofColor(c["highlight"][0], c["highlight"][1], c["highlight"][2]);
+        renderer = shared_ptr<HeavyStoneRenderer>(new HeavyStoneRenderer(stone, base, highlight));
+    } else if (activeEffect == "bouncy") {
+        ofJson c = params->colorSchemes["bouncy"];
+        base = ofColor(c["base"][0], c["base"][1], c["base"][2]);
+        highlight = ofColor(c["highlight"][0], c["highlight"][1], c["highlight"][2]);
+        renderer = shared_ptr<BouncyStoneRenderer>(new BouncyStoneRenderer(stone, base, highlight));
+    } else if (activeEffect == "big") {
+        params->getRandomColorScheme(base, highlight);
+        renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight,"BigStoneRenderer",25,40,5));
+    } else if (activeEffect == "small") {
+        params->getRandomColorScheme(base, highlight);
+        renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight, "SmallStoneRenderer", 25,0,0));
+    } else {
+        params->getRandomColorScheme(base, highlight);
+        renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight));
+    }
     
     stone->addRenderer(renderer);
     
@@ -104,15 +102,15 @@ shared_ptr<GameControlRule> GameFactory::makeGameControlRule(GameParameters * pa
 
 shared_ptr<GameEventRule> GameFactory::makeGameEventRule(GameParameters * params)
 {
-	return shared_ptr<GameEventRule>(new GameEventRule(params));
+    return shared_ptr<GameEventRule>(new GameEventRule(params));
 }
 
 shared_ptr<Rule> GameFactory::makeWorldEffect(GameParameters * params, ofJson config)
 {
-	if (config["state"] != nullptr) {
-		if (config["state"] == "wind") {
-			return shared_ptr<WindRule>(new WindRule(params, config["runtime"]));
-		}
-	}
-	return shared_ptr<Rule>();
+    if (config["state"] != nullptr) {
+        if (config["state"] == "wind") {
+            return shared_ptr<WindRule>(new WindRule(params, config["runtime"]));
+        }
+    }
+    return shared_ptr<Rule>();
 }
