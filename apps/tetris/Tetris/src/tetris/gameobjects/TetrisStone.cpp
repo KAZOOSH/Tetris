@@ -9,6 +9,7 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffe
     createStoneVertecies();
     body = shared_ptr<ofxBox2dPolygon>(new ofxBox2dPolygon);
     
+	scale = params->params["tetrisStone"]["scale"].get<int>();
     float density = params->params["tetrisStone"]["density"].get<float>();
     
     auto vertsAndType = getRandomVertecies();
@@ -26,6 +27,7 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffe
         body->setPhysics(1.0, 0, 0.1);
     } else {
         body->setPhysics(1.0, 0, 1.0);
+		body->setFixedRotation(true);
     }
     
     
@@ -68,7 +70,8 @@ void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition, float d
         
         positionChangeRelativeToPaddleSmoothed = 0.95 * positionChangeRelativeToPaddle + 0.05 * positionChangeRelativeToPaddleSmoothed;
         
-        if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 && distanceToPaddleOrOtherTetrisStone < 150 ){
+        if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 && 
+			distanceToPaddleOrOtherTetrisStone < params->params["tetrisStone"]["scale"]*7.5 ){
             isPartOfTower = true;
         } else {
             isPartOfTower = false;

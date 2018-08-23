@@ -13,14 +13,13 @@ using namespace ofxModule;
 
 CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false){
     setSingleThreaded();
-    parameters.add(deviceId.set("deviceId",2));
+    parameters.add(deviceId.set("deviceId",1));
     parameters.add(width.set("width", 640));
     parameters.add(height.set("height", 480));
     parameters.add(isOsc.set("isOsc", false));
     parameters.add(nPaddle.set("nPaddle", "2"));
 	parameters.add(hostIp.set("hostIp", "localhost"));
     loadSettings();
-    
     if(isOsc) addOSCServer(new OSCServer());
     
     

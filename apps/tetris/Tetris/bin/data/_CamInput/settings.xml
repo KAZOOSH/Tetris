@@ -3,7 +3,7 @@
 	<deviceId>0</deviceId>
 	<width>640</width>
 	<height>480</height>
-	<isOsc>1</isOsc>
-	<nPaddle>1</nPaddle>
-	<hostIp>localhost<hostIp/>
+	<isOsc>0</isOsc>
+	<nPaddle>2</nPaddle>
+	<hostIp>localhost</hostIp>
 </parameters>
