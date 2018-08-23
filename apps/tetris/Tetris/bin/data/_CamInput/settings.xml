@@ -5,4 +5,5 @@
 	<height>480</height>
 	<isOsc>1</isOsc>
 	<nPaddle>1</nPaddle>
+	<hostIp>localhost<hostIp/>
 </parameters>

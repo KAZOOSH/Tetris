@@ -18,6 +18,7 @@ CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false
     parameters.add(height.set("height", 480));
     parameters.add(isOsc.set("isOsc", false));
     parameters.add(nPaddle.set("nPaddle", "2"));
+	parameters.add(hostIp.set("hostIp", "localhost"));
     loadSettings();
     
     if(isOsc) addOSCServer(new OSCServer());
@@ -47,6 +48,7 @@ CamInput::CamInput(string moduleName):ModuleDrawable("CamInput",moduleName,false
     gui.add(interceptError.set("InterceptError", 35, 0, 300));
     gui.add(slopeError.set("SlopeError", 0.1, 0, 1));
     
+	cam.listDevices();
     cam.setDeviceID(deviceId);
     cam.setup(width, height);
     thresh.allocate(width, height, OF_IMAGE_GRAYSCALE);
@@ -238,7 +240,7 @@ void CamInput::sendPositions()
         message.setAddress("paddlePosition");
         message.addStringArg(send.dump());
         
-        oscServer->sendMessage(message,12346,"192.168.8.101");
+        oscServer->sendMessage(message,12346,hostIp);
     }
 }
 
