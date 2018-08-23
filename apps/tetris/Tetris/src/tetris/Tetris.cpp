@@ -220,7 +220,7 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
                         float distanceToPaddleOrOtherTetrisStone = getMinimalDistanceToOtherTowerStonesOrPaddle(stone,paddleRight);
                         stone->updateRelativeToPaddlePosition(prp,distanceToPaddleOrOtherTetrisStone);
                         towerHeightPaddleRight  = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
-                        towerHeightPaddleRight = paddleRight->towerHeight;
+                        paddleRight->towerHeight = towerHeightPaddleRight;
                     }
                 }
             }
