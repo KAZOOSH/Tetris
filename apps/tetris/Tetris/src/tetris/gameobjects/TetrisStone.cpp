@@ -98,9 +98,7 @@ void TetrisStone::render() {
     /*if(isBouncy){
         ofSetColor(255, 0, 0);
     }
-    if(isHeavy){
-        ofSetColor(0, 255, 0);
-    }
+
     if(collided){
         ofSetColor(0, 0, 255);
     }*/
@@ -115,13 +113,6 @@ void TetrisStone::render() {
         }
     ofSetColor(255, 255, 255);
 };
-
-
-void TetrisStone::makeHeavy() {
-    isHeavy = true;
-    //    not working todo: check this out dude
-    // body->setPhysics(10.0f, 1.0f, 0.1f);
-}
 
 void TetrisStone::makeBouncy() {
     isBouncy = true;
@@ -142,20 +133,31 @@ int TetrisStone::getPlayerId(){
 }
 
 void TetrisStone::rotateRight() {
-    body->addImpulseForce(body->getB2DPosition()+ofVec2f(10,0), ofVec2f(0,0.2f));
+    //body->addImpulseForce(body->getB2DPosition()+ofVec2f(10,0), ofVec2f(0,0.2f));
+    if(!collided){
+//        body->setFixedRotation(true);
+        body->setRotation(body->getRotation() + 90);
+//        body->body->SetTransform(b2Vec2(0, 0), DEG_TO_RAD * 90);
+
+   //     body->body->SetTransform(body->body->GetWorldCenter(), DEG_TO_RAD * 90);    }
+    }
 }
 
 void TetrisStone::rotateLeft() {
-    body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
-    //body->setRotation(body->getRotation() - 90);
+     //body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
+    if(!collided){
+     body->setRotation(body->getRotation() - 90);
+    }
 }
 
+
+// super weired !!!! setzt man die größe auf die hälfte und verdoppelt den scale funktioniert die kollision bei manchen steinen nicht mehr
 void TetrisStone::createStoneVertecies(){
-    string stone_L = "0,0; 1,0;1,2;2,2;2,3;0,3";
-    string stone_Z = "0,0;2,0;2,1;3,1;3,2;1,2;1,1;0,1";
-    string stone_I = "0,0;1,0;1,3;0,3";
-    string stone_O = "0,0;2,0;2,2;0,2";
-    string stone_T = "0,1;1,1;1,0;2,0;2,1;3,1;3,2;0,2";
+    string stone_L = "0,0; 2,0;2,4;4,4;4,6;0,6";
+    string stone_Z = "0,0;4,0;4,2;6,2;6,4;2,4;2,2;0,2";
+    string stone_I = "0,0;2,0;2,6;0,6";
+    string stone_O = "0,0;4,0;4,4;0,4";
+    string stone_T = "0,2;2,2;2,0;4,0;4,2;6,2;6,4;0,4";
     stones.insert(pair<string,string>("stone_L",stone_L));
     stones.insert(pair<string, string>("stone_Z", stone_Z));
     stones.insert(pair<string, string>("stone_I", stone_I));
@@ -188,9 +190,25 @@ pair<string, vector <ofDefaultVertexType>> TetrisStone::getRandomVertecies()
     
     string randomStone = stonePair.second;
     vector<string> pairs = ofSplitString(randomStone, ";");
+    
+    int width=0;
+    int height=0;
+    
+    // parse stone strings
+    // get maximum height and width of stone
     for(int i=0; i < pairs.size(); i++){
         vector<string> values = ofSplitString(pairs[i], ",");
-        pts.push_back(ofDefaultVertexType(ofToInt(values[0]) * scale + offsetX, ofToInt(values[1]) * scale, 0));
+        int x= ofToInt(values[0]);
+        int y= ofToInt(values[1]);
+        if(x>width)
+        {width = x;}
+        if(y>height)
+        {height = y;}
+    }
+    // use height and width to create centered stones for easy rotation
+    for(int i=0; i < pairs.size(); i++){
+        vector<string> values = ofSplitString(pairs[i], ",");
+        pts.push_back(ofDefaultVertexType((ofToFloat(values[0]) - width/2) * scale, (ofToInt(values[1]) - 1.5) * scale, 0));
     }
     return pair<string, vector <ofDefaultVertexType>>(stonePair.first, pts);
 }
