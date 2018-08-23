@@ -7,7 +7,7 @@ shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameObjectContainer> objec
     return paddle;
 }
 
-shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params, GameParameters::effects activeEffect)
+shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params, string activeEffect)
 {
     shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone", params, activeEffect));
     
@@ -25,9 +25,9 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContai
     return stone;
 }
 
-shared_ptr<BackgroundObject> GameFactory::makeBackgroundObject(shared_ptr<GameObjectContainer> objects, GameParameters * params)
+shared_ptr<GameObject> GameFactory::makeBackgroundObject(shared_ptr<GameObjectContainer> objects, GameParameters * params)
 {
-    shared_ptr<BackgroundObject> ret = shared_ptr<BackgroundObject>(new BackgroundObject());
+    shared_ptr<GameObject> ret = shared_ptr<GameObject>(new GameObject("Background"));
     auto renderer = shared_ptr<BackgroundRenderer>(new BackgroundRenderer(params, objects));
     ret->addRenderer(renderer);
     return ret;
@@ -77,4 +77,9 @@ shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule(GamePar
 shared_ptr<GameControlRule> GameFactory::makeGameControlRule(GameParameters * params, GameObjectContainer* gameObjects)
 {
     return shared_ptr<GameControlRule>(new GameControlRule(params,gameObjects));
+}
+
+shared_ptr<GameEventRule> GameFactory::makeGameEventRule(GameParameters * params)
+{
+	return shared_ptr<GameEventRule>(new GameEventRule(params));
 }

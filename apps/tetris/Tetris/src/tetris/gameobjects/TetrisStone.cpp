@@ -1,7 +1,7 @@
 #include "TetrisStone.h"
 
 
-TetrisStone::TetrisStone(string name, GameParameters* params_, GameParameters::effects activeEffect):GameObject(name)
+TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffect):GameObject(name)
 {
     //isTetrisStone= true;
     //collided = false;
@@ -18,18 +18,14 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, GameParameters::e
     body->addVertices(vertecies);
     
     
-    switch(activeEffect)
-    {
-        case GameParameters::heavy :
-            body->setPhysics(5.0, 0, 1.0);
-            break;
-        case GameParameters::bouncy :
-            body->setPhysics(1.0, 0, 0.5);
-            break;
-        default:
-            body->setPhysics(1.0, 0, 1.0);
-            break;
-    }
+	if (activeEffect == "heavy") {
+		body->setPhysics(5.0, 0, 1.0);
+	}else if (activeEffect == "heavy") {
+		body->setPhysics(1.0, 0, 0.5);
+	} else {
+		body->setPhysics(1.0, 0, 1.0);
+	}
+
     
     body->triangulatePoly();
     

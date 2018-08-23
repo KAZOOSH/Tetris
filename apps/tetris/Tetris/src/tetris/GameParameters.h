@@ -18,15 +18,27 @@ public:
     
     void getRandomColorScheme(ofColor& base, ofColor& highlight);
     
-    enum effects{ base, heavy, bouncy };
+    //enum effects{ base, heavy, bouncy };
     
+
+	void setRandomNextEffect();
+
+	//util functions
+
     //settings
     ofJson params;
     ofJson colorSchemes;
+	ofJson effects;
     
     //game params
     float winningHeight = 0.9;
-    vector<effects> nextCreationRule;
+    vector<string> nextCreationRule;
+
+	string gamestate = "idle";
+
+private:
+	vector<string> nextEffectList;
+	vector<string> effectList;
     
 };
 

@@ -7,7 +7,7 @@
 class TetrisStone : public GameObject
 {
 public:
-    TetrisStone(string name, GameParameters* params, GameParameters::effects activeEffect);
+    TetrisStone(string name, GameParameters* params, string activeEffect);
     ~TetrisStone();
     void addToWorld(b2World* world);
     void setPosition(ofVec2f position);

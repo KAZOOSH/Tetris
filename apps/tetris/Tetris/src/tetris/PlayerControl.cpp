@@ -9,9 +9,6 @@ PlayerControl::PlayerControl()
 
 PlayerControl::~PlayerControl()
 {
-	ofRemoveListener(serialBuzzer.events.onSerialBuffer, this, &PlayerControl::onBuzzer);
-	ofRemoveListener(serialPlayer[0].events.onSerialBuffer, this, &PlayerControl::onPlayer1);
-	ofRemoveListener(serialPlayer[1].events.onSerialBuffer, this, &PlayerControl::onPlayer2);
 }
 
 void PlayerControl::setup(vector<shared_ptr<Paddle>> paddles_, GameParameters * params_)
@@ -19,9 +16,49 @@ void PlayerControl::setup(vector<shared_ptr<Paddle>> paddles_, GameParameters * 
 	paddles = paddles_;
 	params = params_;
 
-	serialPlayer.push_back(ofxIO::BufferedSerialDevice());
-	serialPlayer.push_back(ofxIO::BufferedSerialDevice());
 	initSerial();
+}
+
+void PlayerControl::update()
+{
+	// pedal
+	try
+	{
+		// Read all bytes from the device;
+		uint8_t buffer[16];
+		while (serialPlayer.available() > 0){
+			std::size_t sz = serialPlayer.readBytes(buffer, 16);
+			if (sz >= 1 && buffer[0] != '0') {
+				std::bitset<8> bits(buffer[0]);
+				for (size_t i = 0; i < 4; i++){
+					if (bits.test(i)) {
+						sendPedalCommand(i);
+					}
+				}
+			}
+		}
+	}
+	catch (const std::exception& exc){
+		ofLogError("ofApp::update") << exc.what();
+	}
+
+	// buzzer
+	try
+	{
+		// Read all bytes from the device;
+		uint8_t buffer[16];
+		while (serialBuzzer.available() > 0) {
+			std::size_t sz = serialBuzzer.readBytes(buffer, 16);
+			if (sz >= 1 && buffer[0] == 'p') {
+				ofJson out;
+				out["control"] = "buzzer";
+				params->notifyControlEvent(out);
+			}
+		}
+	}
+	catch (const std::exception& exc){
+		ofLogError("ofApp::update") << exc.what();
+	}
 }
 
 //TODO : add martin control
@@ -65,48 +102,12 @@ void PlayerControl::onPaddleMove(const ofJson & json)
 	params->notifyControlEvent(out);
 }
 
-void PlayerControl::onBuzzer(const ofxIO::SerialBufferEventArgs & args)
-{
-	string message = args.buffer().toString();
-	if (message[0] == 'p') {
-		//event
-		cout << "buzzer input" << endl;
-		
-		ofJson out;
-		out["control"] = "buzzer";
-		params->notifyControlEvent(out);
-	}
-}
-
-void PlayerControl::onPlayer1(const ofxIO::SerialBufferEventArgs & args)
-{
-	string message = args.buffer().toString();
-	if (message[0] == 'p') {
-		//event
-		cout << "player1 input" << endl;
-
-		ofJson out;
-		out["control"] = "player1Button";
-		params->notifyControlEvent(out);
-	}
-}
-
-void PlayerControl::onPlayer2(const ofxIO::SerialBufferEventArgs & args)
-{
-	string message = args.buffer().toString();
-	if (message[0] == 'p') {
-		//event
-		cout << "player2 input" << endl;
-
-		ofJson out;
-		out["control"] = "player2Button";
-		params->notifyControlEvent(out);
-	}
-}
 
 void PlayerControl::initSerial()
 {
 	auto deviceDescriptors = ofx::IO::SerialDeviceUtils::listDevices();
+
+	
 
 	if (!deviceDescriptors.empty())
 	{
@@ -114,14 +115,12 @@ void PlayerControl::initSerial()
 		for (auto deviceDescriptor : deviceDescriptors)
 		{
 			ofLogNotice("ofApp::setup") << "\t" << deviceDescriptor;
-
+			cout << deviceDescriptor.getHardwareId() << "   " << params->params["serial"]["pedalId"].get<string>() << endl;
 			//connect matching devices
 			if (deviceDescriptor.getHardwareId() == params->params["serial"]["buzzerId"]) {
 				connectDevice(serialBuzzer, deviceDescriptor,"buzzer");
-			}else if (deviceDescriptor.getHardwareId() == params->params["serial"]["player1Button"]) {
-				connectDevice(serialPlayer[0], deviceDescriptor, "player1");
-			} else if (deviceDescriptor.getHardwareId() == params->params["serial"]["player2Button"]) {
-				connectDevice(serialPlayer[1], deviceDescriptor, "player2");
+			}else if (deviceDescriptor.getHardwareId() == params->params["serial"]["pedalId"]) {
+				connectDevice(serialPlayer, deviceDescriptor, "pedal");
 			}
 		}
 	} else
@@ -130,16 +129,22 @@ void PlayerControl::initSerial()
 	}
 }
 
-void PlayerControl::connectDevice(ofxIO::BufferedSerialDevice & device, ofx::IO::SerialDeviceInfo info, string callback)
+void PlayerControl::connectDevice(ofxIO::SerialDevice & device, ofx::IO::SerialDeviceInfo info, string name)
 {
-	if (device.setup(info, 115200)) {
-		//register callback
-		if(callback == "buzzer") ofAddListener(device.events.onSerialBuffer, this, &PlayerControl::onBuzzer);
-		else if (callback == "player1") ofAddListener(device.events.onSerialBuffer, this, &PlayerControl::onPlayer1);
-		else if (callback == "player2") ofAddListener(device.events.onSerialBuffer, this, &PlayerControl::onPlayer2);
-		ofLogNotice("ofApp::setup") << "Successfully setup " << callback << "   -> "<< info;
+	if (device.setup(info, 9600)) {
+		ofLogNotice("ofApp::setup") << "Successfully setup " << name << "   -> "<< info;
 	} else {
-		ofLogError("ofApp::setup") << "Unable to setup " << callback << "   -> " << info;
+		ofLogError("ofApp::setup") << "Unable to setup " << name << "   -> " << info;
 	}
+
+}
+
+void PlayerControl::sendPedalCommand(int i)
+{
+		ofJson out;
+		out["control"] = "pedal";
+		out["direction"] = i % 2 == 0 ? "left" : "right";
+		out["player"] = i < 2 ? 1 : 2;
+		params->notifyControlEvent(out);
 
 }

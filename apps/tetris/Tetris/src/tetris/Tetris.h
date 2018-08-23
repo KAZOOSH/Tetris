@@ -11,7 +11,6 @@
 #include "GameParameters.h"
 #include "PlayerControl.h"
 #include "TetrisStone.h"
-#include "BackgroundObject.h"
 #include "ofxQuadWarp.h"
 
 using namespace ofxModule;
@@ -34,6 +33,8 @@ public:
     
     shared_ptr<TetrisStone> getLastCreatedStone(int playerId);
     void onOscMessage(ofxOscMessage & message);
+
+	void onControlEvent(ofJson& event);
     
 protected:
     void proceedModuleEvent(ModuleEvent &e);

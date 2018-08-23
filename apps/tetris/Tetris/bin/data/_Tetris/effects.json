@@ -1,0 +1,16 @@
+﻿[
+	{
+		"state":"heavy",
+		"main":"тяжелый камень",
+		"sub":"(schwerer Stein)",
+		"time": 2000,
+		"sound":"Schwerer Stein.mp3"
+	},
+	{
+		"state":"bouncy",
+		"main":"прыгающий камень",
+		"sub":"(springender Stein)",
+		"time": 2000,
+		"sound":"Springender Stein.mp3"
+	}
+]

@@ -10,7 +10,8 @@
 		"state":"waiting_for_players",
 		"main":"поднимите бары",
 		"sub":"(bitte Stäbe anheben)",
-		"time": 6000
+		"time": 6000,
+		"sound":""
 	},
 	{
 		"state":"countdown3",
@@ -31,21 +32,31 @@
 		"time": 1000
 	},
 	{
+		"state":"game",
+		"main":"",
+		"sub":"",
+		"time": 1000,
+		"sound": "Spiel startet.mp3"
+	},
+	{
 		"state":"end1",
 		"main":"Игрок 1 побеждает",
 		"sub":"(Spieler 1 gewinnt)",
-		"time": 3000
+		"time": 3000,
+		"sound":"Spieler 1 gewinnt.mp3"
 	},
 	{
 		"state":"end2",
 		"main":"Игрок 2 побеждает",
 		"sub":"(Spieler 2 gewinnt)",
-		"time": 3000
+		"time": 3000,
+		"sound":"Spieler 2 gewinnt.mp3"
 	},
 	{
 		"state":"endEven",
 		"main":"Игрок 2 побеждает",
 		"sub":"(unentschieden)",
-		"time": 3000
+		"time": 3000,
+		"sound":"Unentschieden.mp3"
 	}
 ]
