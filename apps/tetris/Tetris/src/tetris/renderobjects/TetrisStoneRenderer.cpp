@@ -2,9 +2,13 @@
 
 
 
-TetrisStoneRenderer::TetrisStoneRenderer(shared_ptr<TetrisStone> stone_, ofColor base, ofColor highlight):RenderObject("TetrisStoneRenderer")
+TetrisStoneRenderer::TetrisStoneRenderer(shared_ptr<TetrisStone> stone_, ofColor base, ofColor highlight,
+	string name, int dmax_, int padding_ , int wLine_ ):RenderObject(name)
 {
 	stone = stone_;
+	dMax = dmax_;
+	padding = padding_;
+	wLine = wLine_;
 
 	tile.allocate(128, 128);
 	updateTile();
@@ -47,38 +51,26 @@ void TetrisStoneRenderer::updateTile()
 	int h = tile.getHeight();
 
 	//speed
-	float dMax = 25;
 	ofVec2f v = stone->getBody()[0]->getVelocity();
 	ofVec2f d = -ofVec2f(ofxeasing::map_clamp(v.x, 0, 40, 0, dMax,&ofxeasing::sine::easeInOut), 
 		ofxeasing::map_clamp(v.y, 0, 40, 0, dMax, &ofxeasing::sine::easeInOut));
 
 	//line
-	float padding = 20;
-	int wLine = 10;
 
 	if (isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
 		wLine += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 10, 0, &ofxeasing::sine::easeInOut);
 	}
 
-	//color
-	ofColor base = baseColor;
-	ofColor highlight = highlightColor;
-	/*float damping = 1.0;
-
-	if (isPartofTower) {
-		base.setHsb(baseColor.getHue(), baseColor.getSaturation()*damping, baseColor.getBrightness()*damping);
-		highlight.setHsb(highlightColor.getHue(), highlightColor.getSaturation()*damping, highlightColor.getBrightness()*damping);
-	}*/
 
 	tile.begin();
-	ofSetColor(base);
+	ofSetColor(baseColor);
 	ofDrawRectangle(0, 0, w, h);
 	ofTranslate(d);
-	ofSetColor(highlight);
+	ofSetColor(highlightColor);
 	ofDrawRectangle(padding, padding, w- padding*2, h- padding*2);
 
 	if (isPartofTower){// && ofGetElapsedTimeMillis() - tPartofTower > 500) {
-		ofSetColor(base);
+		ofSetColor(baseColor);
 		ofDrawRectangle(padding + wLine, padding + wLine, w - (padding + wLine) * 2, h - (padding + wLine) * 2);
 	}
 	tile.end();

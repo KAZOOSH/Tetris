@@ -12,5 +12,12 @@
 		"sub":"(springender Stein)",
 		"time": 2000,
 		"sound":"Springender Stein.mp3"
+	},
+	{
+		"state":"big",
+		"main":"большой камень",
+		"sub":"(großer Stein)",
+		"time": 2000,
+		"sound":"Grosser Stein.mp3"
 	}
 ]

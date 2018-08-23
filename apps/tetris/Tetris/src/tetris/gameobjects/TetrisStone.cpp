@@ -20,7 +20,7 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffe
     
 	if (activeEffect == "heavy") {
 		body->setPhysics(5.0, 0, 1.0);
-	}else if (activeEffect == "heavy") {
+	}else if (activeEffect == "bouncy") {
 		body->setPhysics(1.0, 0, 0.5);
 	} else {
 		body->setPhysics(1.0, 0, 1.0);

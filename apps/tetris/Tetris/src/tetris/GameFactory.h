@@ -8,6 +8,8 @@
 #include "PolygonRenderer.h"
 #include "TetrisStoneRenderer.h"
 #include "BackgroundRenderer.h"
+#include "HeavyStoneRenderer.h"
+#include "BouncyStoneRenderer.h"
 
 //game objects
 #include "Paddle.h"

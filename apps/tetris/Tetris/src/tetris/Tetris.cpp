@@ -369,8 +369,8 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 
     
     if (key.key == 'n') {
-        params.nextCreationRule[0] = "bouncy";
-        params.nextCreationRule[1] = "heavy";
+		
+		params.setRandomNextEffect();
     }
     
 }
