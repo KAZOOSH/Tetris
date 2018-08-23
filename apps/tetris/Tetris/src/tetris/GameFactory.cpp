@@ -11,7 +11,7 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameObjectContai
 {
     shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone", params));
     stone->addToWorld(objects->physics.getWorld());
-
+    
 	//create and add the renderer
 	ofColor base;
 	ofColor highlight;

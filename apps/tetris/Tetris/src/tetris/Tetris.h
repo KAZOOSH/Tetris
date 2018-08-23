@@ -55,7 +55,7 @@ using namespace ofxModule;
         uint64 produceStoneIntervallInMillis= 3000;
         uint64 lastStoneProductionTimePlayer1 = 0;
 		uint64 lastStoneProductionTimePlayer2 = 0;
-        
+        void collisionHandler(TetrisStone* stone);
         bool makeHeavyStone = false;
 		bool makeBouncyStone = false;
 	};

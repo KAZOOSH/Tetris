@@ -16,7 +16,6 @@ public:
     int getPlayerId();
     void rotateRight();
     void rotateLeft();
-    void makeHeavy();
     void makeBouncy();
     float getDistanceToPaddle();
     bool isTetrisStone = true;
@@ -32,8 +31,8 @@ private:
     vector <ofDefaultVertexType> vertecies;
 	string stoneType;
     void createStoneVertecies();
-    int scale= 40;
-    int offsetX = 200;
+    int scale= 20;
+    int offsetX = 400;
     int playerId;
     uint64_t lastCheckedRelativeToPaddleTime = 0;
     shared_ptr<ofxBox2dPolygon> body;
@@ -43,9 +42,9 @@ private:
     float positionChangeRelativeToPaddleSmoothed = 1;
     float positionChangeRelativeToPaddle;
     GameParameters* params;
-    bool isBouncy;
-	bool isHeavy;
-	bool isLarge;
-    bool isPartOfTower;
+    bool isBouncy = false;
+	bool isHeavy = false;
+	bool isLarge = false;
+    bool isPartOfTower = false;;
 };
 
