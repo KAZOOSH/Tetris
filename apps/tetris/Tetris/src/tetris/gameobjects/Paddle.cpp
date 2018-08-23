@@ -35,7 +35,7 @@ void Paddle::createBody(b2World* world){
     
     body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
     body->enableGravity(false);
-    body->setPhysics(0.1, 0, 1);
+    body->setPhysics(3, 0, 1.0f);
     body->setup(world, x, y, paddleWidth, paddleHeight);
     addBody(body);
     
