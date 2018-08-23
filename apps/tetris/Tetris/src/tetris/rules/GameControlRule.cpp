@@ -2,8 +2,9 @@
 
 
 
-GameControlRule::GameControlRule(GameParameters* params):Rule("GameControlRule",params)
+GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* gameControl_):Rule("GameControlRule",params)
 {
+	gameObjects = gameControl_;
 	mainFont.setup(params->params["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
 	subFont.setup(params->params["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
 	mainFont.setSize(250);
@@ -13,7 +14,7 @@ GameControlRule::GameControlRule(GameParameters* params):Rule("GameControlRule",
 
 	paddleReady = { false,false };
 
-	ofFile file("_Tetris/textfields.json");
+	ofFile file("_Tetris/gamestates.json");
 	if (file.exists()) {
 		file >> stateDescription;
 	}
@@ -50,12 +51,23 @@ void GameControlRule::applyRule()
 			changeGamestate("idle");
 		}
 	} else if (gamestate == "countdown3" && isTSwitch) {
+		params->winningHeight = params->params["gameplay"]["winningHeightMax"].get<float>();
 		changeGamestate("countdown2");
 	} else if (gamestate == "countdown2" && isTSwitch) {
 		changeGamestate("countdown1");
 	} else if (gamestate == "countdown1" && isTSwitch) {
 		changeGamestate("game");
 	} else if (gamestate == "game") {
+		int winningHeight = params->winningHeight*params->params["height"].get<float>();
+		//cout << winningHeight << " -> " << gameObjects->paddles[0]->towerHeight << "   |    " << gameObjects->paddles[1]->towerHeight << endl;
+		if (gameObjects->paddles[0]->towerHeight > winningHeight) {
+			changeGamestate("end1");
+		}
+		else if (gameObjects->paddles[1]->towerHeight > winningHeight) {
+			changeGamestate("end2");
+		}
+
+		//reduce winning height
 		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
 			params->winningHeight = 
 				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
@@ -92,8 +104,12 @@ void GameControlRule::draw()
 
 	}else if (gamestate == "game") {
 		ofSetColor(255);
-		ofDrawRectangle(0, (1.0 - params->winningHeight)*params->params["height"].get<int>(), params->params["width"], 10);
-
+		int h = params->params["height"].get<int>();
+		int hBase = (1.0 - params->winningHeight)*h;
+		int y1 = hBase -(h - gameObjects->paddles[0]->getBody()[0]->getPosition().y);
+		int y2 = hBase - (h - gameObjects->paddles[1]->getBody()[0]->getPosition().y);
+		ofDrawRectangle(0, y1, params->params["width"].get<int>()/2, 10);
+		ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 10);
 	}else if (gamestate == "end1") {
 
 	} else if (gamestate == "end2") {
@@ -115,7 +131,7 @@ void GameControlRule::changeGamestate(string message)
 		{ "gamestate" , gamestate}
 	};
 	ofRemoveListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
-	ofNotifyEvent(params->gameEvent, state);
+	params->notifyGameEvent(state);
 	ofAddListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
 }
 
@@ -147,59 +163,4 @@ int GameControlRule::getStateTime(string stateName)
 	}
 }
 
-InfoPanel::InfoPanel(ofJson settings, ofJson description, ofxFontStash* fontMain, ofxFontStash* fontSub)
-{
-	int h = description["height"] != nullptr ? description["height"] : settings["textFields"]["main"]["h"];
-	mainText = createTextField(fontMain, description["main"], settings["textFields"]["main"]["y"], h,settings["width"]);	
-	subText = createTextField(fontSub, description["sub"], settings["textFields"]["sub"]["y"], settings["textFields"]["sub"]["h"], settings["width"]);
-	duration = description["time"];
-}
 
-void InfoPanel::start()
-{
-	tStart = ofGetElapsedTimeMillis();
-}
-
-void InfoPanel::draw(int x)
-{
-	uint64_t now = ofGetElapsedTimeMillis();
-	if (now - tStart < duration) {
-		ofPopMatrix();
-		ofTranslate(x, 0);
-		//main
-		//todo bouncy fade in
-		float scale = 1.0;
-		if (now - tStart < 1000) scale = ofxeasing::map_clamp(now, tStart, tStart + 1000, 0, 1.0, &ofxeasing::bounce::easeIn);
-		else if (tStart + duration - now < 1000) scale = ofxeasing::map_clamp(now, tStart + duration - 1000, tStart + duration, 1.0, 0.0, &ofxeasing::bounce::easeOut);
-
-		ofPushMatrix();
-			ofTranslate(mainText->position);
-			ofTranslate((1-scale)* mainText->size*0.5);
-			mainText->texture.draw(ofVec2f(0,0), mainText->size.x*scale, mainText->size.y*scale);
-		ofPopMatrix();
-
-		//sub
-		float alpha = 1.0;
-		if(now - tStart < 500) alpha = ofxeasing::map_clamp(now, tStart, tStart+500, 0, 1.0, &ofxeasing::quad::easeIn);
-		else if (tStart + duration -now < 700) alpha = ofxeasing::map_clamp(now, tStart + duration - 700, tStart + duration, 1.0, 0.0, &ofxeasing::quad::easeOut);
-		subText->texture.draw(subText->position, subText->size.x, subText->size.y);
-		ofPopMatrix();
-	}
-}
-
-TextField* InfoPanel::createTextField(ofxFontStash* font, string text, int y, int h, int wScreen)
-{
-	auto bb = font->getStringBoundingBox(text, 0, 0);
-	ofFbo fbo;
-	fbo.allocate(bb.width, bb.height);
-	fbo.begin();
-	ofClear(0, 0);
-	ofSetColor(255);
-	font->draw(text, 250, 0, fbo.getHeight()*0.9);
-	fbo.end();
-
-	ofVec2f size = ofVec2f( fbo.getWidth()*h / fbo.getHeight(),h);
-	ofVec2f pos = ofVec2f(0.5*(0.5*wScreen - size.x), y);
-
-	return new TextField(fbo, size, pos);
-}

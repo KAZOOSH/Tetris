@@ -8,54 +8,64 @@ using namespace ofxModule;
 
 Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     setSingleThreaded();
-	loadSettings();
-
-	//create osc
-	if (params.params["isOsc"]) {
-		addOSCServer(new OSCServer(12346));
-		ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
-	}
-
+    loadSettings();
+    
+    //create osc
+    if (params.params["isOsc"]) {
+        addOSCServer(new OSCServer(12346));
+        ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
+    }
+    
     produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
-
-
-	//create Warper
-	gameFbo.allocate(params.params["width"], params.params["height"]);
-	warperLeft.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth()/2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
-	warperLeft.setTargetRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
-	warperLeft.setup();
-	warperLeft.load("_Tetris/warper_left.json");
-
-	warperRight.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
-	warperRight.setTargetRect(ofRectangle(gameFbo.getWidth()/2+10, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
-	warperRight.setup();
-	warperRight.load("_Tetris/warper_right.json");
-
-	//create objects
-	objects = shared_ptr<GameObjectContainer>(new GameObjectContainer());
-	objects->initPhysics();
-
-	//create GameControl
-	gameControl = shared_ptr<GameControl>(new GameControl(objects));
-
+    
+    //add creation rules
+    params.nextCreationRule.push_back("base");
+    params.nextCreationRule.push_back("base");
+    
+    //create Warper
+    gameFbo.allocate(params.params["width"], params.params["height"]);
+    warperLeft.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth()/2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
+    warperLeft.setTargetRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
+    warperLeft.setup();
+    warperLeft.load("_Tetris/warper_left.json");
+    
+    warperRight.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
+    warperRight.setTargetRect(ofRectangle(gameFbo.getWidth()/2+10, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
+    warperRight.setup();
+    warperRight.load("_Tetris/warper_right.json");
+    
+    //create objects
+    objects = shared_ptr<GameObjectContainer>(new GameObjectContainer());
+    objects->initPhysics();
+    
+    //create GameControl
+    gameObjects = shared_ptr<GameControl>(new GameControl(objects));
+	ofAddListener(params.controlEvent, this, &Tetris::onControlEvent);
+    
     // add contact listener
     objects->physics.enableEvents();
     ofAddListener(objects->physics.contactStartEvents, this, &Tetris::contactStart);
     
-	//add paddles
+    //add Background
+     objects->addGameObject(GameFactory::makeBackgroundObject(objects, &params));
+    
+    
+    //add paddles
     shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,Paddle::paddleNameLeft,&params);
-	objects->addPaddle(p1);
+    objects->addPaddle(p1);
     
     shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,Paddle::paddleNameRight,&params);
-	objects->addPaddle(p2);
-
-	playerControl.setup(objects->paddles, &params);
-	
-	//add rules
-	objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
-	objects->addRule(GameFactory::makeGameControlRule(&params));
-
-	ofRegisterKeyEvents(this);
+    objects->addPaddle(p2);
+    
+    playerControl.setup(objects->paddles, &params);
+    
+    //add rules
+    objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
+    objects->addRule(GameFactory::makeGameControlRule(&params,objects.get()));
+	objects->addRule(GameFactory::makeGameEventRule(&params));
+    
+    
+    ofRegisterKeyEvents(this);
 }
 
 void Tetris::contactStart(ofxBox2dContactArgs &e) {
@@ -94,14 +104,14 @@ void Tetris::collisionHandler(TetrisStone* stone) {
 
 //------------------------------------------------------------------
 void Tetris::stopModule() {
-
+    
 }
 
 //------------------------------------------------------------------
 void Tetris::produceStoneByIntervall() {
     if(lastStoneProductionTimePlayer1 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()){
-            produceStone(1);
-        }
+        produceStone(1);
+    }
     if(lastStoneProductionTimePlayer2 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()){
         produceStone(2);
     }
@@ -109,16 +119,29 @@ void Tetris::produceStoneByIntervall() {
 
 void Tetris::produceStone(int player) {
     
-    auto stone = GameFactory::makeTetrisStone(objects,&params);
+	//create stone
+    auto stone = GameFactory::makeTetrisStone(objects,&params, params.nextCreationRule[player-1]);
     stone->setPlayer(player);
+
+	//notify effect if present
+	if (params.nextCreationRule[player - 1] != "base") {
+		ofJson out;
+		out["function"] = "effect";
+		out["effect"] = params.nextCreationRule[player - 1];
+		out["player"] = player;
+		params.notifyGameEvent(out);
+	}
+    
+    // set stone effect for active player back to base
+    params.nextCreationRule[player-1] = "base";
     
     if(player == 1) {
         lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
         stone->setPosition(ofVec2f(300,0));
     }
     if(player == 2){
-      lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
-      stone->setPosition(ofVec2f(1500,0));
+        lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
+        stone->setPosition(ofVec2f(1500,0));
     }
     objects->addGameObject(stone);
     objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
@@ -155,7 +178,7 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
     
     int towerHeightPaddleLeft = 0;
     int towerHeightPaddleRight = 0;
-
+    
     // get Paddles
     shared_ptr<Paddle> paddleLeft = objects->getPaddle(Paddle::paddleNameLeft);
     shared_ptr<Paddle> paddleRight = objects->getPaddle(Paddle::paddleNameRight);
@@ -173,7 +196,7 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
                 if(stone->getBody().size()>0 && stone->collided){
                     // get Height if its part of the tower
                     if(stone->getIsPartOfTower()){
-                       y = stone->getBody()[0]->getPosition().y;
+                        y = stone->getBody()[0]->getPosition().y;
                     }
                     
                     if(pId == 1) {
@@ -182,7 +205,7 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
                         stone->updateRelativeToPaddlePosition(plp,distanceToPaddleOrOtherTetrisStone);
                         towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
                         paddleLeft->towerHeight = towerHeightPaddleLeft;
-                
+                        
                     }else if(pId == 2) {
                         ofVec2f prp =paddleRight->getPaddleBodyPosition();
                         float distanceToPaddleOrOtherTetrisStone = getMinimalDistanceToOtherTowerStonesOrPaddle(stone,paddleRight);
@@ -212,15 +235,31 @@ shared_ptr<TetrisStone> Tetris::getLastCreatedStone(int playerId) {
 
 void Tetris::onOscMessage(ofxOscMessage & message)
 {
-	if (message.getAddress() == "paddlePosition") {
-		playerControl.onPaddleMove(ofJson::parse(message.getArgAsString(0)));
+    if (message.getAddress() == "paddlePosition") {
+        playerControl.onPaddleMove(ofJson::parse(message.getArgAsString(0)));
+    }
+}
+
+void Tetris::onControlEvent(ofJson & event)
+{
+	if (params.gamestate == "game") {
+		if (event["control"] != nullptr && event["control"] == "pedal") {
+			if (event["direction"] == "left") {
+				getLastCreatedStone(event["player"])->rotateLeft();
+			} else {
+				getLastCreatedStone(event["player"])->rotateRight();
+			}
+		} else if (event["control"] != nullptr && event["control"] == "buzzer") {
+			params.setRandomNextEffect();
+		}
 	}
 }
 
 
 //------------------------------------------------------------------
 void Tetris::update() {
-	gameControl->update();
+	playerControl.update();
+    gameObjects->update();
     produceStoneByIntervall();
     setTetrisStoneRelativeToPaddlePosition();
 }
@@ -229,67 +268,67 @@ void Tetris::update() {
 
 //------------------------------------------------------------------
 void Tetris::draw() {
-	ofSetColor(255);
-	//draw game
-	gameFbo.begin();
-	ofClear(0, 0);
-	gameControl->render();
-	gameFbo.end();
-
-	//do warping
-	drawWarpedFbo(warperLeft,false);
-	drawWarpedFbo(warperRight, true);
-
-	ofDrawBitmapString("Anzahl der Objekte: " + ofToString(objects->physics.getBodyCount()), 50, 50);
-	
+    ofSetColor(255);
+    //draw game
+    gameFbo.begin();
+    ofClear(0, 0);
+    gameObjects->render();
+    gameFbo.end();
+    
+    //do warping
+    drawWarpedFbo(warperLeft,false);
+    drawWarpedFbo(warperRight, true);
+    
+    ofDrawBitmapString("Anzahl der Objekte: " + ofToString(objects->physics.getBodyCount()), 50, 50);
+    
 }
 
 void Tetris::keyPressed(ofKeyEventArgs & key)
 {
-	if (key.key == 'y') {
-		ofJson state = ofJson{
-			{ "function","gamestate" },
-			{ "gamestate" , "end1" }
-		};
-		params.notifyGameEvent(state);
-	}
-
-	if (key.key == 'a') {
-		// left Player
-		auto stone = GameFactory::makeTetrisStone(objects, &params);
-		stone->setPlayer(1);
-		objects->addGameObject(stone);
-		objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
-
-		// right Player
-		auto stone2 = GameFactory::makeTetrisStone(objects, &params);
-		stone2->setPosition(ofVec2f(600, 0));
-		stone2->setPlayer(2);
-		objects->addGameObject(stone2);
-		objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
-	}
-
-	if (key.key == 't' ) {
-		warperLeft.toggleShow();
-		warperRight.toggleShow();
-	}
-
-	if (key.key == 'l') {
-		warperLeft.load("_Tetris/warper_left.json");
-		warperRight.load("_Tetris/warper_right.json");
-	}
-
-	if (key.key == 's') {
-		warperLeft.save("_Tetris/warper_left.json");
-		warperRight.save("_Tetris/warper_right.json");
-	}
-
-	if (key.key == '#') {
-		gameControl->reloadRenderer();
-	}
-
+    if (key.key == 'y') {
+        ofJson state = ofJson{
+            { "function","gamestate" },
+            { "gamestate" , "end1" }
+        };
+        params.notifyGameEvent(state);
+    }
+    
+    if (key.key == 'a') {
+        // left Player
+        auto stone = GameFactory::makeTetrisStone(objects, &params, params.nextCreationRule[0]);
+        stone->setPlayer(1);
+        objects->addGameObject(stone);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+        
+        // right Player
+        auto stone2 = GameFactory::makeTetrisStone(objects, &params, params.nextCreationRule[1]);
+        stone2->setPosition(ofVec2f(600, 0));
+        stone2->setPlayer(2);
+        objects->addGameObject(stone2);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
+    }
+    
+    if (key.key == 't' ) {
+        warperLeft.toggleShow();
+        warperRight.toggleShow();
+    }
+    
+    if (key.key == 'l') {
+        warperLeft.load("_Tetris/warper_left.json");
+        warperRight.load("_Tetris/warper_right.json");
+    }
+    
+    if (key.key == 's') {
+        warperLeft.save("_Tetris/warper_left.json");
+        warperRight.save("_Tetris/warper_right.json");
+    }
+    
+    if (key.key == '#') {
+        gameObjects->reloadRenderer();
+    }
+    
     if (key.key == 'b') {
-        auto stone = GameFactory::makeTetrisStone(objects, &params);
+        auto stone = GameFactory::makeTetrisStone(objects, &params, "base");
         objects->addGameObject(stone);
         objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
     }
@@ -297,7 +336,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
     if (key.key == '2') {
         getLastCreatedStone(1)->makeBouncy();
     }
-
+    
     // rotate last stone for player 1
     if (key.key == 'r') {
         getLastCreatedStone(1)->rotateRight();
@@ -327,46 +366,55 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
             objects->paddles[i]->setFrequencyDiff(-0.1f);
         }
     }
+	if (key.key == 'm') {
+		gameControl->reloadRenderer();
+	}
 
+    
+    if (key.key == 'n') {
+		
+		params.setRandomNextEffect();
+    }
+    
 }
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
-	//cout << e.message.dump(4) << endl;
-	//set paddle position
-	if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle2Position")){
-		playerControl.onPaddleMove(e.message);
-	}
-
+    //cout << e.message.dump(4) << endl;
+    //set paddle position
+    if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle2Position")){
+        playerControl.onPaddleMove(e.message);
+    }
+    
 }
 
 void Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)
 {
-	//======================== get our quad warp matrix.
-
-	ofMatrix4x4 mat = warper.getMatrix();
-
-	//======================== use the matrix to transform our fbo.
-
-	ofPushMatrix();
-	ofMultMatrix(mat);
-	ofSetColor(255);
-	if(!isRight) gameFbo.getTexture().drawSubsection(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()), ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
-	else gameFbo.getTexture().drawSubsection(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()), ofRectangle(gameFbo.getWidth() / 2, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
-	ofPopMatrix();
-
-	//======================== draw quad warp ui.
-
-	ofSetColor(ofColor::magenta);
-	warper.drawQuadOutline();
-
-	ofSetColor(ofColor::yellow);
-	warper.drawCorners();
-
-	ofSetColor(ofColor::magenta);
-	warper.drawHighlightedCorner();
-
-	ofSetColor(ofColor::red);
-	warper.drawSelectedCorner();
+    //======================== get our quad warp matrix.
+    
+    ofMatrix4x4 mat = warper.getMatrix();
+    
+    //======================== use the matrix to transform our fbo.
+    
+    ofPushMatrix();
+    ofMultMatrix(mat);
+    ofSetColor(255);
+    if(!isRight) gameFbo.getTexture().drawSubsection(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()), ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
+    else gameFbo.getTexture().drawSubsection(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()), ofRectangle(gameFbo.getWidth() / 2, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
+    ofPopMatrix();
+    
+    //======================== draw quad warp ui.
+    
+    ofSetColor(ofColor::magenta);
+    warper.drawQuadOutline();
+    
+    ofSetColor(ofColor::yellow);
+    warper.drawCorners();
+    
+    ofSetColor(ofColor::magenta);
+    warper.drawHighlightedCorner();
+    
+    ofSetColor(ofColor::red);
+    warper.drawSelectedCorner();
 }
 

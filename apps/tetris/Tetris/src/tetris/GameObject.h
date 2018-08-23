@@ -39,7 +39,6 @@ protected:
 
 	vector<shared_ptr<RenderObject>> renderer;
 	vector<shared_ptr<ofxBox2dBaseShape>> body;
-	//vector<shared_ptr<Rule>> rules;
 
 	string name ="";
 	long id;

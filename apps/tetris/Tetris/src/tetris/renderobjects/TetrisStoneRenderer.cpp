@@ -2,9 +2,13 @@
 
 
 
-TetrisStoneRenderer::TetrisStoneRenderer(shared_ptr<TetrisStone> stone_, ofColor base, ofColor highlight):RenderObject("TetrisStoneRenderer")
+TetrisStoneRenderer::TetrisStoneRenderer(shared_ptr<TetrisStone> stone_, ofColor base, ofColor highlight,
+	string name, int dmax_, int padding_ , int wLine_ ):RenderObject(name)
 {
 	stone = stone_;
+	dMax = dmax_;
+	padding = padding_;
+	wLine = wLine_;
 
 	tile.allocate(128, 128);
 	updateTile();
@@ -17,6 +21,11 @@ TetrisStoneRenderer::TetrisStoneRenderer(shared_ptr<TetrisStone> stone_, ofColor
 
 void TetrisStoneRenderer::render()
 {
+	if (stone->getIsPartOfTower() != isPartofTower) {
+		isPartofTower = !isPartofTower;
+		tPartofTower = ofGetElapsedTimeMillis();
+	}
+
 	updateTile();
 
 	int scale = stone->getScale();
@@ -37,20 +46,33 @@ void TetrisStoneRenderer::reload()
 
 void TetrisStoneRenderer::updateTile()
 {
+
 	int w = tile.getWidth();
 	int h = tile.getHeight();
 
-	float t = ((ofGetElapsedTimeMillis()+ creationTime) / 3) % 500 * 2*PI /500;
-	float padding = sin(t) * 5 + 15;
-	int wLine = 10;
+	//speed
+	ofVec2f v = stone->getBody()[0]->getVelocity();
+	ofVec2f d = -ofVec2f(ofxeasing::map_clamp(v.x, 0, 40, 0, dMax,&ofxeasing::sine::easeInOut), 
+		ofxeasing::map_clamp(v.y, 0, 40, 0, dMax, &ofxeasing::sine::easeInOut));
+
+	//line
+
+	if (isPartofTower && ofGetElapsedTimeMillis() - tPartofTower < 500) {
+		wLine += ofxeasing::map_clamp(ofGetElapsedTimeMillis() - tPartofTower, 0, 500, 10, 0, &ofxeasing::sine::easeInOut);
+	}
+
 
 	tile.begin();
 	ofSetColor(baseColor);
 	ofDrawRectangle(0, 0, w, h);
+	ofTranslate(d);
 	ofSetColor(highlightColor);
 	ofDrawRectangle(padding, padding, w- padding*2, h- padding*2);
-	ofSetColor(baseColor);
-	ofDrawRectangle(padding+wLine, padding+ wLine, w - (padding+ wLine) *2 , h - (padding + wLine)*2);
+
+	if (isPartofTower){// && ofGetElapsedTimeMillis() - tPartofTower > 500) {
+		ofSetColor(baseColor);
+		ofDrawRectangle(padding + wLine, padding + wLine, w - (padding + wLine) * 2, h - (padding + wLine) * 2);
+	}
 	tile.end();
 }
 

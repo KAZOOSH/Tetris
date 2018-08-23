@@ -1,7 +1,7 @@
 #include "TetrisStone.h"
 
 
-TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
+TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffect):GameObject(name)
 {
     //isTetrisStone= true;
     //collided = false;
@@ -11,26 +11,36 @@ TetrisStone::TetrisStone(string name, GameParameters* params_):GameObject(name)
     
     float density = params->params["tetrisStone"]["density"].get<float>();
     
-	auto vertsAndType = getRandomVertecies();
-	vertecies = vertsAndType.second;
-	stoneType = vertsAndType.first;
-
+    auto vertsAndType = getRandomVertecies();
+    vertecies = vertsAndType.second;
+    stoneType = vertsAndType.first;
+    
     body->addVertices(vertecies);
-    body->setPhysics(density, 0, 1);
-    body->triangulatePoly();
+    
+    
+	if (activeEffect == "heavy") {
+		body->setPhysics(5.0, 0, 1.0);
+	}else if (activeEffect == "bouncy") {
+		body->setPhysics(1.0, 0, 0.5);
+	} else {
+		body->setPhysics(1.0, 0, 1.0);
+	}
 
+    
+    body->triangulatePoly();
+    
     //body->body->SetUserData(this->body);
     //body->setData(new TetrisStone(name,params_));
     
-//    int myInt = 123;
-//    body.get()->setData(this);
-//    TetrisStone * stone = (TetrisStone*)body.get()->getData();
-//    body->body->SetUserData(<#void *data#>)
-//    body->body->SetUserData((void*)myInt);
+    //    int myInt = 123;
+    //    body.get()->setData(this);
+    //    TetrisStone * stone = (TetrisStone*)body.get()->getData();
+    //    body->body->SetUserData(<#void *data#>)
+    //    body->body->SetUserData((void*)myInt);
     
-	//create and add the renderer
-	auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
-	addRenderer(renderer);
+    //create and add the renderer
+    auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+    addRenderer(renderer);
 }
 
 bool TetrisStone::getIsPartOfTower(){
@@ -72,12 +82,12 @@ void TetrisStone::collide(){
 
 int TetrisStone::getScale()
 {
-	return scale;
+    return scale;
 }
 
 string TetrisStone::getType()
 {
-	return stoneType;
+    return stoneType;
 }
 
 TetrisStone::~TetrisStone()
@@ -85,29 +95,30 @@ TetrisStone::~TetrisStone()
 }
 
 void TetrisStone::render() {
-    if(isBouncy){
+    /*if(isBouncy){
         ofSetColor(255, 0, 0);
     }
 
     if(collided){
         ofSetColor(0, 0, 255);
-    }
+    }*/
 
-    if(isPartOfTower){
+    /*if(isPartOfTower){
          ofSetColor(255, 255, 0);
-    }
+    }*/
     
-    body->draw();
-    //    for (auto& r : renderer) {
-    //        r->render();
-    //    }
+    //body->draw();
+        for (auto& r : renderer) {
+            r->render();
+        }
     ofSetColor(255, 255, 255);
 };
 
 void TetrisStone::makeBouncy() {
     isBouncy = true;
-    body->body->GetFixtureList()->SetRestitution(0.5f);
+    // body->setPhysics(1.0f, 0.0f, 0.2f);
 }
+
 
 void TetrisStone::setPosition(ofVec2f position){
     body->setPosition(position);
@@ -159,25 +170,25 @@ void TetrisStone::addToWorld(b2World* world){
     body->create(world);
     addBody(body);
     //create and add the renderer
-   // auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
-   // addRenderer(renderer);
+    // auto renderer = shared_ptr<PolygonRenderer>(new PolygonRenderer(body));
+    // addRenderer(renderer);
 }
 
 pair<string, vector <ofDefaultVertexType>> TetrisStone::getRandomVertecies()
 {
     vector <ofDefaultVertexType> pts;
     
-
-	int max = ofRandom(stones.size());
-	int i = 0;
-
-	pair <string, string> stonePair;
-	for (auto& v:stones){
-		if (i == max) stonePair = v;
-		++i;
-	}
-	
-	string randomStone = stonePair.second;
+    
+    int max = ofRandom(stones.size());
+    int i = 0;
+    
+    pair <string, string> stonePair;
+    for (auto& v:stones){
+        if (i == max) stonePair = v;
+        ++i;
+    }
+    
+    string randomStone = stonePair.second;
     vector<string> pairs = ofSplitString(randomStone, ";");
     
     int width=0;

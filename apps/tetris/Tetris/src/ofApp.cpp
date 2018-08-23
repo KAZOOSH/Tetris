@@ -30,6 +30,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	ofSoundUpdate();
 	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 	moduleControl.getModuleRunner()->updateModules();
 }

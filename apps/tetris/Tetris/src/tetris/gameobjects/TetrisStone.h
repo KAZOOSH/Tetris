@@ -7,7 +7,7 @@
 class TetrisStone : public GameObject
 {
 public:
-    TetrisStone(string name, GameParameters* params);
+    TetrisStone(string name, GameParameters* params, string activeEffect);
     ~TetrisStone();
     void addToWorld(b2World* world);
     void setPosition(ofVec2f position);
@@ -29,7 +29,7 @@ public:
 private:
     pair<string,vector <ofDefaultVertexType>> getRandomVertecies();
     vector <ofDefaultVertexType> vertecies;
-	string stoneType;
+    string stoneType;
     void createStoneVertecies();
     int scale= 20;
     int offsetX = 400;
