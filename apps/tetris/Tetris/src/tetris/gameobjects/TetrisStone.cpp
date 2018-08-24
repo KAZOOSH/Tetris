@@ -68,7 +68,7 @@ void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition, float d
         positionChangeRelativeToPaddleSmoothed = 0.95 * positionChangeRelativeToPaddle + 0.05 * positionChangeRelativeToPaddleSmoothed;
         
         if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 && 
-			distanceToPaddleOrOtherTetrisStone < params->params["tetrisStone"]["scale"].get<int>()*7.5 ){
+			distanceToPaddleOrOtherTetrisStone < params->params["tetrisStone"]["scale"].get<int>()*8.5 ){
 			if (!isPartOfTower)params->soundPlayer.play("partOfTower", playerId);
             isPartOfTower = true;
 			
@@ -111,7 +111,7 @@ void TetrisStone::render() {
      ofSetColor(255, 255, 0);
      }*/
     
-    //body->draw();
+    body->draw();
     for (auto& r : renderer) {
         r->render();
     }
@@ -169,7 +169,7 @@ void TetrisStone::createStoneVertecies(){
     stones.insert(pair<string,string>("stone_L",stone_L));
     stones.insert(pair<string,string>("stone_L2",stone_L2));
     stones.insert(pair<string, string>("stone_Z", stone_Z));
-    stones.insert(pair<string, string>("stone_Z2", stone_Z));
+    stones.insert(pair<string, string>("stone_Z2", stone_Z2));
     stones.insert(pair<string, string>("stone_I", stone_I));
     stones.insert(pair<string, string>("stone_O", stone_O));
     stones.insert(pair<string, string>("stone_T", stone_T));

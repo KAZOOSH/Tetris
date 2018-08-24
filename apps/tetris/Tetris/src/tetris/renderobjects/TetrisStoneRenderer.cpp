@@ -86,7 +86,15 @@ void TetrisStoneRenderer::drawTiles(string type,int scale)
 		tile.draw(0, scale, scale, scale);
 		tile.draw(scale, scale, scale, scale);
 		ofPopMatrix();
-	}else if (type == "stone_Z") {
+	}else if (type == "stone_L2") {
+		ofPushMatrix();
+		ofTranslate(-scale * 0.25, -scale * 0.75);
+		tile.draw(0, -scale, scale, scale);
+		tile.draw(0, 0, scale, scale);
+		tile.draw(0, scale, scale, scale);
+		tile.draw(-scale, scale, scale, scale);
+		ofPopMatrix();
+	} else if (type == "stone_Z") {
 		ofPushMatrix();
 		ofTranslate(-scale * 0.5, 0);
 		tile.draw(-scale, -scale, scale, scale);
@@ -94,12 +102,21 @@ void TetrisStoneRenderer::drawTiles(string type,int scale)
 		tile.draw(0, 0, scale, scale);
 		tile.draw(scale, 0, scale, scale);
 		ofPopMatrix();
+	} else if (type == "stone_Z2") {
+		ofPushMatrix();
+		ofTranslate(-scale * 0.5, 0);
+		tile.draw(scale, -scale, scale, scale);
+		tile.draw(0, -scale, scale, scale);
+		tile.draw(0, 0, scale, scale);
+		tile.draw(-scale, 0, scale, scale);
+		ofPopMatrix();
 	} else if (type == "stone_I") {
 		ofPushMatrix();
-		ofTranslate(-scale * 0.5, -scale * 0.5);
+		ofTranslate(-scale*0.5, -scale);
 		tile.draw(0, -scale, scale, scale);
 		tile.draw(0, 0, scale, scale);
 		tile.draw(0, scale, scale, scale);
+		tile.draw(0, 2*scale, scale, scale);
 		ofPopMatrix();
 	} else if (type == "stone_O") {
 		tile.draw(0, 0, scale, scale);
