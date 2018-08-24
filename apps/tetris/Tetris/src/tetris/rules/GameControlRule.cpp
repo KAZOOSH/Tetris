@@ -4,7 +4,7 @@
 
 GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* gameControl_):Rule("GameControlRule",params)
 {
-	gameObjects = gameControl_;
+	gameControl = gameControl_;
 	mainFont.setup(params->params["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
 	subFont.setup(params->params["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
 	mainFont.setSize(250);
@@ -60,14 +60,15 @@ void GameControlRule::applyRule()
 	} else if (gamestate == "game") {
 		int winningHeight = params->winningHeight*params->params["height"].get<float>();
 		//cout << winningHeight << " -> " << gameObjects->paddles[0]->towerHeight << "   |    " << gameObjects->paddles[1]->towerHeight << endl;
-		if (gameObjects->paddles[0]->towerHeight > winningHeight) {
+		if (gameControl->paddles[0]->towerHeight > winningHeight) {
 			changeGamestate("end1");
 		}
-		else if (gameObjects->paddles[1]->towerHeight > winningHeight) {
+		else if (gameControl->paddles[1]->towerHeight > winningHeight) {
 			changeGamestate("end2");
 		}
 
 		//reduce winning height
+		cout << now << " - " << startState << "    > " << params->params["gameplay"]["maxDuration"].get<int>() << endl;
 		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
 			params->winningHeight = 
 				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
@@ -75,6 +76,7 @@ void GameControlRule::applyRule()
 				params->params["gameplay"]["winningHeightMax"].get<float>(),
 				params->params["gameplay"]["winningHeightMin"].get<float>(),true);
 		} else if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
+			cout << "even" << endl;
 			changeGamestate("endEven");
 		}
 	} else if (gamestate == "end1" && isTSwitch) {
@@ -106,8 +108,8 @@ void GameControlRule::draw()
 		ofSetColor(255);
 		int h = params->params["height"].get<int>();
 		int hBase = (1.0 - params->winningHeight)*h;
-		int y1 = hBase -(h - gameObjects->paddles[0]->getBody()[0]->getPosition().y);
-		int y2 = hBase - (h - gameObjects->paddles[1]->getBody()[0]->getPosition().y);
+		int y1 = hBase -(h - gameControl->paddles[0]->getBody()[0]->getPosition().y);
+		int y2 = hBase - (h - gameControl->paddles[1]->getBody()[0]->getPosition().y);
 		ofDrawRectangle(0, y1, params->params["width"].get<int>()/2, 10);
 		ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 10);
 	}else if (gamestate == "end1") {

@@ -43,8 +43,7 @@ public:
         
 	private:
         float getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle);
-		shared_ptr<GameControl> gameControl;
-    shared_ptr<GameControl> gameObjects;
+    shared_ptr<GameControl> gameControl;
 		shared_ptr<GameObjectContainer> objects;
         void setTetrisStoneRelativeToPaddlePosition();
 		GameParameters params;
@@ -61,6 +60,8 @@ public:
         void collisionHandler(TetrisStone* stone);
         bool makeHeavyStone = false;
 		bool makeBouncyStone = false;
+
+		bool isDebug = false;
 };
 	
 

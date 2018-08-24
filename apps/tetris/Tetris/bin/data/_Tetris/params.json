@@ -1,5 +1,5 @@
 {
-  "width": 2080,
+  "width": 2160,
   "height": 1920,
   "gameplay":{
   	"winningHeightMin":0.4,
@@ -19,6 +19,9 @@
   "fonts": {
     "main": "fonts/tetris.ttf",
     "sub": "fonts/Arial Unicode.ttf"
+  },
+  "physics":{
+  	"gravity":10.0
   },
   "textFields": {
     "main": {
@@ -41,7 +44,7 @@
     "anchorMargin": 600,
     "frequency": 4,
     "damping": 3,
-    "density": 5,
+    "density": 30,
     "leftStartPosition": {
       "x": 400,
       "y": 1500

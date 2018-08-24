@@ -38,12 +38,12 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     warperRight.load("_Tetris/warper_right.json");
     
     //create objects
-    objects = shared_ptr<GameObjectContainer>(new GameObjectContainer());
+    objects = shared_ptr<GameObjectContainer>(new GameObjectContainer(&params));
     objects->initPhysics();
     ofAddListener(params.gameEvent, this, &Tetris::onGameEvent);
     
     //create GameControl
-    gameObjects = shared_ptr<GameControl>(new GameControl(objects));
+    gameControl = shared_ptr<GameControl>(new GameControl(objects));
     ofAddListener(params.controlEvent, this, &Tetris::onControlEvent);
     
     // add contact listener
@@ -157,6 +157,8 @@ void Tetris::produceStone(int player) {
     }
     objects->addGameObject(stone);
     objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+	gameControl->registerEraseEvent(stone->eraseEvent);
+
 }
 
 float Tetris::getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle) {
@@ -164,9 +166,9 @@ float Tetris::getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisSton
     float minimumDistance = 100000;
     float distance = 0;
     // check all stones and set sistance if its
-    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        if(objects->gameObjects[i]->getName() == "TetrisStone" && objects->gameObjects[i]->getId() != stone->getId()){
-            shared_ptr<TetrisStone> otherStone = std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+    for (size_t i = objects->gameControl.size()-1; i > 0; --i) {
+        if(objects->gameControl[i]->getName() == "TetrisStone" && objects->gameControl[i]->getId() != stone->getId()){
+            shared_ptr<TetrisStone> otherStone = std::static_pointer_cast<TetrisStone>(objects->gameControl[i]);
             if(otherStone->getBody().size()>0 && otherStone->getIsPartOfTower()){
                 distance = (stone->getBody()[0]->getPosition()-otherStone->getBody()[0]->getPosition()).length();
                 if(distance < minimumDistance){
@@ -196,10 +198,10 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
     shared_ptr<Paddle> paddleRight = objects->getPaddle(Paddle::paddleNameRight);
     
     // iterate over tetrisstones
-    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        if(objects->gameObjects[i]->getName() == "TetrisStone"){
-            if(objects->gameObjects[i]){
-                shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+    for (size_t i = objects->gameControl.size()-1; i > 0; --i) {
+        if(objects->gameControl[i]->getName() == "TetrisStone"){
+            if(objects->gameControl[i]){
+                shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(objects->gameControl[i]);
                 
                 int pId = stone->getPlayerId();
                 int y = 10000;
@@ -233,8 +235,8 @@ void Tetris::setTetrisStoneRelativeToPaddlePosition() {
 
 
 shared_ptr<TetrisStone> Tetris::getLastCreatedStone(int playerId) {
-    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        shared_ptr<TetrisStone> stone= std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
+    for (size_t i = objects->gameControl.size()-1; i > 0; --i) {
+        shared_ptr<TetrisStone> stone= std::static_pointer_cast<TetrisStone>(objects->gameControl[i]);
         
         if(stone->getName() == "TetrisStone"){
             int pId = stone->getPlayerId();
@@ -290,7 +292,7 @@ void Tetris::onGameEvent(ofJson & event)
 //------------------------------------------------------------------
 void Tetris::update() {
     playerControl.update();
-    gameObjects->update();
+    gameControl->update();
     produceStoneByIntervall();
     setTetrisStoneRelativeToPaddlePosition();
 }
@@ -303,7 +305,7 @@ void Tetris::draw() {
     //draw game
     gameFbo.begin();
     ofClear(0, 0);
-    gameObjects->render();
+    gameControl->render();
     gameFbo.end();
     
     //do warping
@@ -316,6 +318,7 @@ void Tetris::draw() {
 
 void Tetris::keyPressed(ofKeyEventArgs & key)
 {
+	if(key.key)
     if (key.key == 'y') {
         ofJson state = ofJson{
             { "function","gamestate" },
@@ -355,7 +358,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
     }
     
     if (key.key == '#') {
-        gameObjects->reloadRenderer();
+        gameControl->reloadRenderer();
     }
     
     if (key.key == 'b') {
@@ -436,18 +439,21 @@ void Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)
     else gameFbo.getTexture().drawSubsection(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()), ofRectangle(gameFbo.getWidth() / 2, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
     ofPopMatrix();
     
-    //======================== draw quad warp ui.
-    
-    ofSetColor(ofColor::magenta);
-    warper.drawQuadOutline();
-    
-    ofSetColor(ofColor::yellow);
-    warper.drawCorners();
-    
-    ofSetColor(ofColor::magenta);
-    warper.drawHighlightedCorner();
-    
-    ofSetColor(ofColor::red);
-    warper.drawSelectedCorner();
+
+	if (isDebug) {
+		//======================== draw quad warp ui.
+
+		ofSetColor(ofColor::magenta);
+		warper.drawQuadOutline();
+
+		ofSetColor(ofColor::yellow);
+		warper.drawCorners();
+
+		ofSetColor(ofColor::magenta);
+		warper.drawHighlightedCorner();
+
+		ofSetColor(ofColor::red);
+		warper.drawSelectedCorner();
+	}
 }
 

@@ -33,7 +33,7 @@ void GameControl::update()
 
 void GameControl::render()
 {
-	for (auto& obj : objects->gameObjects) {
+	for (auto& obj : objects->gameControl) {
 		obj->render();
 	}
 
@@ -47,9 +47,14 @@ void GameControl::onEraseEvent(long & id)
 	toDeleteIds.push_back(id);
 }
 
+void GameControl::registerEraseEvent(ofEvent<long> ev)
+{
+	ofAddListener(ev, this, &GameControl::onEraseEvent);
+}
+
 void GameControl::reloadRenderer()
 {
-	for (auto& obj : objects->gameObjects) {
+	for (auto& obj : objects->gameControl) {
 		obj->reloadRenderer();
 	}
 }
@@ -57,10 +62,12 @@ void GameControl::reloadRenderer()
 void GameControl::removeErasedElements()
 {
 	for (auto& id : toDeleteIds) {
-		auto position = find_if(objects->gameObjects.begin(), objects->gameObjects.end(),
+		cout << "erase remove " << id << "  " << toDeleteIds.size() << endl;
+		auto position = find_if(objects->gameControl.begin(), objects->gameControl.end(),
 			[&id](const shared_ptr<GameObject> elem) { return elem->getId() == id; });
-		if (position != objects->gameObjects.end()) {
-			objects->gameObjects.erase(position);
+		
+		if (position != objects->gameControl.end()) {
+			objects->gameControl.erase(position);
 		}
 	}
 	
