@@ -26,7 +26,7 @@ public:
 	vector<shared_ptr<Paddle>> paddles;
 
 	//all objects
-	vector<shared_ptr<GameObject>> gameControl;
+	vector<shared_ptr<GameObject>> gameObjects;
 	vector<shared_ptr<Rule>> rules;
 	ofxBox2d physics;
 

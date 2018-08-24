@@ -22,14 +22,14 @@ void GameObjectContainer::initPhysics()
 
 void GameObjectContainer::addGameObject(shared_ptr<GameObject> object)
 {
-    gameControl.push_back(object);
+    gameObjects.push_back(object);
 	
 }
 
 void GameObjectContainer::addPaddle(shared_ptr<Paddle> object)
 {
     paddles.push_back(object);
-    gameControl.push_back(object);
+    gameObjects.push_back(object);
     
 }
 shared_ptr<Paddle> GameObjectContainer::getPaddle(string name)

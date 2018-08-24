@@ -34,7 +34,7 @@ public:
     
     //rules
     static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
-    static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params, GameObjectContainer* gameControl);
+    static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
 	static shared_ptr<GameEventRule> makeGameEventRule(GameParameters* params);
 	static shared_ptr<Rule> makeWorldEffect(GameParameters* params, ofJson config);
 };

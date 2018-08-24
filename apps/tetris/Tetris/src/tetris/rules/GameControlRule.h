@@ -9,7 +9,7 @@ class GameControlRule :
 	public Rule
 {
 public:
-	GameControlRule(GameParameters* params, GameObjectContainer* gameControl);
+	GameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
 	~GameControlRule();
 
 	void applyRule();
@@ -32,7 +32,7 @@ private:
 	map<string, InfoPanel> panels;
 
 	vector<bool> paddleReady;
-	GameObjectContainer* gameControl;
+	GameObjectContainer* gameObjects;
 
 };
 

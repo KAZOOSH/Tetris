@@ -13,7 +13,7 @@ public:
 
 	void onEraseEvent(long& id);
 
-	void registerEraseEvent(ofEvent<long> ev);
+	void registerEraseEvent(ofEvent<long>& ev);
 
 	void reloadRenderer();
 

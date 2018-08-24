@@ -95,9 +95,9 @@ shared_ptr<DeleteOutOfScreenRule> GameFactory::makeDeleteOutOfScreenRule(GamePar
     return shared_ptr<DeleteOutOfScreenRule>(new DeleteOutOfScreenRule(params));
 }
 
-shared_ptr<GameControlRule> GameFactory::makeGameControlRule(GameParameters * params, GameObjectContainer* gameControl)
+shared_ptr<GameControlRule> GameFactory::makeGameControlRule(GameParameters * params, GameObjectContainer* gameObjects)
 {
-    return shared_ptr<GameControlRule>(new GameControlRule(params,gameControl));
+    return shared_ptr<GameControlRule>(new GameControlRule(params,gameObjects));
 }
 
 shared_ptr<GameEventRule> GameFactory::makeGameEventRule(GameParameters * params)
