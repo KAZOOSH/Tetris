@@ -140,22 +140,28 @@ void Tetris::produceStone(int player) {
                 }
             
                 if (params.nextCreationRule[player - 1] == "quicky") {
+                    // collided stones get gravity effects
+                    stone->collide();
                     stone->getBody()[0]->addForce(ofVec2f(0, 1), 10000);
                 }
                 if (params.nextCreationRule[player - 1] == "rotary") {
+                    // collided stones get gravity effects
+                    stone->collide();
                     stone->getBody()[0]->addImpulseForce(stone->getBody()[0]->getB2DPosition()+ofVec2f(10,0), ofVec2f(0,5000));
                 }
             
                 // set stone effect for active player back to base
                 params.nextCreationRule[player-1] = "base";
             
+                int minimumDistanceToBorder= 200;
+                int middle = params.params["width"].get<int>()/2;
                 if(player == 1) {
                     lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
-                    stone->setPosition(ofVec2f(300,0));
+                    stone->setPosition(ofVec2f(ofRandom(minimumDistanceToBorder, middle -minimumDistanceToBorder),0));
                 }
                 if(player == 2){
                     lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
-                    stone->setPosition(ofVec2f(1500,0));
+                    stone->setPosition(ofVec2f(ofRandom(middle + minimumDistanceToBorder, 2*middle -minimumDistanceToBorder),0));
                 }
                 objects->addGameObject(stone);
                 objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
