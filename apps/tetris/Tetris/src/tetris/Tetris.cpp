@@ -67,7 +67,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
     objects->addRule(GameFactory::makeGameControlRule(&params,objects.get()));
     objects->addRule(GameFactory::makeGameEventRule(&params));
-    
+	objects->addRule(GameFactory::makeStoneControlRule(&params));
     
     ofRegisterKeyEvents(this);
 }
@@ -165,6 +165,7 @@ void Tetris::produceStone(int player) {
                 }
                 objects->addGameObject(stone);
                 objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+				objects->getRule("StoneControlRule")->addObject(stone);
                 gameObjects->registerEraseEvent(stone->eraseEvent);
         } else{
             if(player == 1) {
@@ -294,7 +295,13 @@ void Tetris::onControlEvent(ofJson & event)
 void Tetris::onGameEvent(ofJson & event)
 {
     if (event["function"] != nullptr && event["function"] == "createWorldEffect") {
-        objects->addRule(GameFactory::makeWorldEffect(&params, event["params"]));
+
+		auto rule = GameFactory::makeWorldEffect(&params, event["params"]);
+
+		for (auto obj : objects->gameObjects) {
+			if (obj->getName() == "TetrisStone") rule->addObject(obj);
+		}
+        objects->addRule(rule);
         
         ofJson out;
         out["function"] = "effect";

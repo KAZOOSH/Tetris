@@ -16,23 +16,6 @@ void DeleteOutOfScreenRule::applyRule()
 {
 	for (auto& obj:objects){
 		bool toDel = false;
-        
-        if(obj->getName() == "TetrisStone"){
-            shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(obj);
-            if(!stone->collided) {
-                for (auto& body : stone->getBody()) {
-                    int velocity = params->params["tetrisStone"]["startVelocity"].get<int>();
-                    body->setVelocity(0, velocity);
-                    body->enableGravity(false);
-                };
-            } else{
-                for (auto& body : stone->getBody()) {
-                    body->enableGravity(true);
-                };
-            }
-        }
-
-        
 		auto bodies = obj->getBody();
 
 		for (auto& body : bodies) {

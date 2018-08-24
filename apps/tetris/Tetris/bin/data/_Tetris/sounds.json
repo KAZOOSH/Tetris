@@ -1,6 +1,6 @@
 [
 	{
-		"name":"turn",
+		"name":"rotate",
 		"sounds":["Turn block 1.wav","Turn block 2.wav","Turn block 3.wav"]
 	},
 	{
@@ -9,6 +9,10 @@
 	},
 	{
 		"name":"newBlock",
-		"sounds":["New block, new anything.wav","New Stone_tanya dart.wav"]
+		"sounds":["New Stone_Country 1.wav"]
+	},
+	{
+		"name":"start",
+		"sounds":["Start_ship's bell.wav"]
 	}
 ]

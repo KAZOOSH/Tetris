@@ -1,6 +1,5 @@
 #pragma once
 #include "Rule.h"
-#include "TetrisStone.h"
 
 
 class DeleteOutOfScreenRule :

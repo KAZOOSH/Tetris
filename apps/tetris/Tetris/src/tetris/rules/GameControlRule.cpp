@@ -107,13 +107,13 @@ void GameControlRule::draw()
 	}else if (gamestate == "countdown") {
 
 	}else if (gamestate == "game") {
-		ofSetColor(255);
+		/*ofSetColor(255);
 		int h = params->params["height"].get<int>();
 		int hBase = (1.0 - params->winningHeight)*h;
 		int y1 = hBase -(h - gameObjects->paddles[0]->getBody()[0]->getPosition().y);
 		int y2 = hBase - (h - gameObjects->paddles[1]->getBody()[0]->getPosition().y);
 		ofDrawRectangle(0, y1, params->params["width"].get<int>()/2, 10);
-		ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 10);
+		ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 10);*/
 	}else if (gamestate == "end1") {
 
 	} else if (gamestate == "end2") {
@@ -129,6 +129,9 @@ void GameControlRule::changeGamestate(string message)
 	startState = ofGetElapsedTimeMillis();
 
 	panels[gamestate].start();
+
+	if (gamestate == "game") params->soundPlayer.play("start", 1);
+	if (gamestate == "game") params->soundPlayer.play("start", 2);
 
 	ofJson state = ofJson{
 		{"function","gamestate"},
