@@ -128,7 +128,8 @@ void Tetris::produceStone(int player) {
                 auto stone = GameFactory::makeTetrisStone(objects,&params, params.nextCreationRule[player-1]);
                 stone->setPlayer(player);
             
-            
+				params.soundPlayer.play("newBlock", player);
+
                 //notify effect if present
                 if (params.nextCreationRule[player - 1] != "base") {
                     ofJson out;
@@ -414,8 +415,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
         }
     }
     if (key.key == 'm') {
-        params.nextCreationRule[0] = "rotary";
-        params.nextCreationRule[1] = "quicky";
+		params.setRandomNextEffect();
     }
     if (key.key == 'n') {
         params.setNextEffect("wind");

@@ -2,14 +2,15 @@
   "width": 2160,
   "height": 1920,
   "gameplay":{
-  	"winningHeightMin":0.1,
-  	"winningHeightMax":0.8,
-  	"maxDuration":30000,
-  	"startHeightReduction":5000
+  	"winningHeightMin":0.25,
+  	"winningHeightMax":0.7,
+  	"maxDuration":120000,
+  	"startHeightReduction":60000
   },
   "paddleArea": [
     1150,
-    400
+    400,
+    150
   ],
   "isOsc": true,
   "serial": {
@@ -29,7 +30,7 @@
       "h": 120
     },
     "sub": {
-      "y": 1700,
+      "y": 1850,
       "h": 30
     }
   },
