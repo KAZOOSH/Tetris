@@ -33,7 +33,10 @@ void BackgroundRenderer::render()
 	int y2 = hBase - (h - objects->paddles[1]->getBody()[0]->getPosition().y);
 	ofDrawRectangle(0, y1, params->params["width"].get<int>() / 2, h-y1);
 	ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, h-y2);
-
+	
+	ofSetColor(60);
+	ofDrawRectangle(0, y1, params->params["width"].get<int>() / 2, 5);
+	ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 5);
 	ofPopStyle();
 }
 

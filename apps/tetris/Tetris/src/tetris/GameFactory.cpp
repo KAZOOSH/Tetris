@@ -105,6 +105,11 @@ shared_ptr<GameEventRule> GameFactory::makeGameEventRule(GameParameters * params
     return shared_ptr<GameEventRule>(new GameEventRule(params));
 }
 
+shared_ptr<StoneControlRule> GameFactory::makeStoneControlRule(GameParameters * params)
+{
+	return shared_ptr<StoneControlRule>(new StoneControlRule(params));
+}
+
 shared_ptr<Rule> GameFactory::makeWorldEffect(GameParameters * params, ofJson config)
 {
     if (config["state"] != nullptr) {
