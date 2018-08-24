@@ -21,9 +21,7 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffe
     
     if (activeEffect == "heavy") {
         body->setPhysics(10.0, 0, 1.0);
-    } else if (activeEffect == "bouncy") {
-        body->setPhysics(1.0, 0.1, 1.0);
-    } else if (activeEffect == "icy") {
+    }  else if (activeEffect == "icy") {
         body->setPhysics(1.0, 0, 0.1);
     } else {
         body->setPhysics(1.0, 0.0, 1.0);
@@ -162,12 +160,16 @@ void TetrisStone::rotateLeft() {
 // super weired !!!! setzt man die größe auf die hälfte und verdoppelt den scale funktioniert die kollision bei manchen steinen nicht mehr
 void TetrisStone::createStoneVertecies(){
     string stone_L = "0,0; 2,0;2,4;4,4;4,6;0,6";
+    string stone_L2 = "2,0; 4,0;4,6;0,6;0,4;2,4";
     string stone_Z = "0,0;4,0;4,2;6,2;6,4;2,4;2,2;0,2";
-    string stone_I = "0,0;2,0;2,6;0,6";
+    string stone_Z2 = "0,2;2,2;2,0;6,0;6,2;4,2;4,4;0,4";
+    string stone_I = "0,0;2,0;2,8;0,8";
     string stone_O = "0,0;4,0;4,4;0,4";
     string stone_T = "0,2;2,2;2,0;4,0;4,2;6,2;6,4;0,4";
     stones.insert(pair<string,string>("stone_L",stone_L));
+    stones.insert(pair<string,string>("stone_L2",stone_L2));
     stones.insert(pair<string, string>("stone_Z", stone_Z));
+    stones.insert(pair<string, string>("stone_Z2", stone_Z));
     stones.insert(pair<string, string>("stone_I", stone_I));
     stones.insert(pair<string, string>("stone_O", stone_O));
     stones.insert(pair<string, string>("stone_T", stone_T));
