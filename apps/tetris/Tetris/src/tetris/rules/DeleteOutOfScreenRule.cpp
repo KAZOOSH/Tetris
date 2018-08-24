@@ -58,7 +58,7 @@ void DeleteOutOfScreenRule::applyRule()
 void DeleteOutOfScreenRule::onGameEvent(ofJson & event)
 {
 	if (event["function"] != nullptr && event["function"] == "gamestate" && 
-		event["gamestate"] == "idle") {
+		event["gamestate"] == "afterEnd") {
 		
 		for (auto& obj : objects) {
 			bool toDel = false;
