@@ -21,7 +21,8 @@ void DeleteOutOfScreenRule::applyRule()
             shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(obj);
             if(!stone->collided) {
                 for (auto& body : stone->getBody()) {
-                    body->setVelocity(0, 10);
+                    int velocity = params->params["tetrisStone"]["startVelocity"].get<int>();
+                    body->setVelocity(0, velocity);
                     body->enableGravity(false);
                 };
             } else{
@@ -29,22 +30,11 @@ void DeleteOutOfScreenRule::applyRule()
                     body->enableGravity(true);
                 };
             }
-            
         }
-  
-        
+
         
 		auto bodies = obj->getBody();
-		if (obj->getName() == "TetrisStone") {
-			auto tet = std::static_pointer_cast<TetrisStone>(obj);
-			if (!tet->collided)
-			{
-				for (auto& body : bodies) {
-					body->addForce(ofVec2f(0, -1), 500);
-				}
-			}
-			
-		}
+
 		for (auto& body : bodies) {
 			if (shouldRemoveOffScreen(body)){
 				//cout << "del body" << endl;
