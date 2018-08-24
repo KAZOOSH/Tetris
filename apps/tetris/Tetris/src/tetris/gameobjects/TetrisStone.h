@@ -20,6 +20,7 @@ public:
     float getDistanceToPaddle();
     bool isTetrisStone = true;
     bool collided = false;
+    bool isForceAdded = false;
     bool getIsPartOfTower();
     void collide();
     void updateRelativeToPaddlePosition(ofVec2f paddlePosition,float distanceToPaddleOrOtherTetrisStone);

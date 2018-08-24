@@ -35,8 +35,9 @@
   },
   "tetrisStone": {
     "density": 1.0,
-    "produceEveryMilliseconds": 5000,
-    "scale":20
+    "produceEveryMilliseconds": 8000,
+    "scale":20,
+    "startVelocity": 10
   },
   "paddle": {
     "width": 450,
