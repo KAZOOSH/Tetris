@@ -21,7 +21,7 @@
     "sub": "fonts/Arial Unicode.ttf"
   },
   "physics":{
-  	"gravity":10.0
+  	"gravity":50.0
   },
   "textFields": {
     "main": {

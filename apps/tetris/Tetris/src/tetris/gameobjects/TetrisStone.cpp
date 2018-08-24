@@ -70,7 +70,7 @@ void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition, float d
         positionChangeRelativeToPaddleSmoothed = 0.95 * positionChangeRelativeToPaddle + 0.05 * positionChangeRelativeToPaddleSmoothed;
         
         if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 && 
-			distanceToPaddleOrOtherTetrisStone < params->params["tetrisStone"]["scale"]*7.5 ){
+			distanceToPaddleOrOtherTetrisStone < params->params["tetrisStone"]["scale"].get<int>()*7.5 ){
             isPartOfTower = true;
         } else {
             isPartOfTower = false;
