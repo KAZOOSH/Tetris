@@ -59,6 +59,7 @@ using namespace ofxModule;
 		ofParameter<int> erodeValue;
 		ofParameter<int> dilateValue;
 		ofParameter<int> blurValue;
+		ofParameter<string> hostIp;
 
 		shared_ptr<ColinearPoints> colinearPoints;
         vector<cv::Point> foundPoints;

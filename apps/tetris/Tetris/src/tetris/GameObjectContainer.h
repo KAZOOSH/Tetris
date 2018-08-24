@@ -6,12 +6,13 @@
 #include "ofxBox2d.h"
 #include "Paddle.h"
 #include "Rule.h"
+#include "GameParameters.h"
 
 
 class GameObjectContainer
 {
 public:
-	GameObjectContainer();
+	GameObjectContainer(GameParameters* params);
 	~GameObjectContainer();
 
 	void initPhysics();
@@ -30,6 +31,6 @@ public:
 	ofxBox2d physics;
 
 protected:
-	
+	GameParameters* params;
 };
 
