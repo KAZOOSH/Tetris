@@ -26,7 +26,7 @@ void Paddle::createBody(b2World* world){
     
     // load from params and overwrite defaults
     paddleWidth = params->params["paddle"]["width"].get<int>();
-    paddleWidth = params->params["paddle"]["width"].get<int>();
+    paddleHeight = params->params["paddle"]["height"].get<int>();
     anchorMargin = params->params["paddle"]["anchorMargin"].get<int>();
     
     frequencyHz = params->params["paddle"]["frequency"].get<float>();
@@ -85,6 +85,9 @@ void Paddle::createBody(b2World* world){
     anchorJointLeftStatic.setLength(anchorMargin);
     anchorJointBottomLeftStatic.setLength(anchorMargin);
     anchorJointBottomRightStatic.setLength(anchorMargin);
+
+	//create paddle texture
+	createTexture();
 }
 
 ///\brief for testing perpuses, we should finally use a renderer for this
@@ -93,10 +96,20 @@ void Paddle::render()
     // draw towerheight
     float x = getPaddleBodyPosition().x;
     float y = getPaddleBodyPosition().y - towerHeight - paddleHeight/2;
-    ofDrawLine(x-200, y,x + 200, y);
     
-    body->draw();
-    ofSetColor(100,100,255);
+	ofPushMatrix();
+	ofTranslate(body->ofxBox2dBaseShape::getPosition());
+	ofRotateDeg(body->getRotation());
+	ofSetColor(255);
+	texture.draw(-body->getWidth()*0.5, -body->getHeight()*0.5);
+	ofPopMatrix();
+
+	
+	//debug
+	
+	/*
+	ofDrawLine(x - 200, y, x + 200, y);
+	ofSetColor(100,100,255);
     anchorLeft.draw();
     anchorJointLeft.draw();
     anchorRight.draw();
@@ -115,10 +128,40 @@ void Paddle::render()
     // draw values
     ofDrawBitmapString("frequencyHz: "+ ofToString(frequencyHz), 10, 10);
     ofDrawBitmapString("damping: " + ofToString(damping), 10, 40);
+	*/
 }
 
 ofVec2f Paddle::getPaddleBodyPosition(){
     return body->getPosition();
+}
+
+void Paddle::createTexture()
+{
+	int w = body->getWidth();
+	int h = body->getHeight();
+	texture.allocate(w, h);
+	texture.begin();
+	ofSetColor(15);
+	ofDrawRectangle(0, 0, w,h);
+
+	ofSetColor(220);
+	int d1 = w * 0.01;
+	ofDrawRectangle(d1, 0, h, h);
+	ofDrawRectangle(w-h-d1, 0, h, h);
+
+	ofDrawRectangle((w-h)*0.5, 0, h, h);
+
+	ofSetColor(240,13,13);
+	int d2 = w*0.25;
+	ofDrawRectangle(d2, 0, h*1.7, h);
+	ofDrawRectangle(w - h*1.7 - d2, 0, h*1.7, h);
+
+	ofSetColor(220);
+	ofNoFill();
+	ofSetLineWidth(2);
+	ofDrawRectangle(0, 0, w, h);
+
+	texture.end();
 }
 
 void Paddle::setDampingDiff(float diffDamping)

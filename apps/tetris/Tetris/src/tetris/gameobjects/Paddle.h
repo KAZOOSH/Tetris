@@ -38,6 +38,8 @@ public:
     static constexpr const char * paddleNameLeft = "leftPaddle";
     static constexpr const char * paddleNameRight = "rightPaddle";
  
+protected:
+	void createTexture();
     
 private:
 	ofVec2f position;
@@ -70,5 +72,7 @@ private:
     ofVec2f anchorLeftStaticRelativePosition = ofVec2f(-anchorMargin, 0);
     ofVec2f anchorRightStaticRelativePosition = ofVec2f(paddleWidth + anchorMargin, 0);
     ofVec2f anchorBottomStaticRelativePosition = ofVec2f(paddleWidth/2, 0);
+
+	ofFbo texture;
 };
 

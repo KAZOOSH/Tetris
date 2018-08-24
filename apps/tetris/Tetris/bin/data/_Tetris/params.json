@@ -30,7 +30,7 @@
     },
     "sub": {
       "y": 1700,
-      "h": 50
+      "h": 30
     }
   },
   "tetrisStone": {
@@ -40,7 +40,7 @@
   },
   "paddle": {
     "width": 450,
-    "height": 20,
+    "height": 50,
     "anchorMargin": 600,
     "frequency": 4,
     "damping": 3,

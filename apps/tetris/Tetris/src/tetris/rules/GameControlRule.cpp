@@ -93,7 +93,7 @@ void GameControlRule::applyRule()
 void GameControlRule::draw()
 {
 	ofSetColor(255);
-	ofDrawBitmapString(gamestate, 200, 200);
+	//ofDrawBitmapString(gamestate, 200, 200);
 	
 	//if (gamestate != "game") {
 		panels[gamestate].draw();
