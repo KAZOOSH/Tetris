@@ -1,6 +1,6 @@
 #pragma once
 #include "ofMain.h"
-//#include "CreationRules.h"
+#include "SoundEffectPlayer.h"
 
 class CreationRules;
 
@@ -17,9 +17,6 @@ public:
     void notifyControlEvent(ofJson eventText);
     
     void getRandomColorScheme(ofColor& base, ofColor& highlight);
-    
-    //enum effects{ base, heavy, bouncy };
-    
 
 	void setRandomNextEffect();
 	void setNextEffect(string name);
@@ -38,6 +35,8 @@ public:
 	string gamestate = "idle";
 
 	ofJson getEffect(string effect);
+
+	SoundEffectPlayer soundPlayer;
 
 private:
 	vector<string> nextEffectList;

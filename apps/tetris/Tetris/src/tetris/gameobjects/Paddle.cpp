@@ -141,10 +141,28 @@ void Paddle::createTexture()
 	int h = body->getHeight();
 	texture.allocate(w, h);
 	texture.begin();
-	ofSetColor(15);
+	ofSetColor(100);
 	ofDrawRectangle(0, 0, w,h);
 
-	ofSetColor(220);
+	ofSetColor(240, 13, 13);
+
+	int dx = 50;
+	int x = dx;
+	int ws = 20;
+	while (x<w*2)
+	{
+		ofPushMatrix();
+		ofTranslate(x, 0);
+		ofPushMatrix();
+		ofRotate(45.f);
+		ofDrawRectangle(-50, 0, ws, h+100);
+		x += dx;
+		ofPopMatrix();
+		ofPopMatrix();
+	}
+
+
+	/*ofSetColor(220);
 	int d1 = w * 0.01;
 	ofDrawRectangle(d1, 0, h, h);
 	ofDrawRectangle(w-h-d1, 0, h, h);
@@ -159,7 +177,7 @@ void Paddle::createTexture()
 	ofSetColor(220);
 	ofNoFill();
 	ofSetLineWidth(2);
-	ofDrawRectangle(0, 0, w, h);
+	ofDrawRectangle(0, 0, w, h);*/
 
 	texture.end();
 }
