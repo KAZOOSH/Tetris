@@ -120,32 +120,38 @@ void Tetris::produceStoneByIntervall() {
 
 void Tetris::produceStone(int player) {
     
-	//create stone
-    auto stone = GameFactory::makeTetrisStone(objects,&params, params.nextCreationRule[player-1]);
-    stone->setPlayer(player);
 
-	//notify effect if present
-	if (params.nextCreationRule[player - 1] != "base") {
-		ofJson out;
-		out["function"] = "effect";
-		out["effect"] = params.nextCreationRule[player - 1];
-		out["player"] = player;
-		params.notifyGameEvent(out);
-	}
-    
-    // set stone effect for active player back to base
-    params.nextCreationRule[player-1] = "base";
-    
-    if(player == 1) {
-        lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
-        stone->setPosition(ofVec2f(300,0));
+    if(getLastCreatedStone(player) == nullptr || getLastCreatedStone(player)->getBody()[0]->getPosition().y >500){
+        //create stone
+        auto stone = GameFactory::makeTetrisStone(objects,&params, params.nextCreationRule[player-1]);
+        stone->setPlayer(player);
+        
+        //notify effect if present
+        if (params.nextCreationRule[player - 1] != "base") {
+            ofJson out;
+            out["function"] = "effect";
+            out["effect"] = params.nextCreationRule[player - 1];
+            out["player"] = player;
+            params.notifyGameEvent(out);
+        }
+        
+        // set stone effect for active player back to base
+        params.nextCreationRule[player-1] = "base";
+        
+        if(player == 1) {
+            lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
+            stone->setPosition(ofVec2f(ofRandom(200, 400),0));
+        }
+        if(player == 2){
+            lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
+            stone->setPosition(ofVec2f(ofRandom(1400, 1600),0));
+        }
+        objects->addGameObject(stone);
+        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+    } else {
+        lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis() + produceStoneIntervallInMillis/2;
     }
-    if(player == 2){
-        lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
-        stone->setPosition(ofVec2f(1500,0));
-    }
-    objects->addGameObject(stone);
-    objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+
 }
 
 float Tetris::getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle) {

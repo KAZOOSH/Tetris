@@ -4,7 +4,7 @@
 		<!--module type="CamInput"-->
 		<module type="MouseInput"></module>
 		<module type="Tetris">
-			<input id="MouseInput" />
+			<input id="MouseInput"/>
 		</module>
 	</modules>
 </settings>
