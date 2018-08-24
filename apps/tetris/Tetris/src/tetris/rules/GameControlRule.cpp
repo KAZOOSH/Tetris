@@ -77,14 +77,15 @@ void GameControlRule::applyRule()
 				params->params["gameplay"]["winningHeightMin"].get<float>(),true);
 		}
 		if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
-			cout << "even" << endl;
 			changeGamestate("endEven");
 		}
 	} else if (gamestate == "end1" && isTSwitch) {
-		changeGamestate("idle");
+		changeGamestate("afterEnd");
 	} else if (gamestate == "end2" && isTSwitch) {
-		changeGamestate("idle");
+		changeGamestate("afterEnd");
 	} else if (gamestate == "endEven" && isTSwitch) {
+		changeGamestate("afterEnd");
+	} else if (gamestate == "afterEnd" && isTSwitch) {
 		changeGamestate("idle");
 	}
 }
@@ -94,10 +95,10 @@ void GameControlRule::draw()
 	ofSetColor(255);
 	ofDrawBitmapString(gamestate, 200, 200);
 	
-	if (gamestate != "game") {
+	//if (gamestate != "game") {
 		panels[gamestate].draw();
 		panels[gamestate].draw(params->params["width"].get<int>()*0.5);
-	}
+	//}
 
 	if (gamestate == "idle") {
 

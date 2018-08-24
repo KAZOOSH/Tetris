@@ -60,8 +60,6 @@ public:
         void collisionHandler(TetrisStone* stone);
         bool makeHeavyStone = false;
 		bool makeBouncyStone = false;
-
-		bool isDebug = false;
 };
 	
 

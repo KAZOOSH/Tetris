@@ -4,6 +4,7 @@
 
 DeleteOutOfScreenRule::DeleteOutOfScreenRule(GameParameters* params):Rule("DeleteOutOfScreenRule",params)
 {
+	ofAddListener(params->gameEvent, this, &DeleteOutOfScreenRule::onGameEvent);
 }
 
 
@@ -51,6 +52,21 @@ void DeleteOutOfScreenRule::applyRule()
 			}
 		}
 		if (toDel) obj->erase();
+	}
+}
+
+void DeleteOutOfScreenRule::onGameEvent(ofJson & event)
+{
+	if (event["function"] != nullptr && event["function"] == "gamestate" && 
+		event["gamestate"] == "idle") {
+		
+		for (auto& obj : objects) {
+			bool toDel = false;
+
+			if (obj->getName() == "TetrisStone") {
+				obj->erase();
+			}
+		}
 	}
 }
 

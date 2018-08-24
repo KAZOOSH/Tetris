@@ -11,6 +11,7 @@ public:
 	~DeleteOutOfScreenRule();
 
 	void applyRule();
+	void onGameEvent(ofJson& event);
 
 protected:
 	bool shouldRemoveOffScreen(shared_ptr<ofxBox2dBaseShape> shape);

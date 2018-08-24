@@ -16,7 +16,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
         ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
     }
     
-	ofSetWindowPosition(1920, 0);
+	ofSetWindowPosition(0, 0);
 	ofSetWindowShape(params.params["width"], params.params["height"]);
 
     produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
@@ -449,7 +449,6 @@ void Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)
     ofPopMatrix();
     
 
-	if (isDebug) {
 		//======================== draw quad warp ui.
 
 		ofSetColor(ofColor::magenta);
@@ -463,6 +462,6 @@ void Tetris::drawWarpedFbo(ofxQuadWarp warper, bool isRight)
 
 		ofSetColor(ofColor::red);
 		warper.drawSelectedCorner();
-	}
+
 }
 

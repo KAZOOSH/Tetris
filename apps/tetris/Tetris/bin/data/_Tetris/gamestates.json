@@ -11,7 +11,7 @@
 		"main":"поднимите бары",
 		"sub":"(bitte Stäbe anheben)",
 		"time": 6000,
-		"sound":""
+		"sound":"Kontrollstbe anheben.mp3"
 	},
 	{
 		"state":"countdown3",
@@ -29,14 +29,15 @@
 		"state":"countdown1",
 		"main":"1",
 		"sub":"(1)",
-		"time": 1000
+		"time": 2000,
+		"sound": "Spiel startet.mp3"
 	},
 	{
 		"state":"game",
-		"main":"",
-		"sub":"",
-		"time": 1000,
-		"sound": "Spiel startet.mp3"
+		"main":"идти!",
+		"sub":"Los!",
+		"time": 2000,
+		"sound":"Los.mp3"
 	},
 	{
 		"state":"end1",
@@ -58,5 +59,12 @@
 		"sub":"(unentschieden)",
 		"time": 3000,
 		"sound":"Unentschieden.mp3"
+	},
+	{
+		"state":"afterEnd",
+		"main":"",
+		"sub":"",
+		"time": 3000,
+		"sound":""
 	}
 ]
