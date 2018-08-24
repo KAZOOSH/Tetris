@@ -46,7 +46,7 @@ void DeleteOutOfScreenRule::applyRule()
 		}
 		for (auto& body : bodies) {
 			if (shouldRemoveOffScreen(body)){
-				cout << "del body" << endl;
+				//cout << "del body" << endl;
 				toDel = true;
 			}
 		}

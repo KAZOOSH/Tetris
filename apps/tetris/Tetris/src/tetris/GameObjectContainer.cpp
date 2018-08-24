@@ -17,7 +17,7 @@ void GameObjectContainer::initPhysics()
     physics.init();
     physics.setGravity(0, params->params["physics"]["gravity"].get<float>());
     //physics.createGround();
-    physics.setFPS(30.0);
+    physics.setFPS(60.0);
 }
 
 void GameObjectContainer::addGameObject(shared_ptr<GameObject> object)

@@ -2,7 +2,7 @@
   "width": 2160,
   "height": 1920,
   "gameplay":{
-  	"winningHeightMin":0.4,
+  	"winningHeightMin":0.1,
   	"winningHeightMax":0.8,
   	"maxDuration":30000,
   	"startHeightReduction":5000
@@ -36,7 +36,7 @@
   "tetrisStone": {
     "density": 1.0,
     "produceEveryMilliseconds": 5000,
-    "scale":30
+    "scale":20
   },
   "paddle": {
     "width": 450,

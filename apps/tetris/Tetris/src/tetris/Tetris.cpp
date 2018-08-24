@@ -123,7 +123,7 @@ void Tetris::produceStoneByIntervall() {
 
 void Tetris::produceStone(int player) {
     
-        if(getLastCreatedStone(player) == nullptr || getLastCreatedStone(player)->getBody()[0]->getPosition().y >500){
+        if(getLastCreatedStone(player) == nullptr || getLastCreatedStone(player)->getBody()[0]->getPosition().y >500){
                 //create stone
                 auto stone = GameFactory::makeTetrisStone(objects,&params, params.nextCreationRule[player-1]);
                 stone->setPlayer(player);

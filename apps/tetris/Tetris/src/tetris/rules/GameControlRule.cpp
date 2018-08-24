@@ -68,14 +68,15 @@ void GameControlRule::applyRule()
 		}
 
 		//reduce winning height
-		cout << now << " - " << startState << "    > " << params->params["gameplay"]["maxDuration"].get<int>() << endl;
+		//cout << now << " - " << startState << "    > " << params->params["gameplay"]["maxDuration"].get<int>() << endl;
 		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
 			params->winningHeight = 
 				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
 				params->params["gameplay"]["maxDuration"].get<int>(),
 				params->params["gameplay"]["winningHeightMax"].get<float>(),
 				params->params["gameplay"]["winningHeightMin"].get<float>(),true);
-		} else if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
+		}
+		if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
 			cout << "even" << endl;
 			changeGamestate("endEven");
 		}

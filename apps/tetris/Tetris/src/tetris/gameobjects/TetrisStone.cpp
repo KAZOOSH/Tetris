@@ -26,7 +26,7 @@ TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffe
     } else if (activeEffect == "icy") {
         body->setPhysics(1.0, 0, 0.1);
     } else {
-        body->setPhysics(5.0, -5.0, 1.0);
+        body->setPhysics(1.0, 0.0, 1.0);
     }
     
     

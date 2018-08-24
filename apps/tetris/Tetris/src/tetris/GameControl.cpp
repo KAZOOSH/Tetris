@@ -71,7 +71,7 @@ void GameControl::removeErasedElements()
 				r->removeObject(id);
 			}
 			
-			cout << "erase remove " << id << "  " << toDeleteIds.size() << endl;
+			//cout << "erase remove " << id << "  " << toDeleteIds.size() << endl;
 			objects->gameObjects.erase(position);
 		}
 	}
