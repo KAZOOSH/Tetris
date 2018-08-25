@@ -22,6 +22,8 @@ public:
 
 	int getStateTime(string stateName);
 
+	void drawFadeOut();
+
 private:
 	ofxFontStash mainFont;
 	ofxFontStash subFont;
@@ -30,6 +32,8 @@ private:
 	string gamestate = "idle";
 	uint64_t startState = 0;
 	map<string, InfoPanel> panels;
+	map<int, InfoPanel> countdown;
+	int lastCountdownSwitch=0;
 
 	vector<bool> paddleReady;
 	GameObjectContainer* gameObjects;

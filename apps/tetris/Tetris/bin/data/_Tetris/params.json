@@ -2,10 +2,10 @@
   "width": 2160,
   "height": 1920,
   "gameplay":{
-  	"winningHeightMin":0.25,
-  	"winningHeightMax":0.7,
-  	"maxDuration":120000,
-  	"startHeightReduction":60000
+  	"winningHeightMin":0.10,
+  	"winningHeightMax":0.25,
+  	"maxDuration":80000,
+  	"startHeightReduction":20000
   },
   "paddleArea": [
     1150,
@@ -18,7 +18,7 @@
     "pedalId": "USB\\VID_1A86&PID_7523&REV_0263"
   },
   "fonts": {
-    "main": "fonts/tetris.ttf",
+    "main": "fonts/tetris2.ttf",
     "sub": "fonts/Arial Unicode.ttf"
   },
   "physics":{
@@ -27,7 +27,7 @@
   "textFields": {
     "main": {
       "y": 500,
-      "h": 120
+      "h": 80
     },
     "sub": {
       "y": 1850,

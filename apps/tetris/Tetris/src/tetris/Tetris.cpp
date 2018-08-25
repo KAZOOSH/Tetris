@@ -316,7 +316,7 @@ void Tetris::onGameEvent(ofJson & event)
 void Tetris::update() {
     playerControl.update();
     gameObjects->update();
-    produceStoneByIntervall();
+	if(params.gamestate == "game") produceStoneByIntervall();
     setTetrisStoneRelativeToPaddlePosition();
 }
 
@@ -335,7 +335,7 @@ void Tetris::draw() {
     drawWarpedFbo(warperLeft,false);
     drawWarpedFbo(warperRight, true);
     
-    ofDrawBitmapString("Anzahl der Objekte: " + ofToString(objects->physics.getBodyCount()), 50, 50);
+    //ofDrawBitmapString("Anzahl der Objekte: " + ofToString(objects->physics.getBodyCount()), 50, 50);
     
 }
 

@@ -12,9 +12,16 @@ public:
 	virtual void render();
 	void reload();
 
+	void onGamestate(ofJson& state);
+
 private:
 	GameParameters* params;
 	shared_ptr<GameObjectContainer> objects;
 	ofShader shader;
+
+	ofFbo goalTex;
+	ofFbo paddleTex;
+
+	bool isCountDown = false;
 };
 

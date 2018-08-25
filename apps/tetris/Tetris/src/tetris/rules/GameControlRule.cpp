@@ -24,6 +24,19 @@ GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* ga
 		panels.insert(pair<string, InfoPanel>(s["state"].get<string>(), InfoPanel(params->params, s, &mainFont, &subFont)));
 	}
 
+	//create countdown panels
+	for (size_t i = 0; i < 15; i++)
+	{
+		ofJson s;
+		s["state"] = ofToString(i+1);
+		s["main"] = ofToString(i+1);
+		s["sub"] = "(" + ofToString(i+1) + ")";
+		s["time"] = 1000;
+		s["sound"] = "";
+		
+		countdown.insert(pair<int, InfoPanel>(i, InfoPanel(params->params, s, &mainFont, &subFont)));
+	}
+
 	ofAddListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
 	ofAddListener(params->controlEvent, this, &GameControlRule::onPaddleMove);
 }
@@ -68,7 +81,6 @@ void GameControlRule::applyRule()
 		}
 
 		//reduce winning height
-		//cout << now << " - " << startState << "    > " << params->params["gameplay"]["maxDuration"].get<int>() << endl;
 		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
 			params->winningHeight = 
 				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
@@ -77,7 +89,11 @@ void GameControlRule::applyRule()
 				params->params["gameplay"]["winningHeightMin"].get<float>(),true);
 		}
 		if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
-			changeGamestate("endEven");
+			if (gameObjects->paddles[0]->towerHeight > gameObjects->paddles[1]->towerHeight) {
+				changeGamestate("end1");
+			} else if (gameObjects->paddles[1]->towerHeight > gameObjects->paddles[0]->towerHeight) {
+				changeGamestate("end2");
+			}else changeGamestate("endEven");
 		}
 	} else if (gamestate == "end1" && isTSwitch) {
 		changeGamestate("afterEnd");
@@ -107,17 +123,29 @@ void GameControlRule::draw()
 	}else if (gamestate == "countdown") {
 
 	}else if (gamestate == "game") {
-		/*ofSetColor(255);
-		int h = params->params["height"].get<int>();
-		int hBase = (1.0 - params->winningHeight)*h;
-		int y1 = hBase -(h - gameObjects->paddles[0]->getBody()[0]->getPosition().y);
-		int y2 = hBase - (h - gameObjects->paddles[1]->getBody()[0]->getPosition().y);
-		ofDrawRectangle(0, y1, params->params["width"].get<int>()/2, 10);
-		ofDrawRectangle(params->params["width"].get<int>() / 2, y2, params->params["width"].get<int>() / 2, 10);*/
-	}else if (gamestate == "end1") {
+		int tLeft = startState + params->params["gameplay"]["maxDuration"].get<int>() - ofGetElapsedTimeMillis();
+		if (tLeft < 15000  && tLeft >0) {
+			int t = tLeft / 1000;
+			if (t != lastCountdownSwitch) {
+				lastCountdownSwitch = t;
+				countdown[t].start();
+				ofJson s;
+				s["function"] = "countdown";
+				params->notifyGameEvent(s);
+			}
+			countdown[t].draw();
+			countdown[t].draw(params->params["width"].get<int>()*0.5);
+		}
 
-	} else if (gamestate == "end2") {
-
+		
+	}else if (gamestate == "end2") {
+		ofPushMatrix();
+		ofTranslate(params->params["width"].get<int>() * 0.5, 0);
+		drawFadeOut();
+		ofPopMatrix();
+		
+	} else if (gamestate == "end1") {
+		drawFadeOut();
 	}
 
 	
@@ -168,6 +196,12 @@ int GameControlRule::getStateTime(string stateName)
 	for (auto& s : stateDescription) {
 		if (s["state"] == stateName) return s["time"];
 	}
+}
+
+void GameControlRule::drawFadeOut()
+{
+	ofSetColor(0);//, ofClamp((ofGetElapsedTimeMillis() - startState) * 255 / 2000,0,255));
+	ofDrawRectangle(0, 0, params->params["width"].get<int>() * 0.5, params->params["height"].get<int>());
 }
 
 

@@ -8,33 +8,12 @@
 		"type":"stone"
 	},
 	{
-		"state":"bouncy",
-		"main":"прыгающий камень",
-		"sub":"(springender Stein)",
-		"time": 2000,
-		"sound":"Springender Stein.mp3",
-		"type":"stone"
-	},
-	{
 		"state":"icy",
 		"main":"ледяной камень",
 		"sub":"eisiger Stein",
 		"time":2000,
-		"sound":"eisiger Stein.mp3"
-	},
-	{
-		"state":"quicky",
-		"main":"быстрый камень",
-		"sub":"schneller Stein",
-		"time":2000,
-		"sound":"schneller Stein.mp3"
-	},
-	{
-		"state":"rotary",
-		"main":"поворотный камень",
-		"sub":"drehender Stein",
-		"time":2000,
-		"sound":"drehender Stein.mp3"
+		"sound":"eisiger Stein.mp3",
+		"type":"stone"
 	},
 	{
 		"state":"big",
