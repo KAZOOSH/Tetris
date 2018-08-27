@@ -189,3 +189,9 @@ apps/myApps/*
 apps/tetris/build-Tetris-Desktop-Debug/qtc_Desktop_Debug/qtc_Desktop_Debug\.bg
 
 apps/projectGenerator
+
+apps/tetris/build-customEventExample-Desktop-Debug/qtc_Desktop_Debug/qtc_Desktop_Debug\.bg
+
+apps/tetris/Tetris/Tetris\.qbs
+
+*.bg

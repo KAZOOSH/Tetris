@@ -48,11 +48,11 @@ void ofxBox2dBaseShape::destroy() {
 }
 
 //----------------------------------------
-bool ofxBox2dBaseShape::shouldRemove(shared_ptr<ofxBox2dBaseShape> shape) {
-    return !shape.get()->alive;
+bool ofxBox2dBaseShape::shouldRemove(std::shared_ptr<ofxBox2dBaseShape> shape) {
+    return !shape->alive;
 }
-bool ofxBox2dBaseShape::shouldRemoveOffScreen(shared_ptr<ofxBox2dBaseShape> shape) {
-    return !ofRectangle(0, 0, ofGetWidth(), ofGetHeight()).inside(shape.get()->getPosition());
+bool ofxBox2dBaseShape::shouldRemoveOffScreen(std::shared_ptr<ofxBox2dBaseShape> shape) {
+    return !ofRectangle(0, 0, ofGetWidth(), ofGetHeight()).inside(shape->getPosition());
 }
 
 //----------------------------------------

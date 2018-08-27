@@ -4,7 +4,7 @@
 #include "TextureShape.h"
 
 // ------------------------------------------------- App
-class ofApp : public ofBaseApp {
+class ofApp: public ofBaseApp {
 	
 public:
 	
@@ -22,8 +22,8 @@ public:
 	ofxBox2d box2d;
 
 	// a vector of all the texture images
-	vector <ofImage> textures;
+	std::vector<ofImage> textures;
 
 	// a vector of all the texture shapes
-	vector <shared_ptr<TextureShape> > shapes;
+	std::vector<std::shared_ptr<TextureShape>> shapes;
 };

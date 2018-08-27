@@ -16,15 +16,15 @@ void ofApp::setup() {
 		
 		float r = ofRandom(10, 20);
 		auto circle = std::make_shared<ofxBox2dCircle>();
-		circle.get()->setPhysics(3.0, 0.53, 0.9);
-		circle.get()->setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()/2, r);
+		circle->setPhysics(3.0, 0.53, 0.9);
+		circle->setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()/2, r);
 		circles.push_back(circle);
 		
 		float w = ofRandom(4, 20);
 		float h = ofRandom(4, 20);
 		auto rect = std::make_shared<ofxBox2dRect>();
-		rect.get()->setPhysics(3.0, 0.53, 0.9);
-		rect.get()->setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()/2, w, h);
+		rect->setPhysics(3.0, 0.53, 0.9);
+		rect->setup(box2d.getWorld(), ofGetWidth()/2, ofGetHeight()/2, w, h);
 		boxes.push_back(rect);
 	}
 }
@@ -36,17 +36,17 @@ void ofApp::update() {
 	ofVec2f mouse(ofGetMouseX(), ofGetMouseY());
 	float minDis = ofGetMousePressed() ? 300 : 200;
 
-	for(int i=0; i<circles.size(); i++) {
-		float dis = mouse.distance(circles[i].get()->getPosition());
-		if(dis < minDis) circles[i].get()->addRepulsionForce(mouse, 9);
-		else circles[i].get()->addAttractionPoint(mouse, 4.0);
+	for(auto i=0; i<circles.size(); i++) {
+		float dis = mouse.distance(circles[i]->getPosition());
+		if(dis < minDis) circles[i]->addRepulsionForce(mouse, 9);
+		else circles[i]->addAttractionPoint(mouse, 4.0);
 		
 		
 	}
-	for(int i=0; i<boxes.size(); i++) {
-		float dis = mouse.distance(boxes[i].get()->getPosition());
-		if(dis < minDis) boxes[i].get()->addRepulsionForce(mouse, 9);
-		else boxes[i].get()->addAttractionPoint(mouse, 4.0);
+	for(auto i=0; i<boxes.size(); i++) {
+		float dis = mouse.distance(boxes[i]->getPosition());
+		if(dis < minDis) boxes[i]->addRepulsionForce(mouse, 9);
+		else boxes[i]->addAttractionPoint(mouse, 4.0);
 	}
 }
 
@@ -54,16 +54,16 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	
-	for(int i=0; i<circles.size(); i++) {
+	for(auto i=0; i<circles.size(); i++) {
 		ofFill();
 		ofSetHexColor(0xf6c738);
-		circles[i].get()->draw();
+		circles[i]->draw();
 	}
 	
-	for(int i=0; i<boxes.size(); i++) {
+	for(auto i=0; i<boxes.size(); i++) {
 		ofFill();
 		ofSetHexColor(0xBF2545);
-		boxes[i].get()->draw();
+		boxes[i]->draw();
 	}
 	
 	// draw the ground
@@ -85,8 +85,8 @@ void ofApp::keyPressed(int key) {
 	if(key == 'c') {
 		float r = ofRandom(14, 20);		// a random radius 4px - 20px
 		auto circle = std::make_shared<ofxBox2dCircle>();
-		circle.get()->setPhysics(3.0, 0.53, 0.9);
-		circle.get()->setup(box2d.getWorld(), mouseX, mouseY, r);
+		circle->setPhysics(3.0, 0.53, 0.9);
+		circle->setup(box2d.getWorld(), mouseX, mouseY, r);
 		circles.push_back(circle);
 	}
 	
@@ -94,8 +94,8 @@ void ofApp::keyPressed(int key) {
 		float w = ofRandom(14, 20);	
 		float h = ofRandom(14, 20);	
 		auto rect = std::make_shared<ofxBox2dRect>();
-		rect.get()->setPhysics(3.0, 0.53, 0.9);
-		rect.get()->setup(box2d.getWorld(), mouseX, mouseY, w, h);
+		rect->setPhysics(3.0, 0.53, 0.9);
+		rect->setup(box2d.getWorld(), mouseX, mouseY, w, h);
 		boxes.push_back(rect);
 	}
 	
