@@ -7,7 +7,7 @@
 using namespace ofxModule;
 
 Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
-    setSingleThreaded();
+	setSingleThreaded();
 	loadSettings();
 
 	//create Warper
@@ -80,6 +80,7 @@ shared_ptr<GameObject> Tetris::getLastCreatedStone(int playerId){
             }
         };
     }
+	return nullptr;
 }
 
 

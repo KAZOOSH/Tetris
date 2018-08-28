@@ -6,6 +6,7 @@
 //
 //
 #pragma once
+#include "ofxOsc.h"
 
 class ofxOscEventListener{
 public:

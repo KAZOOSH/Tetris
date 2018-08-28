@@ -195,3 +195,5 @@ apps/tetris/build-customEventExample-Desktop-Debug/qtc_Desktop_Debug/qtc_Desktop
 apps/tetris/Tetris/Tetris\.qbs
 
 *.bg
+
+apps/tetris/Tetris/bin/Tetris_debug

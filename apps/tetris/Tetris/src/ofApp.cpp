@@ -11,7 +11,7 @@ void ofApp::setup(){
 	ofSetLogLevel(OF_LOG_NOTICE);
 	ofLogToConsole();
 
-	//init app and connect modules
+	/*//init app and connect modules
 	if (moduleControl.getXmlLoader()->xmlHasModule("CamInput")) {
 		CamInput* mod = new CamInput();
 		moduleControl.getXmlLoader()->addModule(mod);
@@ -25,7 +25,7 @@ void ofApp::setup(){
 		moduleControl.getXmlLoader()->addModule(mod);
 	}
 
-	moduleControl.getXmlLoader()->createModuleConnections();
+	moduleControl.getXmlLoader()->createModuleConnections();*/
 }
 
 //--------------------------------------------------------------

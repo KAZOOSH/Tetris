@@ -4,7 +4,7 @@
 //========================================================================
 int main( ){
 	ofGLWindowSettings settings;
-	settings.setGLVersion(3, 2);
+	settings.setGLVersion(2, 1);
 	settings.setSize(1024, 768);
 	ofCreateWindow(settings);
 
@@ -12,6 +12,7 @@ int main( ){
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN
 	// pass in width and height too:
-	ofRunApp(new ofApp());
+	return ofRunApp(std::make_shared<ofApp>());
+	//ofRunApp(new ofApp());
 
 }

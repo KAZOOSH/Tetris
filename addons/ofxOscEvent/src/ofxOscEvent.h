@@ -39,7 +39,7 @@ public:
     static ofEvent<ofxOscMessage> packetIn;
     
     void setup(int port){
-        ofxOscReceiver::setup(port);
+		//ofxOscReceiver::setup(port);
         enable();
     }
     
@@ -107,14 +107,14 @@ protected:
     }
     
     void onUpdate(ofEventArgs & e){
-        while (hasWaitingMessages())
+		/*while (hasWaitingMessages())
 		{
 			ofxOscMessage m;
 			getNextMessage(&m);
 			
 			string addr = m.getAddress();
 			notify(addr, m);
-		}
+		}*/
     }
 protected:
     map< string, vector<ofxOscEventListener * > > listeners;
