@@ -30,24 +30,28 @@ void MouseInput::update() {
 	
 
 	ofJson send;
-	send["function"] = "paddlePosition";
+	send["function"] = "paddle1Position";
 	send["paddle"] = 
-	{ {{
+	{{
 			{"x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0)},
 			{"y", ofMap(ofGetMouseY()+y0,0,ofGetHeight(),0.0,1.0)}
 		},{
-			{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
+			{ "x", ofMap(ofGetMouseX() + 500,0,ofGetWidth(),0.0,1.0) },
 			{ "y", ofMap(ofGetMouseY()+y1,0,ofGetHeight(),0.0,1.0) }
 		}
-		},{ {
-				{ "x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0) },
-				{ "y", ofMap(ofGetMouseY()+y0,0,ofGetHeight(),0.0,1.0) }
-			},{
-				{ "x", ofMap(ofGetMouseX() + 200,0,ofGetWidth(),0.0,1.0) },
-				{ "y", ofMap(ofGetMouseY()+y1,0,ofGetHeight(),0.0,1.0) }
-			}
-	}
+	};
 
+	notifyEvent(send);
+
+	send["function"] = "paddle2Position";
+	send["paddle"] =
+	{ {
+		{ "x", ofMap(ofGetMouseX(),0,ofGetWidth(),0.0,1.0) },
+	{ "y", ofMap(ofGetMouseY() + y0,0,ofGetHeight(),0.0,1.0) }
+		},{
+			{ "x", ofMap(ofGetMouseX() + 400,0,ofGetWidth(),0.0,1.0) },
+	{ "y", ofMap(ofGetMouseY() + y1,0,ofGetHeight(),0.0,1.0) }
+		}
 	};
 
 	notifyEvent(send);

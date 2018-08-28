@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <settings>
 	<modules>
-		<module type="MouseInput">
-		</module>
+		<module type="MouseInput"/>
+		<!--module type="MouseInput"></module-->
 		<module type="Tetris">
 			<input id="MouseInput" />
 		</module>

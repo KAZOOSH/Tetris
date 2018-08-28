@@ -1,4 +1,4 @@
-#include "ofApp.h"
+﻿#include "ofApp.h"
 
 using namespace ofxModule;
 
@@ -6,36 +6,40 @@ using namespace ofxModule;
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-
+	ofEnableAlphaBlending();
 
 	ofSetLogLevel(OF_LOG_NOTICE);
 	ofLogToConsole();
 
-	/*//init app and connect modules
+	//init app and connect modules
 	if (moduleControl.getXmlLoader()->xmlHasModule("CamInput")) {
 		CamInput* mod = new CamInput();
 		moduleControl.getXmlLoader()->addModule(mod);
 	}
-	if (moduleControl.getXmlLoader()->xmlHasModule("MouseInput")) {
+        if (moduleControl.getXmlLoader()->xmlHasModule("MouseInput")) {
 		MouseInput* mod = new MouseInput();
 		moduleControl.getXmlLoader()->addModule(mod);
 	}
 	if (moduleControl.getXmlLoader()->xmlHasModule("Tetris")) {
 		Tetris* mod = new Tetris();
 		moduleControl.getXmlLoader()->addModule(mod);
-	}
+        }
 
-	moduleControl.getXmlLoader()->createModuleConnections();*/
+	moduleControl.getXmlLoader()->createModuleConnections();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	ofSoundUpdate();
+	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 	moduleControl.getModuleRunner()->updateModules();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	moduleControl.getModuleRunner()->drawModules();
+
+	ofSetColor(255);
 }
 
 //--------------------------------------------------------------

@@ -1,0 +1,73 @@
+﻿[
+	{
+		"state":"idle",
+		"main":"Тетрис",
+		"sub":"(Tetris)",
+		"time": 6000,
+		"height":150
+	},
+	{
+		"state":"waiting_for_players",
+		"main":"поднимите бары",
+		"sub":"(bitte Stäbe anheben)",
+		"time": 6000,
+		"sound":"Kontrollstbe anheben.mp3",
+		"height":50
+	},
+	{
+		"state":"countdown3",
+		"main":"3",
+		"sub":"(3)",
+		"time": 1000
+	},
+	{
+		"state":"countdown2",
+		"main":"2",
+		"sub":"(2)",
+		"time": 1000
+	},
+	{
+		"state":"countdown1",
+		"main":"1",
+		"sub":"(1)",
+		"time": 2000,
+		"sound": "Spiel startet.mp3"
+	},
+	{
+		"state":"game",
+		"main":"идти!",
+		"sub":"Los!",
+		"time": 2000,
+		"sound":"Los.mp3"
+	},
+	{
+		"state":"end1",
+		"main":"Игрок 1 побеждает",
+		"sub":"(Spieler 1 gewinnt)",
+		"time": 7000,
+		"sound":"Spieler 1 gewinnt.mp3",
+		"height":50
+	},
+	{
+		"state":"end2",
+		"main":"Игрок 2 побеждает",
+		"sub":"(Spieler 2 gewinnt)",
+		"time": 7000,
+		"sound":"Spieler 2 gewinnt.mp3",
+		"height":50
+	},
+	{
+		"state":"endEven",
+		"main":"нерешительный",
+		"sub":"(unentschieden)",
+		"time": 7000,
+		"sound":"Unentschieden.mp3"
+	},
+	{
+		"state":"afterEnd",
+		"main":"",
+		"sub":"",
+		"time": 10000,
+		"sound":"Tetris-Theme_Balalaika.mp3"
+	}
+]

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "ofxBox2d.h"
+#include "GameParameters.h"
 
 //class PaddlePosition {
 //public:
@@ -16,8 +17,9 @@
 
 class Paddle : public GameObject
 {
+    
 public:
-	Paddle(string name);
+	Paddle(string name, GameParameters* params_);
 	~Paddle();
     void createBody(b2World* world);
     void render();
@@ -27,6 +29,17 @@ public:
 	void updatePosition();
     void setDampingDiff(float damping);
     void setFrequencyDiff(float frequency);
+    ofVec2f getPaddleBodyPosition();
+    bool isPaddleLeft;
+    bool isPaddleRight;
+    int towerHeight =0;
+    
+    //statics
+    static constexpr const char * paddleNameLeft = "leftPaddle";
+    static constexpr const char * paddleNameRight = "rightPaddle";
+ 
+protected:
+	void createTexture();
     
 private:
 	ofVec2f position;
@@ -36,18 +49,30 @@ private:
     ofxBox2dCircle anchorRight;
     ofxBox2dCircle anchorLeftStatic;
     ofxBox2dCircle anchorRightStatic;
-    ofxBox2dCircle anchorBottom;
+    ofxBox2dCircle anchorBottomStatic;
     
     ofxBox2dJoint anchorJointLeft;
     ofxBox2dJoint anchorJointRight;
     ofxBox2dJoint anchorJointLeftStatic;
     ofxBox2dJoint anchorJointRightStatic;
-    ofxBox2dJoint anchorJointBottom;
- 
+    ofxBox2dJoint anchorJointBottomLeftStatic;
+    ofxBox2dJoint anchorJointBottomRightStatic;
+    
+    GameParameters* params;
+    
 	bool positionChanged = false;
-    int paddleWidth = 250;
+    int paddleWidth = 300;
     int paddleHeight = 100;
     float frequencyHz = 1.0f;
     float damping = 5.0f;
+    float density = 0.5f;
+    int anchorMargin = 100;
+    shared_ptr<ofxBox2dRect> body;
+    // positionen ausgehend von der linken oberen ecke des paddles
+    ofVec2f anchorLeftStaticRelativePosition = ofVec2f(-anchorMargin, 0);
+    ofVec2f anchorRightStaticRelativePosition = ofVec2f(paddleWidth + anchorMargin, 0);
+    ofVec2f anchorBottomStaticRelativePosition = ofVec2f(paddleWidth/2, 0);
+
+	ofFbo texture;
 };
 

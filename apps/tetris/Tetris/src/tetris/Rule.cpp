@@ -2,10 +2,13 @@
 
 
 
-Rule::Rule(string name_, GameParameters* params_)
+Rule::Rule(string name_, GameParameters* params_, int runtime_)
 {
 	name = name_;
 	params = params_;
+
+	creationTime = ofGetElapsedTimeMillis();
+	runtime = runtime_;
 }
 
 
@@ -38,4 +41,14 @@ void Rule::removeObject(long id)
 	if (position != objects.end()) {
 		objects.erase(position);
 	}
+}
+
+int Rule::getRuntime()
+{
+	return runtime;
+}
+
+uint64_t Rule::getCreationTime()
+{
+	return creationTime;
 }

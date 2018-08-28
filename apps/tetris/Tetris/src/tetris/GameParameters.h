@@ -1,22 +1,46 @@
 #pragma once
-
 #include "ofMain.h"
+#include "SoundEffectPlayer.h"
+
+class CreationRules;
+
 class GameParameters
 {
 public:
-	GameParameters();
-	~GameParameters();
+    GameParameters();
+    ~GameParameters();
+    
+    ofEvent<ofJson> gameEvent;
+    ofEvent<ofJson> controlEvent;
+    
+    void notifyGameEvent(ofJson eventText);
+    void notifyControlEvent(ofJson eventText);
+    
+    void getRandomColorScheme(ofColor& base, ofColor& highlight);
 
-	ofEvent<ofJson> gameEvent;
-	ofEvent<ofJson> controlEvent;
+	void setRandomNextEffect();
+	void setNextEffect(string name);
 
-	void notifyGameEvent(ofJson eventText);
-	void notifyControlEvent(ofJson eventText);
+	//util functions
 
-	//settings
-	ofJson params;
+    //settings
+    ofJson params;
+    ofJson colorSchemes;
+	ofJson effects;
+    
+    //game params
+    float winningHeight = 0.9;
+    vector<string> nextCreationRule;
 
-	//params relevant for current game
-	//ofParameter<string> gamestate = "idle";
+	string gamestate = "idle";
+
+	ofJson getEffect(string effect);
+
+	SoundEffectPlayer soundPlayer;
+
+private:
+	vector<string> nextEffectList;
+	vector<string> effectList;
+    
 };
 

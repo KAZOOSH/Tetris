@@ -1,5 +1,6 @@
 #pragma once
 
+#include <bitset>  
 #include "Paddle.h"
 #include "GameParameters.h"
 #include "ofxSerial.h"
@@ -12,20 +13,20 @@ public:
 
 	void setup(vector<shared_ptr<Paddle>> paddles, GameParameters* params);
 
+	void update();
+
 	//callbacks
-	void onPaddleMove(ofJson& json);
-	void onBuzzer(const ofxIO::SerialBufferEventArgs& args);
-	void onPlayer1(const ofxIO::SerialBufferEventArgs& args);
-	void onPlayer2(const ofxIO::SerialBufferEventArgs& args);
+	void onPaddleMove(const ofJson& json);
 
 protected:
 	void initSerial();
-	void connectDevice(ofxIO::BufferedSerialDevice& device, ofx::IO::SerialDeviceInfo info, string callback);
+	void connectDevice(ofxIO::SerialDevice& device, ofx::IO::SerialDeviceInfo info,string name);
+	void sendPedalCommand(int i);
 private:
 	vector<shared_ptr<Paddle>> paddles;
 	GameParameters* params;
 
-	vector<ofxIO::BufferedSerialDevice> serialPlayer;
-	ofxIO::BufferedSerialDevice serialBuzzer;
+	ofxIO::SerialDevice serialPlayer;
+	ofxIO::SerialDevice serialBuzzer;
 };
 

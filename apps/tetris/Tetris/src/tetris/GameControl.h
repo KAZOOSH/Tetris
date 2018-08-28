@@ -13,11 +13,13 @@ public:
 
 	void onEraseEvent(long& id);
 
+	void registerEraseEvent(ofEvent<long>& ev);
 
 	void reloadRenderer();
 
 protected:
 	void removeErasedElements();
+	void removeDeprecatedRules();
 
 private:
 	long tGameStarted;

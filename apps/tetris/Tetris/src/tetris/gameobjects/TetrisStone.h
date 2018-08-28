@@ -1,12 +1,13 @@
 #pragma once
-#include "PolygonRenderer.h"
 #include "ofxBox2d.h"
 #include "GameObject.h"
+#include "GameParameters.h"
+#include "PolygonRenderer.h"
 
 class TetrisStone : public GameObject
 {
 public:
-    TetrisStone(string name);
+    TetrisStone(string name, GameParameters* params, string activeEffect);
     ~TetrisStone();
     void addToWorld(b2World* world);
     void setPosition(ofVec2f position);
@@ -15,21 +16,36 @@ public:
     int getPlayerId();
     void rotateRight();
     void rotateLeft();
-    void makeHeavy();
     void makeBouncy();
-    //void makeLarge();
+    float getDistanceToPaddle();
+    bool isTetrisStone = true;
+    bool collided = false;
+    bool isForceAdded = false;
+    bool getIsPartOfTower();
+    void collide();
+    void updateRelativeToPaddlePosition(ofVec2f paddlePosition,float distanceToPaddleOrOtherTetrisStone);
+    int getScale();
+    string getType();
     
 private:
-    vector <ofDefaultVertexType> getRandomVertecies();
+    pair<string,vector <ofDefaultVertexType>> getRandomVertecies();
     vector <ofDefaultVertexType> vertecies;
+    string stoneType;
     void createStoneVertecies();
     int scale= 20;
-    int offsetX = 200;
+    int offsetX = 400;
     int playerId;
+    uint64_t lastCheckedRelativeToPaddleTime = 0;
     shared_ptr<ofxBox2dPolygon> body;
-    vector<string> stones;
-    bool isBouncy;
-	bool isHeavy;
-	bool isLarge;
+    map<string,string> stones;
+    
+    float distanceToPaddle=10000;
+    float positionChangeRelativeToPaddleSmoothed = 1;
+    float positionChangeRelativeToPaddle;
+    GameParameters* params;
+    bool isBouncy = false;
+	bool isHeavy = false;
+	bool isLarge = false;
+    bool isPartOfTower = false;;
 };
 
