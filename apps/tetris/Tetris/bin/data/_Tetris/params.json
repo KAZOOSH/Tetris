@@ -14,7 +14,7 @@
   ],
   "isOsc": true,
   "serial": {
-    "buzzerId": "USB\\VID_2341&PID_8037&REV_0100&MI_00",
+    "buzzerId": "USB\\VID_2341&PID_8037&REV_0100&MI_00##",
     "pedalId": "USB\\VID_1A86&PID_7523&REV_0263"
   },
   "fonts": {

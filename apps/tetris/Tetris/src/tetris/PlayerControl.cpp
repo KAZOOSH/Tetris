@@ -21,6 +21,37 @@ void PlayerControl::setup(vector<shared_ptr<Paddle>> paddles_, GameParameters * 
 
 void PlayerControl::update()
 {
+	// buzzer
+	try
+	{
+		// Read all bytes from the device;
+		uint8_t buffer[16];
+		while (serialBuzzer.available() > 0) {
+			std::size_t sz = serialBuzzer.readBytes(buffer, 16);
+			if (sz >= 1 && buffer[0] == 'p') {
+				ofJson out;
+				out["control"] = "buzzer";
+				params->notifyControlEvent(out);
+				//cout << "buzzer" << endl;
+			}
+		}
+		while (serialPlayer.available() > 0) {
+			std::size_t sz = serialPlayer.readBytes(buffer, 16);
+			if (sz >= 1 && buffer[0] != '0') {
+				//cout << "pedal" << endl;
+				std::bitset<8> bits(buffer[0]);
+				for (size_t i = 0; i < 4; i++) {
+					if (bits.test(i)) {
+						sendPedalCommand(i);
+					}
+				}
+			}
+		}
+	}
+	catch (const std::exception& exc) {
+		ofLogError("ofApp::update") << exc.what();
+	}
+	/*
 	// pedal
 	try
 	{
@@ -42,23 +73,7 @@ void PlayerControl::update()
 		ofLogError("ofApp::update") << exc.what();
 	}
 
-	// buzzer
-	try
-	{
-		// Read all bytes from the device;
-		uint8_t buffer[16];
-		while (serialBuzzer.available() > 0) {
-			std::size_t sz = serialBuzzer.readBytes(buffer, 16);
-			if (sz >= 1 && buffer[0] == 'p') {
-				ofJson out;
-				out["control"] = "buzzer";
-				params->notifyControlEvent(out);
-			}
-		}
-	}
-	catch (const std::exception& exc){
-		ofLogError("ofApp::update") << exc.what();
-	}
+	*/
 }
 
 //TODO : add martin control

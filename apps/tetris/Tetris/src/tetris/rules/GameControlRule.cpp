@@ -138,13 +138,13 @@ void GameControlRule::draw()
 		}
 
 		
-	}else if (gamestate == "end2") {
+	}else if (gamestate == "end1") {
 		ofPushMatrix();
 		ofTranslate(params->params["width"].get<int>() * 0.5, 0);
 		drawFadeOut();
 		ofPopMatrix();
 		
-	} else if (gamestate == "end1") {
+	} else if (gamestate == "end2") {
 		drawFadeOut();
 	}
 
@@ -200,7 +200,11 @@ int GameControlRule::getStateTime(string stateName)
 
 void GameControlRule::drawFadeOut()
 {
-	ofSetColor(0);//, ofClamp((ofGetElapsedTimeMillis() - startState) * 255 / 2000,0,255));
+	//ofSetColor(0);//, ofClamp((ofGetElapsedTimeMillis() - startState) * 255 / 2000,0,255));
+	
+	int alpha = ofMap(ofGetElapsedTimeMillis() - startState, 0, 2000, 0, 255, true);
+	//cout << ofGetElapsedTimeMillis() << " - " << startState << " = " << ofGetElapsedTimeMillis() - startState<< "  alpha "<< alpha  << endl;
+	ofSetColor(0,alpha);
 	ofDrawRectangle(0, 0, params->params["width"].get<int>() * 0.5, params->params["height"].get<int>());
 }
 

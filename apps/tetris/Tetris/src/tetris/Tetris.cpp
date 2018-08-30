@@ -16,7 +16,7 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
         ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
     }
     
-	ofSetWindowPosition(0, 0);
+	ofSetWindowPosition(1920, 0);
 	ofSetWindowShape(params.params["width"], params.params["height"]);
 
     produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();

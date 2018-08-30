@@ -24,7 +24,7 @@ void InfoPanel::draw(int x)
 {
 	uint64_t now = ofGetElapsedTimeMillis();
 	if (now - tStart < duration) {
-		ofPopMatrix();
+		ofPushMatrix();
 		ofTranslate(x, 0);
 		//main
 		//todo bouncy fade in
