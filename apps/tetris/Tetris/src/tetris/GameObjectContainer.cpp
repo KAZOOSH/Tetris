@@ -2,9 +2,8 @@
 
 
 
-GameObjectContainer::GameObjectContainer(GameParameters* params_)
+GameObjectContainer::GameObjectContainer()
 {
-	params = params_;
 }
 
 
@@ -12,10 +11,10 @@ GameObjectContainer::~GameObjectContainer()
 {
 }
 
-void GameObjectContainer::initPhysics()
+void GameObjectContainer::initPhysics(float gravity)
 {
     physics.init();
-    physics.setGravity(0, params->params["physics"]["gravity"].get<float>());
+	physics.setGravity(0, gravity);
     //physics.createGround();
     physics.setFPS(60.0);
 }

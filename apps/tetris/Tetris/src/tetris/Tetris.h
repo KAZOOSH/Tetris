@@ -12,6 +12,7 @@
 #include "PlayerControl.h"
 #include "TetrisStone.h"
 #include "ofxQuadWarp.h"
+#inclide "GameComponents.h"
 
 using namespace ofxModule;
 
@@ -44,7 +45,6 @@ public:
 	private:
         float getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle);
     shared_ptr<GameControl> gameObjects;
-		shared_ptr<GameObjectContainer> objects;
         void setTetrisStoneRelativeToPaddlePosition();
 		GameParameters params;
 		PlayerControl playerControl;

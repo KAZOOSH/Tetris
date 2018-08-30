@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderObject.h"
 #include "ofxBox2d.h"
-//#include "Rule.h"
 
 /// \brief game object class, basically a container which controlls the renderer, rules, and physics objects
 class GameObject
@@ -27,10 +26,6 @@ public:
 
 	vector<shared_ptr<ofxBox2dBaseShape>> getBody();
 
-	/*void addRule(shared_ptr<Rule> rule);
-	void removeRule(shared_ptr<Rule> rule);
-	void removeRule(string ruleName);
-	*/
 	void erase();
 
 	virtual void onBodyAdded(shared_ptr<ofxBox2dBaseShape> body) {};
