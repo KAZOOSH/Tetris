@@ -47,9 +47,9 @@ public:
 		shared_ptr<GameComponents> components;
 
 
-        float getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle);
+        
     shared_ptr<GameControl> objects;
-        void setTetrisStoneRelativeToPaddlePosition();
+        
 
 		PlayerControl playerControl;
         void produceStone(int player);
