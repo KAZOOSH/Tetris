@@ -11,10 +11,10 @@ PlayerControl::~PlayerControl()
 {
 }
 
-void PlayerControl::setup(vector<shared_ptr<Paddle>> paddles_, GameParameters * params_)
+void PlayerControl::setup(shared_ptr<GameComponents> components_)
 {
-	paddles = paddles_;
-	params = params_;
+	components = components_;
+	paddles = components->objects()->paddles;
 
 	initSerial();
 }
@@ -52,7 +52,7 @@ void PlayerControl::update()
 			if (sz >= 1 && buffer[0] == 'p') {
 				ofJson out;
 				out["control"] = "buzzer";
-				params->notifyControlEvent(out);
+				components->events()->notifyControlEvent(out);
 			}
 		}
 	}
@@ -64,19 +64,21 @@ void PlayerControl::update()
 //TODO : add martin control
 void PlayerControl::onPaddleMove(const ofJson & json)
 {
+	auto settings = components->params();
+
 	ofJson out;
 	out["control"] = "paddle";
 
 	int nPaddle = json["function"] == "paddle1Position" ? 0 : 1;
 
 		//calculate movement area
-		float w = 0.5*params->params["width"].get<float>();
-		float offset = (w - params->params["paddleArea"][0].get<float>()) / 2;
+		float w = 0.5*settings->settings["width"].get<float>();
+		float offset = (w - settings->settings["paddleArea"][0].get<float>()) / 2;
 		float x_min = offset + nPaddle * w;
 		float x_max = w - offset + nPaddle * w;
-		float h = params->params["height"].get<float>();
-		float y_min = h - params->params["paddleArea"][1].get<float>()- params->params["paddleArea"][2].get<float>();
-		float y_max = h - params->params["paddleArea"][2].get<float>();
+		float h = settings->settings["height"].get<float>();
+		float y_min = h - settings->settings["paddleArea"][1].get<float>()- settings->settings["paddleArea"][2].get<float>();
+		float y_max = h - settings->settings["paddleArea"][2].get<float>();
 
 		//map input to movement area
 		ofVec2f pos1 = ofVec2f(ofMap(json["paddle"][0]["x"].get<float>(), 0.0,1.0,x_min,x_max),
@@ -99,7 +101,7 @@ void PlayerControl::onPaddleMove(const ofJson & json)
 			{ "y", pos2.y }
 		};
 	
-	params->notifyControlEvent(out);
+	components->events()->notifyControlEvent(out);
 }
 
 
@@ -115,11 +117,11 @@ void PlayerControl::initSerial()
 		for (auto deviceDescriptor : deviceDescriptors)
 		{
 			ofLogNotice("ofApp::setup") << "\t" << deviceDescriptor;
-			cout << deviceDescriptor.getHardwareId() << "   " << params->params["serial"]["pedalId"].get<string>() << endl;
+			cout << deviceDescriptor.getHardwareId() << "   " << components->params()->settings["serial"]["pedalId"].get<string>() << endl;
 			//connect matching devices
-			if (deviceDescriptor.getHardwareId() == params->params["serial"]["buzzerId"]) {
+			if (deviceDescriptor.getHardwareId() == components->params()->settings["serial"]["buzzerId"]) {
 				connectDevice(serialBuzzer, deviceDescriptor,"buzzer");
-			}else if (deviceDescriptor.getHardwareId() == params->params["serial"]["pedalId"]) {
+			}else if (deviceDescriptor.getHardwareId() == components->params()->settings["serial"]["pedalId"]) {
 				connectDevice(serialPlayer, deviceDescriptor, "pedal");
 			}
 		}
@@ -145,6 +147,6 @@ void PlayerControl::sendPedalCommand(int i)
 		out["control"] = "pedal";
 		out["direction"] = i % 2 == 0 ? "left" : "right";
 		out["player"] = i < 2 ? 1 : 2;
-		params->notifyControlEvent(out);
+		components->events()->notifyControlEvent(out);
 
 }

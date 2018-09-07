@@ -1,11 +1,10 @@
 #pragma once
 
-#include "RenderObject.h"
+//#include "RenderObject.h"
 #include "Rule.h"
 #include "GameObject.h"
 #include "ofxBox2d.h"
 #include "Paddle.h"
-#include "Rule.h"
 
 
 class GameObjectContainer
@@ -25,7 +24,7 @@ public:
 	vector<shared_ptr<Paddle>> paddles;
 
 	//all objects
-	vector<shared_ptr<GameObject>> gameObjects;
+	vector<shared_ptr<GameObject>> objects;
 	vector<shared_ptr<Rule>> rules;
 	ofxBox2d physics;
 

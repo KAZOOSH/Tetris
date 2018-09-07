@@ -1,15 +1,14 @@
 #pragma once
 #include "ofMain.h"
 #include "GameObject.h"
-#include "GameParameters.h"
+//#include "GameObjectContainer.h"
 
-class GameParameters;
 
 /// \brief abstract definition of a rule
 class Rule
 {
 public:
-	Rule(string name, GameParameters* params, int runtime = 0);
+	Rule(string name, int runtime = 0);
 
 	string getName();
 
@@ -24,9 +23,8 @@ public:
 	uint64_t getCreationTime();
 
 protected:
-	shared_ptr<vector<shared_ptr<GameObject>>> objects;
 	string name;
-	GameParameters* params;
+	//shared_ptr<GameComponents> components;
 	int runtime = 0;
 	uint64_t creationTime;
 };

@@ -2,10 +2,11 @@
 
 
 
-GameEventRule::GameEventRule(GameParameters* params) :Rule("GameControlRule", params)
+GameEventRule::GameEventRule(shared_ptr<GameComponents> components) :GameRule("GameControlRule", components)
 {
-	mainFont.setup(params->params["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
-	subFont.setup(params->params["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
+	auto params = components->params();
+	mainFont.setup(params->settings["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
+	subFont.setup(params->settings["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
 	mainFont.setSize(250);
 	subFont.setSize(250);
 	mainFont.setCharacterSpacing(0);
@@ -13,7 +14,7 @@ GameEventRule::GameEventRule(GameParameters* params) :Rule("GameControlRule", pa
 
 	//create InfoPanels
 	for (auto& s : params->effects) {
-		vector<InfoPanel> p = { InfoPanel(params->params, s, &mainFont, &subFont),InfoPanel(params->params, s, &mainFont, &subFont) };
+		vector<InfoPanel> p = { InfoPanel(params->settings, s, &mainFont, &subFont),InfoPanel(params->settings, s, &mainFont, &subFont) };
 		p[0].setPlayer(1);
 		p[0].setPlayer(2);
 		panels.insert(pair<string, vector<InfoPanel>>(s["state"].get<string>(), p));
@@ -22,7 +23,7 @@ GameEventRule::GameEventRule(GameParameters* params) :Rule("GameControlRule", pa
 	currentEvents.push_back(vector<string>());
 	currentEvents.push_back(vector<string>());
 
-	ofAddListener(params->gameEvent, this, &GameEventRule::onGameEvent);
+	ofAddListener(components->events()->gameEvent, this, &GameEventRule::onGameEvent);
 }
 
 
@@ -58,7 +59,7 @@ void GameEventRule::draw()
 			if (i == 0) {
 				panels[ev][i].draw();
 			} else {
-				panels[ev][i].draw(params->params["width"].get<int>()*0.5);
+				panels[ev][i].draw(components->params()->settings["width"].get<int>()*0.5);
 			}
 		}
 	}

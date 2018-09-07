@@ -285,14 +285,14 @@ static void FN(Cleanup)(MemoryManager* m, HashToBinaryTree* self) {
 
 static void FN(Init)(
     MemoryManager* m, HashToBinaryTree* self, const uint8_t* data,
-    const BrotliEncoderParams* params, size_t position, size_t bytes,
+    const BrotliEncoderParams* settings, size_t position, size_t bytes,
     BROTLI_BOOL is_last) {
   if (self->is_dirty_) {
     uint32_t invalid_pos;
     size_t num_nodes;
     uint32_t i;
     BROTLI_UNUSED(data);
-    self->window_mask_ = (1u << params->lgwin) - 1u;
+    self->window_mask_ = (1u << settings->lgwin) - 1u;
     invalid_pos = (uint32_t)(0 - self->window_mask_);
     self->invalid_pos_ = invalid_pos;
     for (i = 0; i < BUCKET_SIZE; i++) {
@@ -419,12 +419,12 @@ static BROTLI_INLINE BackwardMatch* FN(StoreAndFindMatches)(
 static BROTLI_INLINE size_t FN(FindAllMatches)(HashToBinaryTree* self,
     const uint8_t* data, const size_t ring_buffer_mask, const size_t cur_ix,
     const size_t max_length, const size_t max_backward,
-    const BrotliEncoderParams* params, BackwardMatch* matches) {
+    const BrotliEncoderParams* settings, BackwardMatch* matches) {
   BackwardMatch* const orig_matches = matches;
   const size_t cur_ix_masked = cur_ix & ring_buffer_mask;
   size_t best_len = 1;
   const size_t short_match_max_backward =
-      params->quality != HQ_ZOPFLIFICATION_QUALITY ? 16 : 64;
+      settings->quality != HQ_ZOPFLIFICATION_QUALITY ? 16 : 64;
   size_t stop = cur_ix - short_match_max_backward;
   uint32_t dict_matches[BROTLI_MAX_STATIC_DICTIONARY_MATCH_LEN + 1];
   size_t i;
@@ -681,11 +681,11 @@ static BROTLI_INLINE void HashersSetup(
 
 #define _WARMUP_HASH(N)                                                        \
 static BROTLI_INLINE void WarmupHashH ## N(MemoryManager* m,                   \
-    const BrotliEncoderParams* params, const size_t size, const uint8_t* dict, \
+    const BrotliEncoderParams* settings, const size_t size, const uint8_t* dict, \
     H ## N* hasher) {                                                          \
   size_t overlap = (StoreLookaheadH ## N()) - 1;                               \
   size_t i;                                                                    \
-  InitH ## N(m, hasher, dict, params, 0, size, BROTLI_FALSE);                  \
+  InitH ## N(m, hasher, dict, settings, 0, size, BROTLI_FALSE);                  \
   if (BROTLI_IS_OOM(m)) return;                                                \
   for (i = 0; i + overlap < size; i++) {                                       \
     StoreH ## N(hasher, dict, ~(size_t)0, i);                                  \
@@ -696,12 +696,12 @@ FOR_ALL_HASHERS(_WARMUP_HASH)
 
 /* Custom LZ77 window. */
 static BROTLI_INLINE void HashersPrependCustomDictionary(
-    MemoryManager* m, Hashers* self, const BrotliEncoderParams* params,
+    MemoryManager* m, Hashers* self, const BrotliEncoderParams* settings,
     const size_t size, const uint8_t* dict) {
-  int hasher_type = ChooseHasher(params);
+  int hasher_type = ChooseHasher(settings);
   switch (hasher_type) {
 #define _PREPEND(N) \
-    case N: WarmupHashH ## N(m, params, size, dict, self->h ## N); break;
+    case N: WarmupHashH ## N(m, settings, size, dict, self->h ## N); break;
     FOR_ALL_HASHERS(_PREPEND)
 #undef _PREPEND
     default: break;

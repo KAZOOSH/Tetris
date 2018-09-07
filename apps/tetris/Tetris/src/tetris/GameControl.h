@@ -5,7 +5,7 @@
 class GameControl
 {
 public:
-	GameControl(GameObjectContainer objectContainer);
+	GameControl(shared_ptr<GameObjectContainer> objects);
 	~GameControl();
 
 	void update();
@@ -23,7 +23,7 @@ protected:
 
 private:
 	long tGameStarted;
-	unique_ptr<GameObjectContainer> objectContainer;
+	shared_ptr<GameObjectContainer> objectContainer;
 
 	vector<long> toDeleteIds;
 };

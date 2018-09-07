@@ -27,7 +27,7 @@ extern "C" {
 BROTLI_INTERNAL void BrotliCreateBackwardReferences(
     MemoryManager* m, size_t num_bytes, size_t position, BROTLI_BOOL is_last,
     const uint8_t* ringbuffer, size_t ringbuffer_mask,
-    const BrotliEncoderParams* params, Hashers* hashers, int* dist_cache,
+    const BrotliEncoderParams* settings, Hashers* hashers, int* dist_cache,
     size_t* last_insert_len, Command* commands, size_t* num_commands,
     size_t* num_literals);
 
@@ -75,7 +75,7 @@ BROTLI_INTERNAL void BrotliInitZopfliNodes(ZopfliNode* array, size_t length);
 BROTLI_INTERNAL size_t BrotliZopfliComputeShortestPath(
     MemoryManager* m, size_t num_bytes, size_t position,
     const uint8_t* ringbuffer, size_t ringbuffer_mask,
-    const BrotliEncoderParams* params, const size_t max_backward_limit,
+    const BrotliEncoderParams* settings, const size_t max_backward_limit,
     const int* dist_cache, H10* hasher, ZopfliNode* nodes);
 
 BROTLI_INTERNAL void BrotliZopfliCreateCommands(const size_t num_bytes,

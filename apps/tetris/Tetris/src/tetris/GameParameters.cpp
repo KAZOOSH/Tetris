@@ -6,7 +6,7 @@ GameParameters::GameParameters()
 {
 	ofFile fileParams("_Tetris/params.json");
 	if (fileParams.exists()) {
-		fileParams >> params;
+		fileParams >> settings;
 	} else {
 		ofLogError(" _Tetris/params.json does not exist");
 	}

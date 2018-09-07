@@ -8,11 +8,12 @@
 #include "GameObject.h"
 #include "GameFactory.h"
 #include "GameControl.h"
-#include "GameParameters.h"
 #include "PlayerControl.h"
 #include "TetrisStone.h"
 #include "ofxQuadWarp.h"
-#inclide "GameComponents.h"
+#include "GameComponents.h"
+
+#include "GameComponents.h"
 
 using namespace ofxModule;
 
@@ -43,10 +44,13 @@ public:
         void contactStart(ofxBox2dContactArgs &e);
         
 	private:
+		shared_ptr<GameComponents> components;
+
+
         float getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle);
-    shared_ptr<GameControl> gameObjects;
+    shared_ptr<GameControl> objects;
         void setTetrisStoneRelativeToPaddlePosition();
-		GameParameters params;
+
 		PlayerControl playerControl;
         void produceStone(int player);
 		ofxQuadWarp warperLeft;

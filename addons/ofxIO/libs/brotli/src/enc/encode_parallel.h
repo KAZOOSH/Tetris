@@ -16,7 +16,7 @@
 
 namespace brotli {
 
-int BrotliCompressBufferParallel(BrotliParams params,
+int BrotliCompressBufferParallel(BrotliParams settings,
                                  size_t input_size,
                                  const uint8_t* input_buffer,
                                  size_t* encoded_size,

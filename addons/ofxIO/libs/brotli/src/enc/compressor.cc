@@ -25,10 +25,10 @@ static void SetParams(const BrotliParams* from, BrotliEncoderState* to) {
   BrotliEncoderSetParameter(to, BROTLI_PARAM_LGBLOCK, (uint32_t)from->lgblock);
 }
 
-BrotliCompressor::BrotliCompressor(BrotliParams params) {
+BrotliCompressor::BrotliCompressor(BrotliParams settings) {
   state_ = BrotliEncoderCreateInstance(0, 0, 0);
   if (state_ == 0) std::exit(EXIT_FAILURE);  /* OOM */
-  SetParams(&params, state_);
+  SetParams(&settings, state_);
 }
 
 BrotliCompressor::~BrotliCompressor(void) {
@@ -75,20 +75,20 @@ void BrotliCompressor::BrotliSetCustomDictionary(size_t size,
   BrotliEncoderSetCustomDictionary(state_, size, dict);
 }
 
-int BrotliCompressBuffer(BrotliParams params, size_t input_size,
+int BrotliCompressBuffer(BrotliParams settings, size_t input_size,
                          const uint8_t* input_buffer, size_t* encoded_size,
                          uint8_t* encoded_buffer) {
-  return BrotliEncoderCompress(params.quality, params.lgwin,
-      (BrotliEncoderMode)params.mode, input_size, input_buffer,
+  return BrotliEncoderCompress(settings.quality, settings.lgwin,
+      (BrotliEncoderMode)settings.mode, input_size, input_buffer,
       encoded_size, encoded_buffer);
 }
 
-int BrotliCompress(BrotliParams params, BrotliIn* in, BrotliOut* out) {
-  return BrotliCompressWithCustomDictionary(0, 0, params, in, out);
+int BrotliCompress(BrotliParams settings, BrotliIn* in, BrotliOut* out) {
+  return BrotliCompressWithCustomDictionary(0, 0, settings, in, out);
 }
 
 int BrotliCompressWithCustomDictionary(size_t dictsize, const uint8_t* dict,
-                                       BrotliParams params, BrotliIn* in,
+                                       BrotliParams settings, BrotliIn* in,
                                        BrotliOut* out) {
   const size_t kOutputBufferSize = 65536;
   uint8_t* output_buffer;
@@ -101,7 +101,7 @@ int BrotliCompressWithCustomDictionary(size_t dictsize, const uint8_t* dict,
 
   s = BrotliEncoderCreateInstance(0, 0, 0);
   if (!s) return 0;
-  SetParams(&params, s);
+  SetParams(&settings, s);
   BrotliEncoderSetCustomDictionary(s, dictsize, dict);
   output_buffer = new uint8_t[kOutputBufferSize];
 

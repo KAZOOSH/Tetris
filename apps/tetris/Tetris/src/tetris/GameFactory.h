@@ -2,6 +2,7 @@
 #include "ofMain.h"
 #include "GameObjectContainer.h"
 #include "GameParameters.h"
+#include "GameComponents.h"
 
 //renderer
 #include "RenderObject.h"
@@ -27,17 +28,17 @@ class GameFactory
 {
 public:
     //Gameobjects
-    static shared_ptr<Paddle> makePaddle(shared_ptr<GameObjectContainer> objects, string name, GameParameters* params);
-    static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameObjectContainer> objects);
-    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameObjectContainer> objects, GameParameters* params, string activeEffect);
-    static shared_ptr<GameObject> makeBackgroundObject(shared_ptr<GameObjectContainer> objects, GameParameters* params);
+    static shared_ptr<Paddle> makePaddle(shared_ptr<GameComponents> components, string name);
+    static shared_ptr<GameObject> makeBasicStone(shared_ptr<GameComponents> components);
+    static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameComponents> components, string activeEffect);
+    static shared_ptr<GameObject> makeBackgroundObject(shared_ptr<GameComponents> components);
     
     
     //rules
-    static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(GameParameters* params);
-    static shared_ptr<GameControlRule> makeGameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
-	static shared_ptr<GameEventRule> makeGameEventRule(GameParameters* params);
-	static shared_ptr<StoneControlRule> makeStoneControlRule(GameParameters* params);
-	static shared_ptr<Rule> makeWorldEffect(GameParameters* params, ofJson config);
+    static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(shared_ptr<GameComponents> components);
+    static shared_ptr<GameControlRule> makeGameControlRule(shared_ptr<GameComponents> components);
+	static shared_ptr<GameEventRule> makeGameEventRule(shared_ptr<GameComponents> components);
+	static shared_ptr<StoneControlRule> makeStoneControlRule(shared_ptr<GameComponents> components);
+	static shared_ptr<Rule> makeWorldEffect(shared_ptr<GameComponents> components, ofJson config);
 };
 

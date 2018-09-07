@@ -2,7 +2,7 @@
 
 
 
-WindRule::WindRule(GameParameters* params,int runtime):Rule("WindRule", params,runtime)
+WindRule::WindRule(shared_ptr<GameComponents> components,int runtime):GameRule("WindRule", components,runtime)
 {
 
 }
@@ -11,6 +11,7 @@ void WindRule::applyRule()
 {
 	float now = ofGetElapsedTimef();
 	int i = 0;
+	auto objects = components->objects()->objects;
 	for (auto& obj : objects) {
 			auto bodies = obj->getBody();
 			if (obj->getName() == "TetrisStone") {

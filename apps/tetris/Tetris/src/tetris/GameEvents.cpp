@@ -2,7 +2,13 @@
 
 GameEvents::GameEvents()
 {
+	nextCreationRule.push_back("base");
+	nextCreationRule.push_back("base");
+}
 
+void GameEvents::setup(shared_ptr<GameParameters> params_)
+{
+	settings = params_;
 }
 
 void GameEvents::notifyGameEvent(ofJson eventText)
@@ -21,16 +27,16 @@ void GameEvents::notifyControlEvent(ofJson eventText)
 
 void GameEvents::setRandomNextEffect(){
 	if (nextEffectList.size() == 0) {
-		for (int i = 0; i < effects.size(); i++) {
-			nextEffectList.push_back(effects[i]["state"]);
+		for (int i = 0; i < settings->effects.size(); i++) {
+			nextEffectList.push_back(settings->effects[i]["state"]);
 		}
 		std::random_shuffle(nextEffectList.begin(), nextEffectList.end());
 	}
 
-	if (getEffect(nextEffectList.back())["type"] == "world") {
+	if (settings->getEffect(nextEffectList.back())["type"] == "world") {
 		ofJson out;
 		out["function"] = "createWorldEffect";
-		out["params"] = getEffect(nextEffectList.back());
+		out["params"] = settings->getEffect(nextEffectList.back());
 		notifyGameEvent(out);
 
 	} else {
@@ -42,10 +48,10 @@ void GameEvents::setRandomNextEffect(){
 
 void GameEvents::setNextEffect(string name)
 {
-	if (getEffect(name)["type"] == "world") {
+	if (settings->getEffect(name)["type"] == "world") {
 		ofJson out;
 		out["function"] = "createWorldEffect";
-		out["params"] = getEffect(name);
+		out["params"] = settings->getEffect(name);
 		notifyGameEvent(out);
 
 	} else {

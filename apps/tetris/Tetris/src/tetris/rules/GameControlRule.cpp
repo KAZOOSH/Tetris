@@ -2,11 +2,11 @@
 
 
 
-GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* gameControl_):Rule("GameControlRule",params)
+GameControlRule::GameControlRule(shared_ptr<GameComponents> components):GameRule("GameControlRule",components)
 {
-	gameObjects = gameControl_;
-	mainFont.setup(params->params["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
-	subFont.setup(params->params["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
+	objects = components->objects();
+	mainFont.setup(components->params()->settings["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
+	subFont.setup(components->params()->settings["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
 	mainFont.setSize(250);
 	subFont.setSize(250);
 	mainFont.setCharacterSpacing(0);
@@ -21,7 +21,7 @@ GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* ga
 
 	//create InfoPanels
 	for (auto& s : stateDescription) {
-		panels.insert(pair<string, InfoPanel>(s["state"].get<string>(), InfoPanel(params->params, s, &mainFont, &subFont)));
+		panels.insert(pair<string, InfoPanel>(s["state"].get<string>(), InfoPanel(components->params()->settings, s, &mainFont, &subFont)));
 	}
 
 	//create countdown panels
@@ -34,11 +34,11 @@ GameControlRule::GameControlRule(GameParameters* params, GameObjectContainer* ga
 		s["time"] = 1000;
 		s["sound"] = "";
 		
-		countdown.insert(pair<int, InfoPanel>(i, InfoPanel(params->params, s, &mainFont, &subFont)));
+		countdown.insert(pair<int, InfoPanel>(i, InfoPanel(components->params()->settings, s, &mainFont, &subFont)));
 	}
 
-	ofAddListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
-	ofAddListener(params->controlEvent, this, &GameControlRule::onPaddleMove);
+	ofAddListener(components->events()->gameEvent, this, &GameControlRule::onGamestateChanged);
+	ofAddListener(components->events()->controlEvent, this, &GameControlRule::onPaddleMove);
 }
 
 
@@ -64,34 +64,34 @@ void GameControlRule::applyRule()
 			changeGamestate("idle");
 		}
 	} else if (gamestate == "countdown3" && isTSwitch) {
-		params->winningHeight = params->params["gameplay"]["winningHeightMax"].get<float>();
+		components->events()->winningHeight = components->params()->settings["gameplay"]["winningHeightMax"].get<float>();
 		changeGamestate("countdown2");
 	} else if (gamestate == "countdown2" && isTSwitch) {
 		changeGamestate("countdown1");
 	} else if (gamestate == "countdown1" && isTSwitch) {
 		changeGamestate("game");
 	} else if (gamestate == "game") {
-		int winningHeight = params->winningHeight*params->params["height"].get<float>();
+		int winningHeight = components->events()->winningHeight*components->params()->settings["height"].get<float>();
 		//cout << winningHeight << " -> " << gameObjects->paddles[0]->towerHeight << "   |    " << gameObjects->paddles[1]->towerHeight << endl;
-		if (gameObjects->paddles[0]->towerHeight > winningHeight) {
+		if (objects->paddles[0]->towerHeight > winningHeight) {
 			changeGamestate("end1");
 		}
-		else if (gameObjects->paddles[1]->towerHeight > winningHeight) {
+		else if (objects->paddles[1]->towerHeight > winningHeight) {
 			changeGamestate("end2");
 		}
 
 		//reduce winning height
-		if (now - startState > params->params["gameplay"]["startHeightReduction"].get<int>()){
-			params->winningHeight = 
-				ofMap(now - startState, params->params["gameplay"]["startHeightReduction"].get<int>(),
-				params->params["gameplay"]["maxDuration"].get<int>(),
-				params->params["gameplay"]["winningHeightMax"].get<float>(),
-				params->params["gameplay"]["winningHeightMin"].get<float>(),true);
+		if (now - startState > components->params()->settings["gameplay"]["startHeightReduction"].get<int>()){
+			components->events()->winningHeight = 
+				ofMap(now - startState, components->params()->settings["gameplay"]["startHeightReduction"].get<int>(),
+				components->params()->settings["gameplay"]["maxDuration"].get<int>(),
+				components->params()->settings["gameplay"]["winningHeightMax"].get<float>(),
+				components->params()->settings["gameplay"]["winningHeightMin"].get<float>(),true);
 		}
-		if (now - startState > params->params["gameplay"]["maxDuration"].get<int>()) {
-			if (gameObjects->paddles[0]->towerHeight > gameObjects->paddles[1]->towerHeight) {
+		if (now - startState > components->params()->settings["gameplay"]["maxDuration"].get<int>()) {
+			if (objects->paddles[0]->towerHeight > objects->paddles[1]->towerHeight) {
 				changeGamestate("end1");
-			} else if (gameObjects->paddles[1]->towerHeight > gameObjects->paddles[0]->towerHeight) {
+			} else if (objects->paddles[1]->towerHeight > objects->paddles[0]->towerHeight) {
 				changeGamestate("end2");
 			}else changeGamestate("endEven");
 		}
@@ -113,7 +113,7 @@ void GameControlRule::draw()
 	
 	//if (gamestate != "game") {
 		panels[gamestate].draw();
-		panels[gamestate].draw(params->params["width"].get<int>()*0.5);
+		panels[gamestate].draw(components->params()->settings["width"].get<int>()*0.5);
 	//}
 
 	if (gamestate == "idle") {
@@ -123,7 +123,7 @@ void GameControlRule::draw()
 	}else if (gamestate == "countdown") {
 
 	}else if (gamestate == "game") {
-		int tLeft = startState + params->params["gameplay"]["maxDuration"].get<int>() - ofGetElapsedTimeMillis();
+		int tLeft = startState + components->params()->settings["gameplay"]["maxDuration"].get<int>() - ofGetElapsedTimeMillis();
 		if (tLeft < 15000  && tLeft >0) {
 			int t = tLeft / 1000;
 			if (t != lastCountdownSwitch) {
@@ -131,16 +131,16 @@ void GameControlRule::draw()
 				countdown[t].start();
 				ofJson s;
 				s["function"] = "countdown";
-				params->notifyGameEvent(s);
+				components->events()->notifyGameEvent(s);
 			}
 			countdown[t].draw();
-			countdown[t].draw(params->params["width"].get<int>()*0.5);
+			countdown[t].draw(components->params()->settings["width"].get<int>()*0.5);
 		}
 
 		
 	}else if (gamestate == "end2") {
 		ofPushMatrix();
-		ofTranslate(params->params["width"].get<int>() * 0.5, 0);
+		ofTranslate(components->params()->settings["width"].get<int>() * 0.5, 0);
 		drawFadeOut();
 		ofPopMatrix();
 		
@@ -158,16 +158,16 @@ void GameControlRule::changeGamestate(string message)
 
 	panels[gamestate].start();
 
-	if (gamestate == "game") params->soundPlayer.play("start", 1);
-	if (gamestate == "game") params->soundPlayer.play("start", 2);
+	if (gamestate == "game") components->soundPlayer()->play("start", 1);
+	if (gamestate == "game") components->soundPlayer()->play("start", 2);
 
 	ofJson state = ofJson{
 		{"function","gamestate"},
 		{ "gamestate" , gamestate}
 	};
-	ofRemoveListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
-	params->notifyGameEvent(state);
-	ofAddListener(params->gameEvent, this, &GameControlRule::onGamestateChanged);
+	ofRemoveListener(components->events()->gameEvent, this, &GameControlRule::onGamestateChanged);
+	components->events()->notifyGameEvent(state);
+	ofAddListener(components->events()->gameEvent, this, &GameControlRule::onGamestateChanged);
 }
 
 void GameControlRule::onGamestateChanged(ofJson & message)
@@ -184,8 +184,8 @@ void GameControlRule::onPaddleMove(ofJson & message)
 	if (message["control"] != nullptr && message["control"] == "paddle") {
 		float p = 0.5*(message["p1"]["y"].get<float>() + message["p2"]["y"].get<float>());
 
-		float y_min = params->params["height"].get<float>()- params->params["paddleArea"][1].get<float>();
-		float y_max = params->params["height"].get<float>();
+		float y_min = components->params()->settings["height"].get<float>()- components->params()->settings["paddleArea"][1].get<float>();
+		float y_max = components->params()->settings["height"].get<float>();
 		if (ofMap(p, y_max, y_min, 0.0, 1.0) > 0.7) paddleReady[message["id"].get<int>() - 1] = true;
 		else paddleReady[message["id"].get<int>() - 1] = false;
 	}
@@ -202,7 +202,7 @@ int GameControlRule::getStateTime(string stateName)
 void GameControlRule::drawFadeOut()
 {
 	ofSetColor(0);//, ofClamp((ofGetElapsedTimeMillis() - startState) * 255 / 2000,0,255));
-	ofDrawRectangle(0, 0, params->params["width"].get<int>() * 0.5, params->params["height"].get<int>());
+	ofDrawRectangle(0, 0, components->params()->settings["width"].get<int>() * 0.5, components->params()->settings["height"].get<int>());
 }
 
 

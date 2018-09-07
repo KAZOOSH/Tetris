@@ -92,13 +92,13 @@ static void FN(InitForData)(HashForgetfulChain* self, const uint8_t* data,
 
 static void FN(Init)(
     MemoryManager* m, HashForgetfulChain* self, const uint8_t* data,
-    const BrotliEncoderParams* params, size_t position, size_t bytes,
+    const BrotliEncoderParams* settings, size_t position, size_t bytes,
     BROTLI_BOOL is_last) {
   /* Choose which init method is faster.
      Init() is about 100 times faster than InitForData(). */
   const size_t kMaxBytesForPartialHashInit = BUCKET_SIZE >> 6;
   BROTLI_UNUSED(m);
-  self->max_hops = (params->quality > 6 ? 7u : 8u) << (params->quality - 4);
+  self->max_hops = (settings->quality > 6 ? 7u : 8u) << (settings->quality - 4);
   if (position == 0 && is_last && bytes <= kMaxBytesForPartialHashInit) {
     FN(InitForData)(self, data, bytes);
   } else {

@@ -1,12 +1,12 @@
 #pragma once
-#include "Rule.h"
+#include "GameRule.h"
 
 
 class DeleteOutOfScreenRule :
-	public Rule
+	public GameRule
 {
 public:
-	DeleteOutOfScreenRule(GameParameters* params);
+	DeleteOutOfScreenRule(shared_ptr<GameComponents> components);
 	~DeleteOutOfScreenRule();
 
 	void applyRule();

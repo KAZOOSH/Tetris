@@ -2,7 +2,7 @@
 
 #include <bitset>  
 #include "Paddle.h"
-#include "GameParameters.h"
+#include "GameComponents.h"
 #include "ofxSerial.h"
 
 class PlayerControl
@@ -11,7 +11,7 @@ public:
 	PlayerControl();
 	~PlayerControl();
 
-	void setup(vector<shared_ptr<Paddle>> paddles, GameParameters* params);
+	void setup(shared_ptr<GameComponents> components);
 
 	void update();
 
@@ -24,7 +24,7 @@ protected:
 	void sendPedalCommand(int i);
 private:
 	vector<shared_ptr<Paddle>> paddles;
-	GameParameters* params;
+	shared_ptr<GameComponents> components;
 
 	ofxIO::SerialDevice serialPlayer;
 	ofxIO::SerialDevice serialBuzzer;
