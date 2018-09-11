@@ -47,25 +47,25 @@ namespace ofxCv {
             maxSize = cv::Size(side, side);
 		}
         classifier.detectMultiScale(graySmallMat,
-                                    objects,
+                                    gameControl,
                                     multiScaleFactor,
                                     minNeighbors,
                                     (cannyPruning ? CASCADE_DO_CANNY_PRUNING : 0) |
                                     (findBiggestObject ? CASCADE_FIND_BIGGEST_OBJECT | CASCADE_DO_ROUGH_SEARCH : 0),
                                     minSize,
                                     maxSize);
-		for(int i = 0; i < objects.size(); i++) {
-            cv::Rect& rect = objects[i];
+		for(int i = 0; i < gameControl.size(); i++) {
+            cv::Rect& rect = gameControl[i];
 			rect.width /= rescale, rect.height /= rescale;
 			rect.x /= rescale, rect.y /= rescale;
 		}
-		tracker.track(objects);
+		tracker.track(gameControl);
 	}
 	unsigned int ObjectFinder::size() const {
-		return objects.size();
+		return gameControl.size();
 	}
 	ofRectangle ObjectFinder::getObject(unsigned int i) const {
-		return toOf(objects[i]);
+		return toOf(gameControl[i]);
 	}
 	ofRectangle ObjectFinder::getObjectSmoothed(unsigned int i) const {
 		return toOf(tracker.getSmoothed(getLabel(i)));

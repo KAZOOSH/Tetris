@@ -29,7 +29,7 @@ public:
 	void erase();
 
 	virtual void onBodyAdded(shared_ptr<ofxBox2dBaseShape> body) {};
-	ofEvent<long> eraseEvent;
+	ofEvent<uint64_t> eraseEvent;
 protected:
 
 	vector<shared_ptr<RenderObject>> renderer;

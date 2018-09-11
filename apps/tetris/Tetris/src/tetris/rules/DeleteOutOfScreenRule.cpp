@@ -14,8 +14,8 @@ DeleteOutOfScreenRule::~DeleteOutOfScreenRule()
 
 void DeleteOutOfScreenRule::applyRule()
 {
-	auto objects = components->objects()->objects;
-	for (auto& obj:objects){
+	auto gameControl = components->gameControl()->gameControl;
+	for (auto& obj:gameControl){
 		bool toDel = false;
 		auto bodies = obj->getBody();
 
@@ -33,8 +33,8 @@ void DeleteOutOfScreenRule::onGameEvent(ofJson & event)
 	if (event["function"] != nullptr && event["function"] == "gamestate" && 
 		event["gamestate"] == "afterEnd") {
 		
-		auto objects = components->objects()->objects;
-		for (auto& obj : objects) {
+		auto gameControl = components->gameControl()->gameControl;
+		for (auto& obj : gameControl) {
 			bool toDel = false;
 
 			if (obj->getName() == "TetrisStone") {

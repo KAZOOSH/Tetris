@@ -20,7 +20,7 @@ GameComponents::GameComponents()
 	soundEffectPlayer = shared_ptr<SoundEffectPlayer>();*/
 }
 
-shared_ptr<GameObjectContainer> GameComponents::objects()
+shared_ptr<GameObjectContainer> GameComponents::gameControl()
 {
 	return gameObjectContainer;
 }

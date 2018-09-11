@@ -36,7 +36,7 @@ private:
 	int lastCountdownSwitch=0;
 
 	vector<bool> paddleReady;
-	shared_ptr<GameObjectContainer> objects;
+	shared_ptr<GameObjectContainer> gameControl;
 
 };
 

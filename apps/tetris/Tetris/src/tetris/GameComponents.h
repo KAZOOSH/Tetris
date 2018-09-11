@@ -10,7 +10,7 @@ class GameComponents
 {
 public:
 	GameComponents();
-	 shared_ptr<GameObjectContainer> objects();
+	 shared_ptr<GameObjectContainer> gameControl();
 	 shared_ptr<GameParameters> params();
 	 shared_ptr<GameEvents> events();
 	 shared_ptr<SoundEffectPlayer> soundPlayer();

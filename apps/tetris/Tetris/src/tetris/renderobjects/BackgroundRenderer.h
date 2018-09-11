@@ -18,7 +18,7 @@ public:
 private:
 	shared_ptr<GameComponents> components;
 	shared_ptr<GameParameters> settings;
-	shared_ptr<GameObjectContainer> objects;
+	shared_ptr<GameObjectContainer> gameControl;
 	ofShader shader;
 
 	ofFbo goalTex;

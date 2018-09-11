@@ -22,6 +22,7 @@
 #include "GameEventRule.h"
 #include "WindRule.h"
 #include "StoneControlRule.h"
+#include "StoneCreationRule.h"
 
 /// \brief creates all Game Elements
 class GameFactory
@@ -39,6 +40,7 @@ public:
     static shared_ptr<GameControlRule> makeGameControlRule(shared_ptr<GameComponents> components);
 	static shared_ptr<GameEventRule> makeGameEventRule(shared_ptr<GameComponents> components);
 	static shared_ptr<StoneControlRule> makeStoneControlRule(shared_ptr<GameComponents> components);
+	static shared_ptr<StoneCreationRule> makeStoneCreationRule(shared_ptr<GameComponents> components);
 	static shared_ptr<Rule> makeWorldEffect(shared_ptr<GameComponents> components, ofJson config);
 };
 

@@ -25,6 +25,11 @@ void GameEvents::notifyControlEvent(ofJson eventText)
 	ofNotifyEvent(controlEvent, eventText);
 }
 
+void GameEvents::notifyEraseEvent(uint64_t & eraseId)
+{
+	ofNotifyEvent(objectEraseEvent, eraseId);
+}
+
 void GameEvents::setRandomNextEffect(){
 	if (nextEffectList.size() == 0) {
 		for (int i = 0; i < settings->effects.size(); i++) {
@@ -58,4 +63,9 @@ void GameEvents::setNextEffect(string name)
 		nextCreationRule[0] = name;
 		nextCreationRule[1] = name;
 	}
+}
+
+void GameEvents::registerEraseEvent(ofEvent<uint64_t>& ev)
+{
+	ofAddListener(ev, this, &GameEvents::notifyEraseEvent);
 }

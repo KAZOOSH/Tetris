@@ -4,7 +4,7 @@
 
 GameControlRule::GameControlRule(shared_ptr<GameComponents> components):GameRule("GameControlRule",components)
 {
-	objects = components->objects();
+	gameControl = components->gameControl();
 	mainFont.setup(components->params()->settings["fonts"]["main"], 1.0, 1024, false, 8, 1.5f);
 	subFont.setup(components->params()->settings["fonts"]["sub"], 1.0, 1024, false, 8, 1.0);
 	mainFont.setSize(250);
@@ -73,10 +73,10 @@ void GameControlRule::applyRule()
 	} else if (gamestate == "game") {
 		int winningHeight = components->events()->winningHeight*components->params()->settings["height"].get<float>();
 		//cout << winningHeight << " -> " << gameObjects->paddles[0]->towerHeight << "   |    " << gameObjects->paddles[1]->towerHeight << endl;
-		if (objects->paddles[0]->towerHeight > winningHeight) {
+		if (gameControl->paddles[0]->towerHeight > winningHeight) {
 			changeGamestate("end1");
 		}
-		else if (objects->paddles[1]->towerHeight > winningHeight) {
+		else if (gameControl->paddles[1]->towerHeight > winningHeight) {
 			changeGamestate("end2");
 		}
 
@@ -89,9 +89,9 @@ void GameControlRule::applyRule()
 				components->params()->settings["gameplay"]["winningHeightMin"].get<float>(),true);
 		}
 		if (now - startState > components->params()->settings["gameplay"]["maxDuration"].get<int>()) {
-			if (objects->paddles[0]->towerHeight > objects->paddles[1]->towerHeight) {
+			if (gameControl->paddles[0]->towerHeight > gameControl->paddles[1]->towerHeight) {
 				changeGamestate("end1");
-			} else if (objects->paddles[1]->towerHeight > objects->paddles[0]->towerHeight) {
+			} else if (gameControl->paddles[1]->towerHeight > gameControl->paddles[0]->towerHeight) {
 				changeGamestate("end2");
 			}else changeGamestate("endEven");
 		}

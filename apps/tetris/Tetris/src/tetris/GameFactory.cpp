@@ -3,7 +3,7 @@
 shared_ptr<Paddle> GameFactory::makePaddle(shared_ptr<GameComponents> components, string name)
 {
     shared_ptr<Paddle> paddle = shared_ptr<Paddle>(new Paddle(name, components->params()));
-    paddle->createBody(components->objects()->physics.getWorld());
+    paddle->createBody(components->gameControl()->physics.getWorld());
     return paddle;
 }
 
@@ -12,7 +12,7 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameComponents> 
     shared_ptr<TetrisStone> stone = shared_ptr<TetrisStone>(new TetrisStone("TetrisStone", components->params(), activeEffect));
     
 	//test: changed unique pointer
-	stone->addToWorld(components->objects()->physics.world.get());
+	stone->addToWorld(components->gameControl()->physics.world.get());
     //create and add the renderer
     shared_ptr<TetrisStoneRenderer> renderer;
     ofColor base;
@@ -81,7 +81,7 @@ shared_ptr<GameObject> GameFactory::makeBasicStone(shared_ptr<GameComponents> co
     
     body->setPhysics(1.0, 0.3, 0.3);
     body->triangulatePoly();
-    body->create(components->objects()->physics.getWorld());
+    body->create(components->gameControl()->physics.getWorld());
     //add the body to the object
     basicStone->addBody(body);
     
@@ -110,6 +110,11 @@ shared_ptr<GameEventRule> GameFactory::makeGameEventRule(shared_ptr<GameComponen
 shared_ptr<StoneControlRule> GameFactory::makeStoneControlRule(shared_ptr<GameComponents> components)
 {
 	return shared_ptr<StoneControlRule>(new StoneControlRule(components));
+}
+
+shared_ptr<StoneCreationRule> GameFactory::makeStoneCreationRule(shared_ptr<GameComponents> components)
+{
+	return shared_ptr<StoneCreationRule>(new StoneCreationRule(components));
 }
 
 shared_ptr<Rule> GameFactory::makeWorldEffect(shared_ptr<GameComponents> components, ofJson config)

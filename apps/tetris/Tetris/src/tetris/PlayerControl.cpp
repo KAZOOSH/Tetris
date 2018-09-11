@@ -14,7 +14,7 @@ PlayerControl::~PlayerControl()
 void PlayerControl::setup(shared_ptr<GameComponents> components_)
 {
 	components = components_;
-	paddles = components->objects()->paddles;
+	paddles = components->gameControl()->paddles;
 
 	initSerial();
 }

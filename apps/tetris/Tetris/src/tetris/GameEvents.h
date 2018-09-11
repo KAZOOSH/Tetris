@@ -13,9 +13,11 @@ public:
 
 	ofEvent<ofJson> gameEvent;
 	ofEvent<ofJson> controlEvent;
+	ofEvent<uint64_t> objectEraseEvent;
 
 	void notifyGameEvent(ofJson eventText);
 	void notifyControlEvent(ofJson eventText);
+	void notifyEraseEvent(uint64_t& eraseId);
 
 	void setRandomNextEffect();
 	void setNextEffect(string name);
@@ -25,6 +27,7 @@ public:
 
 	float winningHeight = 0.9;
 	
+	void registerEraseEvent(ofEvent<uint64_t>& ev);
 
 private:
 	shared_ptr<GameParameters> settings;

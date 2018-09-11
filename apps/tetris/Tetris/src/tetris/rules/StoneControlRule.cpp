@@ -14,8 +14,8 @@ StoneControlRule::~StoneControlRule()
 
 void StoneControlRule::enableGravity()
 {
-	auto objects = components->objects()->objects;
-	for (auto& obj : objects) {
+	auto gameControl = components->gameControl()->gameControl;
+	for (auto& obj : gameControl) {
 		if (obj->getName() == "TetrisStone") {
 			shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(obj);
 			if (!stone->collided) {
@@ -44,14 +44,14 @@ void StoneControlRule::setTetrisStoneRelativeToPaddlePosition()
 	int towerHeightPaddleRight = 0;
 
 	// get Paddles
-	shared_ptr<Paddle> paddleLeft = components->objects()->getPaddle(Paddle::paddleNameLeft);
-	shared_ptr<Paddle> paddleRight = components->objects()->getPaddle(Paddle::paddleNameRight);
+	shared_ptr<Paddle> paddleLeft = components->gameControl()->getPaddle(Paddle::paddleNameLeft);
+	shared_ptr<Paddle> paddleRight = components->gameControl()->getPaddle(Paddle::paddleNameRight);
 
 	// iterate over tetrisstones
-	for (size_t i = components->objects()->objects.size() - 1; i > 0; --i) {
-		if (components->objects()->objects[i]->getName() == "TetrisStone") {
-			if (components->objects()->objects[i]) {
-				shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(components->objects()->objects[i]);
+	for (size_t i = components->gameControl()->gameControl.size() - 1; i > 0; --i) {
+		if (components->gameControl()->gameControl[i]->getName() == "TetrisStone") {
+			if (components->gameControl()->gameControl[i]) {
+				shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(components->gameControl()->gameControl[i]);
 
 				int pId = stone->getPlayerId();
 				int y = 10000;
@@ -88,9 +88,9 @@ float StoneControlRule::getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<
 	float minimumDistance = 100000;
 	float distance = 0;
 	// check all stones and set sistance if its
-	for (size_t i = components->objects()->objects.size() - 1; i > 0; --i) {
-		if (components->objects()->objects[i]->getName() == "TetrisStone" && components->objects()->objects[i]->getId() != stone->getId()) {
-			shared_ptr<TetrisStone> otherStone = std::static_pointer_cast<TetrisStone>(components->objects()->objects[i]);
+	for (size_t i = components->gameControl()->gameControl.size() - 1; i > 0; --i) {
+		if (components->gameControl()->gameControl[i]->getName() == "TetrisStone" && components->gameControl()->gameControl[i]->getId() != stone->getId()) {
+			shared_ptr<TetrisStone> otherStone = std::static_pointer_cast<TetrisStone>(components->gameControl()->gameControl[i]);
 			if (otherStone->getBody().size()>0 && otherStone->getIsPartOfTower()) {
 				distance = (stone->getBody()[0]->getPosition() - otherStone->getBody()[0]->getPosition()).length();
 				if (distance < minimumDistance) {

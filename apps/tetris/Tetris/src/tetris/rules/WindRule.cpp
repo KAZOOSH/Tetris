@@ -11,8 +11,8 @@ void WindRule::applyRule()
 {
 	float now = ofGetElapsedTimef();
 	int i = 0;
-	auto objects = components->objects()->objects;
-	for (auto& obj : objects) {
+	auto gameControl = components->gameControl()->gameControl;
+	for (auto& obj : gameControl) {
 			auto bodies = obj->getBody();
 			if (obj->getName() == "TetrisStone") {
 				float v = ofSignedNoise(now*0.4 +i*112) * 20;

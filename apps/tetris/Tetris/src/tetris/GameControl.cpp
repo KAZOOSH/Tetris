@@ -1,9 +1,10 @@
 #include "GameControl.h"
 
 
-GameControl::GameControl(shared_ptr<GameObjectContainer> objects)
+GameControl::GameControl(shared_ptr<GameObjectContainer> gameControl, shared_ptr<GameEvents> events)
 {
-	objectContainer = objects;
+	objectContainer = gameControl;
+	ofAddListener(events->objectEraseEvent, this, &GameControl::onEraseEvent);
 }
 
 GameControl::~GameControl()
@@ -33,7 +34,7 @@ void GameControl::update()
 
 void GameControl::render()
 {
-	for (auto& obj : objectContainer->objects) {
+	for (auto& obj : objectContainer->gameControl) {
 		obj->render();
 	}
 
@@ -42,19 +43,14 @@ void GameControl::render()
 	}
 }
 
-void GameControl::onEraseEvent(long & id)
+void GameControl::onEraseEvent(uint64_t & id)
 {
 	toDeleteIds.push_back(id);
 }
 
-void GameControl::registerEraseEvent(ofEvent<long>& ev)
-{
-	ofAddListener(ev, this, &GameControl::onEraseEvent);
-}
-
 void GameControl::reloadRenderer()
 {
-	for (auto& obj : objectContainer->objects) {
+	for (auto& obj : objectContainer->gameControl) {
 		obj->reloadRenderer();
 	}
 }
@@ -63,16 +59,16 @@ void GameControl::removeErasedElements()
 {
 	for (auto& id : toDeleteIds) {
 		
-		auto position = find_if(objectContainer->objects.begin(), objectContainer->objects.end(),
+		auto position = find_if(objectContainer->gameControl.begin(), objectContainer->gameControl.end(),
 			[&id](const shared_ptr<GameObject> elem) { return elem->getId() == id; });
 		
-		if (position != objectContainer->objects.end()) {
+		if (position != objectContainer->gameControl.end()) {
 			/*for (auto& r : objectContainer->rules) {
 				r->removeObject(id);
 			}*/
 			
 			//cout << "erase remove " << id << "  " << toDeleteIds.size() << endl;
-			objectContainer->objects.erase(position);
+			objectContainer->gameControl.erase(position);
 		}
 	}
 	toDeleteIds.clear();

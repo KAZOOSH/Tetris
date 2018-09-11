@@ -6,7 +6,7 @@ BackgroundRenderer::BackgroundRenderer(shared_ptr<GameComponents> components_):R
 {
 	components = components_;
 	settings = components->params();
-	objects = components->objects();
+	gameControl = components->gameControl();
 	shader.load("shaders/bg");
 
 	goalTex.allocate(settings->settings["width"].get<int>() / 2, 10);
@@ -77,8 +77,8 @@ void BackgroundRenderer::render()
 	ofSetColor(0);
 	int h = settings->settings["height"].get<int>();
 	int hBase = (1.0 - components->events()->winningHeight)*h;
-	int y1 = hBase - (h - objects->paddles[0]->getBody()[0]->getPosition().y);
-	int y2 = hBase - (h - objects->paddles[1]->getBody()[0]->getPosition().y);
+	int y1 = hBase - (h - gameControl->paddles[0]->getBody()[0]->getPosition().y);
+	int y2 = hBase - (h - gameControl->paddles[1]->getBody()[0]->getPosition().y);
 	ofDrawRectangle(0, y1, settings->settings["width"].get<int>() / 2, h-y1);
 	ofDrawRectangle(settings->settings["width"].get<int>() / 2, y2, settings->settings["width"].get<int>() / 2, h-y2);
 	
@@ -90,19 +90,19 @@ void BackgroundRenderer::render()
 	ofPopStyle();
 
 
-	int hGoal1 = objects->paddles[0]->getBody()[0]->getPosition().y- objects->paddles[0]->towerHeight;
-	int hGoal2 = objects->paddles[1]->getBody()[0]->getPosition().y - objects->paddles[1]->towerHeight;
+	int hGoal1 = gameControl->paddles[0]->getBody()[0]->getPosition().y- gameControl->paddles[0]->towerHeight;
+	int hGoal2 = gameControl->paddles[1]->getBody()[0]->getPosition().y - gameControl->paddles[1]->towerHeight;
 	
 	ofSetColor(255, 80);
 	if (isCountDown) {
-		objects->paddles[1]->towerHeight > objects->paddles[0]->towerHeight ? ofSetColor(255,0,0, 80) : ofSetColor(0, 255, 0, 80);
-		paddleTex.draw(objects->paddles[0]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal1);
-		objects->paddles[0]->towerHeight > objects->paddles[1]->towerHeight ? ofSetColor(255, 0, 0, 80) : ofSetColor(0, 255, 0, 80);
-		paddleTex.draw(objects->paddles[1]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal2);
+		gameControl->paddles[1]->towerHeight > gameControl->paddles[0]->towerHeight ? ofSetColor(255,0,0, 80) : ofSetColor(0, 255, 0, 80);
+		paddleTex.draw(gameControl->paddles[0]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal1);
+		gameControl->paddles[0]->towerHeight > gameControl->paddles[1]->towerHeight ? ofSetColor(255, 0, 0, 80) : ofSetColor(0, 255, 0, 80);
+		paddleTex.draw(gameControl->paddles[1]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal2);
 
 	} else {
-		paddleTex.draw(objects->paddles[0]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal1);
-		paddleTex.draw(objects->paddles[1]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal2);
+		paddleTex.draw(gameControl->paddles[0]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal1);
+		paddleTex.draw(gameControl->paddles[1]->getBody()[0]->getPosition().x - settings->settings["paddle"]["width"].get<int>()*0.5, hGoal2);
 	}
 	
 	//ofDrawRectangle(0, hGoal1, params->params["width"].get<int>() / 2, 5);
