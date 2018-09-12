@@ -10,7 +10,7 @@ public:
 	~GameObject();
 
 	string getName();
-	long getId();
+	uint64_t getId();
 
 	//virtual void applyRules();
 	virtual void render();
@@ -36,6 +36,6 @@ protected:
 	vector<shared_ptr<ofxBox2dBaseShape>> body;
 
 	string name ="";
-	long id;
+	uint64_t id;
 };
 

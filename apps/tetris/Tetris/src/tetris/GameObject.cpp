@@ -18,7 +18,7 @@ string GameObject::getName()
 	return name;
 }
 
-long GameObject::getId()
+uint64_t GameObject::getId()
 {
 	return id;
 }
