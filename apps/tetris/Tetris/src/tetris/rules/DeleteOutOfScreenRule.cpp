@@ -2,9 +2,9 @@
 #include "TetrisStone.h"
 
 
-DeleteOutOfScreenRule::DeleteOutOfScreenRule(GameParameters* params):Rule("DeleteOutOfScreenRule",params)
+DeleteOutOfScreenRule::DeleteOutOfScreenRule(shared_ptr<GameComponents> components):GameRule("DeleteOutOfScreenRule",components)
 {
-	ofAddListener(params->gameEvent, this, &DeleteOutOfScreenRule::onGameEvent);
+	ofAddListener(components->events()->gameEvent, this, &DeleteOutOfScreenRule::onGameEvent);
 }
 
 
@@ -14,13 +14,13 @@ DeleteOutOfScreenRule::~DeleteOutOfScreenRule()
 
 void DeleteOutOfScreenRule::applyRule()
 {
-	for (auto& obj:objects){
+	auto gameControl = components->gameControl()->gameControl;
+	for (auto& obj:gameControl){
 		bool toDel = false;
 		auto bodies = obj->getBody();
 
 		for (auto& body : bodies) {
-			if (shouldRemoveOffScreen(body)){
-				//cout << "del body" << endl;
+			if (obj->getName() == "TetrisStone" && shouldRemoveOffScreen(body)){
 				toDel = true;
 			}
 		}
@@ -33,7 +33,8 @@ void DeleteOutOfScreenRule::onGameEvent(ofJson & event)
 	if (event["function"] != nullptr && event["function"] == "gamestate" && 
 		event["gamestate"] == "afterEnd") {
 		
-		for (auto& obj : objects) {
+		auto gameControl = components->gameControl()->gameControl;
+		for (auto& obj : gameControl) {
 			bool toDel = false;
 
 			if (obj->getName() == "TetrisStone") {
@@ -45,5 +46,5 @@ void DeleteOutOfScreenRule::onGameEvent(ofJson & event)
 
 bool DeleteOutOfScreenRule::shouldRemoveOffScreen(shared_ptr<ofxBox2dBaseShape> shape)
 {
-	return !ofRectangle(0, 0, params->params["width"], params->params["height"]).inside(shape.get()->getPosition());
+	return !ofRectangle(0, 0, components->params()->settings["width"], components->params()->settings["height"]).inside(shape.get()->getPosition());
 }

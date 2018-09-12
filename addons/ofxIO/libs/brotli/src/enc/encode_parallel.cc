@@ -46,7 +46,7 @@ static void RecomputeDistancePrefixes(Command* cmds, size_t num_commands,
 }
 
 /* Returns 1 on success, otherwise 0. */
-int WriteMetaBlockParallel(const BrotliEncoderParams* params,
+int WriteMetaBlockParallel(const BrotliEncoderParams* settings,
                            const uint32_t input_size,
                            const uint8_t* input_buffer,
                            const uint32_t prefix_size,
@@ -107,14 +107,14 @@ int WriteMetaBlockParallel(const BrotliEncoderParams* params,
   hashers = BROTLI_ALLOC(m, Hashers, 1);
   if (BROTLI_IS_OOM(m)) goto oom;
   InitHashers(hashers);
-  HashersSetup(m, hashers, ChooseHasher(params));
+  HashersSetup(m, hashers, ChooseHasher(settings));
   if (BROTLI_IS_OOM(m)) goto oom;
 
   /* Compute backward references. */
   commands = BROTLI_ALLOC(m, Command, ((input_size + 1) >> 1));
   if (BROTLI_IS_OOM(m)) goto oom;
   BrotliCreateBackwardReferences(m, input_size, input_pos,
-      TO_BROTLI_BOOL(is_last), input, mask, params,
+      TO_BROTLI_BOOL(is_last), input, mask, settings,
       hashers, dist_cache, &last_insert_len, commands, &num_commands,
       &num_literals);
   if (BROTLI_IS_OOM(m)) goto oom;
@@ -129,19 +129,19 @@ int WriteMetaBlockParallel(const BrotliEncoderParams* params,
   /* Build the meta-block. */
   MetaBlockSplit mb;
   InitMetaBlockSplit(&mb);
-  num_direct_distance_codes = params->mode == BROTLI_MODE_FONT ? 12 : 0;
-  distance_postfix_bits = params->mode == BROTLI_MODE_FONT ? 1 : 0;
+  num_direct_distance_codes = settings->mode == BROTLI_MODE_FONT ? 12 : 0;
+  distance_postfix_bits = settings->mode == BROTLI_MODE_FONT ? 1 : 0;
   literal_context_mode = use_utf8_mode ? CONTEXT_UTF8 : CONTEXT_SIGNED;
   RecomputeDistancePrefixes(commands, num_commands,
                             num_direct_distance_codes,
                             distance_postfix_bits);
-  if (params->quality < MIN_QUALITY_FOR_HQ_BLOCK_SPLITTING) {
+  if (settings->quality < MIN_QUALITY_FOR_HQ_BLOCK_SPLITTING) {
     BrotliBuildMetaBlockGreedy(m, input, input_pos, mask,
                                commands, num_commands,
                                &mb);
     if (BROTLI_IS_OOM(m)) goto oom;
   } else {
-    BrotliBuildMetaBlock(m, input, input_pos, mask, params,
+    BrotliBuildMetaBlock(m, input, input_pos, mask, settings,
                          prev_byte, prev_byte2,
                          commands, num_commands,
                          literal_context_mode,
@@ -155,14 +155,14 @@ int WriteMetaBlockParallel(const BrotliEncoderParams* params,
   first_byte = 0;
   first_byte_bits = 0;
   if (is_first) {
-    if (params->lgwin == 16) {
+    if (settings->lgwin == 16) {
       first_byte = 0;
       first_byte_bits = 1;
-    } else if (params->lgwin == 17) {
+    } else if (settings->lgwin == 17) {
       first_byte = 1;
       first_byte_bits = 7;
     } else {
-      first_byte = static_cast<uint8_t>(((params->lgwin - 17) << 1) | 1);
+      first_byte = static_cast<uint8_t>(((settings->lgwin - 17) << 1) | 1);
       first_byte_bits = 4;
     }
   }
@@ -234,16 +234,16 @@ int BrotliCompressBufferParallel(BrotliParams compressor_params,
     return 1;
   }
 
-  BrotliEncoderParams params;
-  params.mode = (BrotliEncoderMode)compressor_params.mode;
-  params.quality = compressor_params.quality;
-  params.lgwin = compressor_params.lgwin;
-  params.lgblock = compressor_params.lgblock;
+  BrotliEncoderParams settings;
+  settings.mode = (BrotliEncoderMode)compressor_params.mode;
+  settings.quality = compressor_params.quality;
+  settings.lgwin = compressor_params.lgwin;
+  settings.lgblock = compressor_params.lgblock;
 
-  SanitizeParams(&params);
-  params.lgblock = ComputeLgBlock(&params);
-  size_t max_input_block_size = 1 << params.lgblock;
-  size_t max_prefix_size = 1u << params.lgwin;
+  SanitizeParams(&settings);
+  settings.lgblock = ComputeLgBlock(&settings);
+  size_t max_input_block_size = 1 << settings.lgblock;
+  size_t max_prefix_size = 1u << settings.lgwin;
 
   std::vector<std::vector<uint8_t> > compressed_pieces;
 
@@ -255,7 +255,7 @@ int BrotliCompressBufferParallel(BrotliParams compressor_params,
         static_cast<uint32_t>(BROTLI_MIN(size_t, max_prefix_size, pos));
     size_t out_size = input_block_size + (input_block_size >> 3) + 1024;
     std::vector<uint8_t> out(out_size);
-    if (!WriteMetaBlockParallel(&params,
+    if (!WriteMetaBlockParallel(&settings,
                                 input_block_size,
                                 &input_buffer[pos],
                                 prefix_size,

@@ -128,7 +128,7 @@ void BrotliSplitBlock(MemoryManager* m,
                       const uint8_t* data,
                       const size_t pos,
                       const size_t mask,
-                      const BrotliEncoderParams* params,
+                      const BrotliEncoderParams* settings,
                       BlockSplit* literal_split,
                       BlockSplit* insert_and_copy_split,
                       BlockSplit* dist_split) {
@@ -143,7 +143,7 @@ void BrotliSplitBlock(MemoryManager* m,
     SplitByteVectorLiteral(
         m, literals, literals_count,
         kSymbolsPerLiteralHistogram, kMaxLiteralHistograms,
-        kLiteralStrideLength, kLiteralBlockSwitchCost, params,
+        kLiteralStrideLength, kLiteralBlockSwitchCost, settings,
         literal_split);
     if (BROTLI_IS_OOM(m)) return;
     BROTLI_FREE(m, literals);
@@ -161,7 +161,7 @@ void BrotliSplitBlock(MemoryManager* m,
     SplitByteVectorCommand(
         m, insert_and_copy_codes, num_commands,
         kSymbolsPerCommandHistogram, kMaxCommandHistograms,
-        kCommandStrideLength, kCommandBlockSwitchCost, params,
+        kCommandStrideLength, kCommandBlockSwitchCost, settings,
         insert_and_copy_split);
     if (BROTLI_IS_OOM(m)) return;
     /* TODO: reuse for distances? */
@@ -184,7 +184,7 @@ void BrotliSplitBlock(MemoryManager* m,
     SplitByteVectorDistance(
         m, distance_prefixes, j,
         kSymbolsPerDistanceHistogram, kMaxCommandHistograms,
-        kCommandStrideLength, kDistanceBlockSwitchCost, params,
+        kCommandStrideLength, kDistanceBlockSwitchCost, settings,
         dist_split);
     if (BROTLI_IS_OOM(m)) return;
     BROTLI_FREE(m, distance_prefixes);

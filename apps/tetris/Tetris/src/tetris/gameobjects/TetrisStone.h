@@ -7,7 +7,7 @@
 class TetrisStone : public GameObject
 {
 public:
-    TetrisStone(string name, GameParameters* params, string activeEffect);
+    TetrisStone(string name,const shared_ptr<GameParameters> params, string activeEffect);
     ~TetrisStone();
     void addToWorld(b2World* world);
     void setPosition(ofVec2f position);
@@ -42,7 +42,7 @@ private:
     float distanceToPaddle=10000;
     float positionChangeRelativeToPaddleSmoothed = 1;
     float positionChangeRelativeToPaddle;
-    GameParameters* params;
+	shared_ptr<GameParameters> params;
     bool isBouncy = false;
 	bool isHeavy = false;
 	bool isLarge = false;

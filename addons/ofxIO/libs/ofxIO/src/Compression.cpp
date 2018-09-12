@@ -345,13 +345,13 @@ std::size_t Compression::compress(const ByteBuffer& uncompressedBuffer,
         }
         case BR:
         {
-            brotli::BrotliParams params;
+            brotli::BrotliParams settings;
 
             std::size_t encodedSize = BrotliEncoderMaxCompressedSize(uncompressedBuffer.size());
 
             compressedBuffer.resize(encodedSize);
 
-            int result = brotli::BrotliCompressBuffer(params,
+            int result = brotli::BrotliCompressBuffer(settings,
                                                       uncompressedBuffer.size(),
                                                       uncompressedBuffer.getPtr(),
                                                       &encodedSize,

@@ -54,9 +54,9 @@ static BROTLI_INLINE void RingBufferInit(RingBuffer* rb) {
 }
 
 static BROTLI_INLINE void RingBufferSetup(
-    const BrotliEncoderParams* params, RingBuffer* rb) {
-  int window_bits = ComputeRbBits(params);
-  int tail_bits = params->lgblock;
+    const BrotliEncoderParams* settings, RingBuffer* rb) {
+  int window_bits = ComputeRbBits(settings);
+  int tail_bits = settings->lgblock;
   *(uint32_t*)&rb->size_ = 1u << window_bits;
   *(uint32_t*)&rb->mask_ = (1u << window_bits) - 1;
   *(uint32_t*)&rb->tail_size_ = 1u << tail_bits;

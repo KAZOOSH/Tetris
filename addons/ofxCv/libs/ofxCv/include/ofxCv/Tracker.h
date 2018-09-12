@@ -133,7 +133,7 @@ namespace ofxCv {
 		virtual ~Tracker(){};
 		void setPersistence(unsigned int persistence);
 		void setMaximumDistance(float maximumDistance);
-		virtual const std::vector<unsigned int>& track(const std::vector<T>& objects);
+		virtual const std::vector<unsigned int>& track(const std::vector<T>& gameControl);
 		
 		// organized in the order received by track()
 		const std::vector<unsigned int>& getCurrentLabels() const;
@@ -163,9 +163,9 @@ namespace ofxCv {
 	}
 	
 	template <class T>
-	const std::vector<unsigned int>& Tracker<T>::track(const std::vector<T>& objects) {
+	const std::vector<unsigned int>& Tracker<T>::track(const std::vector<T>& gameControl) {
 		previous = current;
-		int n = objects.size();
+		int n = gameControl.size();
 		int m = previous.size();
 		
 		// build NxM distance matrix
@@ -174,7 +174,7 @@ namespace ofxCv {
 		std::vector<MatchDistancePair> all;
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < m; j++) {
-				float curDistance = trackingDistance(objects[i], previous[j].object);
+				float curDistance = trackingDistance(gameControl[i], previous[j].object);
 				if(curDistance < maximumDistance) {
 					all.push_back(MatchDistancePair(MatchPair(i, j), curDistance));
 				}
@@ -200,7 +200,7 @@ namespace ofxCv {
 				matchedObjects[i] = true;
 				matchedPrevious[j] = true;
 				int index = current.size();
-				current.push_back(TrackedObject<T>(objects[i], previous[j], index));
+				current.push_back(TrackedObject<T>(gameControl[i], previous[j], index));
 				current.back().timeStep(true);
 				currentLabels[i] = current.back().getLabel();
 			}
@@ -212,7 +212,7 @@ namespace ofxCv {
 			if(!matchedObjects[i]) {
 				int curLabel = getNewLabel();
 				int index = current.size();
-				current.push_back(TrackedObject<T>(objects[i], curLabel, index));
+				current.push_back(TrackedObject<T>(gameControl[i], curLabel, index));
 				current.back().timeStep(true);
 				currentLabels[i] = curLabel;
 				newLabels.push_back(curLabel);
@@ -320,8 +320,8 @@ namespace ofxCv {
 		float getSmoothingRate() const {
 			return smoothingRate;
 		}
-		const std::vector<unsigned int>& track(const std::vector<cv::Rect>& objects) {
-			const std::vector<unsigned int>& labels = Tracker<cv::Rect>::track(objects);
+		const std::vector<unsigned int>& track(const std::vector<cv::Rect>& gameControl) {
+			const std::vector<unsigned int>& labels = Tracker<cv::Rect>::track(gameControl);
 			// add new objects, update old objects
 			for(int i = 0; i < labels.size(); i++) {
 				unsigned int label = labels[i];
@@ -403,8 +403,8 @@ namespace ofxCv {
 		std::vector<unsigned int> labels;
 		std::vector<F> followers;
 	public:
-		const std::vector<unsigned int>& track(const std::vector<T>& objects) {
-			Tracker<T>::track(objects);
+		const std::vector<unsigned int>& track(const std::vector<T>& gameControl) {
+			Tracker<T>::track(gameControl);
 			// kill missing, update old
 			for(int i = 0; i < labels.size(); i++) {
 				unsigned int curLabel = labels[i];

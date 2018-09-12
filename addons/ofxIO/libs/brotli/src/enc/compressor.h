@@ -61,7 +61,7 @@ struct BrotliParams {
 /* An instance can not be reused for multiple brotli streams. */
 class BrotliCompressor {
  public:
-  explicit BrotliCompressor(BrotliParams params);
+  explicit BrotliCompressor(BrotliParams settings);
   ~BrotliCompressor(void);
 
   /* The maximum input size that can be processed at once. */
@@ -140,7 +140,7 @@ class BrotliCompressor {
 /* Compresses the data in |input_buffer| into |encoded_buffer|, and sets
    |*encoded_size| to the compressed length.
    Returns 0 if there was an error and 1 otherwise. */
-int BrotliCompressBuffer(BrotliParams params,
+int BrotliCompressBuffer(BrotliParams settings,
                          size_t input_size,
                          const uint8_t* input_buffer,
                          size_t* encoded_size,
@@ -148,12 +148,12 @@ int BrotliCompressBuffer(BrotliParams params,
 
 /* Same as above, but uses the specified input and output classes instead
    of reading from and writing to pre-allocated memory buffers. */
-int BrotliCompress(BrotliParams params, BrotliIn* in, BrotliOut* out);
+int BrotliCompress(BrotliParams settings, BrotliIn* in, BrotliOut* out);
 
 /* Before compressing the data, sets a custom LZ77 dictionary with
    BrotliCompressor::BrotliSetCustomDictionary. */
 int BrotliCompressWithCustomDictionary(size_t dictsize, const uint8_t* dict,
-                                       BrotliParams params,
+                                       BrotliParams settings,
                                        BrotliIn* in, BrotliOut* out);
 
 }  /* namespace brotli */

@@ -1,9 +1,9 @@
 #include "Paddle.h"
 
 
-Paddle::Paddle(string name, GameParameters* params_):GameObject(name)
+Paddle::Paddle(string name, shared_ptr<GameParameters> params_):GameObject(name)
 {
-    params = params_;
+    settings = params_;
     isPaddleLeft = name == paddleNameLeft;
     isPaddleRight = name == paddleNameRight;
 }
@@ -17,21 +17,21 @@ void Paddle::createBody(b2World* world){
     int y = 1;
     
     if(isPaddleLeft){
-        x = params->params["paddle"]["leftStartPosition"]["x"].get<int>();
-        y = params->params["paddle"]["leftStartPosition"]["y"].get<int>();
+        x = settings->settings["paddle"]["leftStartPosition"]["x"].get<int>();
+        y = settings->settings["paddle"]["leftStartPosition"]["y"].get<int>();
     } else if(isPaddleRight){
-        x = params->params["paddle"]["rightStartPosition"]["x"].get<int>();
-        y = params->params["paddle"]["rightStartPosition"]["y"].get<int>();
+        x = settings->settings["paddle"]["rightStartPosition"]["x"].get<int>();
+        y = settings->settings["paddle"]["rightStartPosition"]["y"].get<int>();
     }
     
     // load from params and overwrite defaults
-    paddleWidth = params->params["paddle"]["width"].get<int>();
-    paddleHeight = params->params["paddle"]["height"].get<int>();
-    anchorMargin = params->params["paddle"]["anchorMargin"].get<int>();
+    paddleWidth = settings->settings["paddle"]["width"].get<int>();
+    paddleHeight = settings->settings["paddle"]["height"].get<int>();
+    anchorMargin = settings->settings["paddle"]["anchorMargin"].get<int>();
     
-    frequencyHz = params->params["paddle"]["frequency"].get<float>();
-    damping = params->params["paddle"]["damping"].get<float>();
-    density = params->params["paddle"]["density"].get<float>();
+    frequencyHz = settings->settings["paddle"]["frequency"].get<float>();
+    damping = settings->settings["paddle"]["damping"].get<float>();
+    density = settings->settings["paddle"]["density"].get<float>();
     
     body = shared_ptr<ofxBox2dRect>(new ofxBox2dRect);
     body->enableGravity(false);

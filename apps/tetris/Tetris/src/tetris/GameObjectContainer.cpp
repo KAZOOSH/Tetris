@@ -2,9 +2,8 @@
 
 
 
-GameObjectContainer::GameObjectContainer(GameParameters* params_)
+GameObjectContainer::GameObjectContainer()
 {
-	params = params_;
 }
 
 
@@ -12,24 +11,24 @@ GameObjectContainer::~GameObjectContainer()
 {
 }
 
-void GameObjectContainer::initPhysics()
+void GameObjectContainer::initPhysics(float gravity)
 {
     physics.init();
-    physics.setGravity(0, params->params["physics"]["gravity"].get<float>());
+	physics.setGravity(0, gravity);
     //physics.createGround();
     physics.setFPS(60.0);
 }
 
 void GameObjectContainer::addGameObject(shared_ptr<GameObject> object)
 {
-    gameObjects.push_back(object);
+    gameControl.push_back(object);
 	
 }
 
 void GameObjectContainer::addPaddle(shared_ptr<Paddle> object)
 {
     paddles.push_back(object);
-    gameObjects.push_back(object);
+    gameControl.push_back(object);
     
 }
 shared_ptr<Paddle> GameObjectContainer::getPaddle(string name)

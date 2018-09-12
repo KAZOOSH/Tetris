@@ -12,11 +12,11 @@
 static BROTLI_NOINLINE void FN(CreateBackwardReferences)(
     MemoryManager* m, size_t num_bytes, size_t position, BROTLI_BOOL is_last,
     const uint8_t* ringbuffer, size_t ringbuffer_mask,
-    const BrotliEncoderParams* params, Hasher* hasher, int* dist_cache,
+    const BrotliEncoderParams* settings, Hasher* hasher, int* dist_cache,
     size_t* last_insert_len, Command* commands, size_t* num_commands,
     size_t* num_literals) {
   /* Set maximum distance, see section 9.1. of the spec. */
-  const size_t max_backward_limit = MaxBackwardLimit(params->lgwin);
+  const size_t max_backward_limit = MaxBackwardLimit(settings->lgwin);
 
   const Command* const orig_commands = commands;
   size_t insert_length = *last_insert_len;
@@ -26,13 +26,13 @@ static BROTLI_NOINLINE void FN(CreateBackwardReferences)(
 
   /* For speed up heuristics for random data. */
   const size_t random_heuristics_window_size =
-      LiteralSpreeLengthForSparseSearch(params);
+      LiteralSpreeLengthForSparseSearch(settings);
   size_t apply_random_heuristics = position + random_heuristics_window_size;
 
   /* Minimum score to accept a backward reference. */
   const score_t kMinScore = BROTLI_SCORE_BASE + 400;
 
-  FN(Init)(m, hasher, ringbuffer, params, position, num_bytes, is_last);
+  FN(Init)(m, hasher, ringbuffer, settings, position, num_bytes, is_last);
   if (BROTLI_IS_OOM(m)) return;
   FN(StitchToPreviousBlock)(hasher, num_bytes, position,
                             ringbuffer, ringbuffer_mask);
@@ -54,7 +54,7 @@ static BROTLI_NOINLINE void FN(CreateBackwardReferences)(
         const score_t cost_diff_lazy = 700;
         BROTLI_BOOL is_match_found;
         HasherSearchResult sr2;
-        sr2.len = params->quality < MIN_QUALITY_FOR_EXTENSIVE_REFERENCE_SEARCH ?
+        sr2.len = settings->quality < MIN_QUALITY_FOR_EXTENSIVE_REFERENCE_SEARCH ?
             BROTLI_MIN(size_t, sr.len - 1, max_length) : 0;
         sr2.len_x_code = 0;
         sr2.distance = 0;

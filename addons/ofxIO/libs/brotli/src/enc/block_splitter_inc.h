@@ -363,7 +363,7 @@ static void FN(SplitByteVector)(MemoryManager* m,
                                 const size_t max_histograms,
                                 const size_t sampling_stride_length,
                                 const double block_switch_cost,
-                                const BrotliEncoderParams* params,
+                                const BrotliEncoderParams* settings,
                                 BlockSplit* split) {
   const size_t data_size = FN(HistogramDataSize)();
   size_t num_histograms = length / literals_per_histogram + 1;
@@ -404,7 +404,7 @@ static void FN(SplitByteVector)(MemoryManager* m,
     double* cost = BROTLI_ALLOC(m, double, num_histograms);
     uint8_t* switch_signal = BROTLI_ALLOC(m, uint8_t, length * bitmaplen);
     uint16_t* new_id = BROTLI_ALLOC(m, uint16_t, num_histograms);
-    const size_t iters = params->quality < HQ_ZOPFLIFICATION_QUALITY ? 3 : 10;
+    const size_t iters = settings->quality < HQ_ZOPFLIFICATION_QUALITY ? 3 : 10;
     size_t i;
     if (BROTLI_IS_OOM(m)) return;
     for (i = 0; i < iters; ++i) {

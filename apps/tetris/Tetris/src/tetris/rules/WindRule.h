@@ -1,11 +1,11 @@
 #pragma once
-#include "Rule.h"
+#include "GameRule.h"
 #include "TetrisStone.h"
 class WindRule :
-	public Rule
+	public GameRule
 {
 public:
-	WindRule(GameParameters* params,int runtime);
+	WindRule(shared_ptr<GameComponents> components,int runtime);
 
 	void applyRule();
 };

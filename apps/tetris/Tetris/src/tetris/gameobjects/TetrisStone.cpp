@@ -1,16 +1,16 @@
 #include "TetrisStone.h"
 
 
-TetrisStone::TetrisStone(string name, GameParameters* params_, string activeEffect):GameObject(name)
+TetrisStone::TetrisStone(string name, shared_ptr<GameParameters> params_, string activeEffect):GameObject(name)
 {
     //isTetrisStone= true;
     //collided = false;
-    params = params_;
+	params = params_;
     createStoneVertecies();
     body = shared_ptr<ofxBox2dPolygon>(new ofxBox2dPolygon);
     
-	scale = params->params["tetrisStone"]["scale"].get<int>();
-    float density = params->params["tetrisStone"]["density"].get<float>();
+	scale = params->settings["tetrisStone"]["scale"].get<int>();
+    float density = params->settings["tetrisStone"]["density"].get<float>();
     
     auto vertsAndType = getRandomVertecies();
     vertecies = vertsAndType.second;
@@ -68,8 +68,8 @@ void TetrisStone::updateRelativeToPaddlePosition(ofVec2f paddlePosition, float d
         positionChangeRelativeToPaddleSmoothed = 0.95 * positionChangeRelativeToPaddle + 0.05 * positionChangeRelativeToPaddleSmoothed;
         
         if(positionChangeRelativeToPaddleSmoothed < 10 && positionChangeRelativeToPaddleSmoothed > -10 && 
-			distanceToPaddleOrOtherTetrisStone < params->params["tetrisStone"]["scale"].get<int>()*8.5 ){
-			if (!isPartOfTower)params->soundPlayer.play("partOfTower", playerId);
+			distanceToPaddleOrOtherTetrisStone < params->settings["tetrisStone"]["scale"].get<int>()*8.5 ){
+			//if (!isPartOfTower)params.soundPlayer.play("partOfTower", playerId);
             isPartOfTower = true;
 			
         } else {
@@ -141,7 +141,7 @@ void TetrisStone::rotateRight() {
     if(!collided){
         //        body->setFixedRotation(true);
         body->setRotation(body->getRotation() + 90);
-		params->soundPlayer.play("rotate",playerId);
+		//params.soundPlayer.play("rotate",playerId);
         //        body->body->SetTransform(b2Vec2(0, 0), DEG_TO_RAD * 90);
         
         //     body->body->SetTransform(body->body->GetWorldCenter(), DEG_TO_RAD * 90);    }
@@ -152,7 +152,7 @@ void TetrisStone::rotateLeft() {
     //body->addImpulseForce(body->getB2DPosition()-ofVec2f(10,0), ofVec2f(0,0.2f));
     if(!collided){
         body->setRotation(body->getRotation() - 90);
-		params->soundPlayer.play("rotate", playerId);
+		//params.soundPlayer.play("rotate", playerId);
     }
 }
 

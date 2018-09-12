@@ -10,23 +10,23 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     setSingleThreaded();
     loadSettings();
     
+	components = make_shared<GameComponents>(GameComponents());
+
+	auto gameParams = components->params();
     //create osc
-    if (params.params["isOsc"]) {
+    if (gameParams->settings["isOsc"]) {
         addOSCServer(new OSCServer(12346));
         ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
     }
+
+	
     
 	ofSetWindowPosition(0, 0);
-	ofSetWindowShape(params.params["width"], params.params["height"]);
+	ofSetWindowShape(gameParams->settings["width"], gameParams->settings["height"]);
 
-    produceStoneIntervallInMillis = params.params["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
-    
-    //add creation rules
-    params.nextCreationRule.push_back("base");
-    params.nextCreationRule.push_back("base");
     
     //create Warper
-    gameFbo.allocate(params.params["width"], params.params["height"]);
+    gameFbo.allocate(gameParams->settings["width"], gameParams->settings["height"]);
     warperLeft.setSourceRect(ofRectangle(0, 0, gameFbo.getWidth()/2, gameFbo.getHeight()));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
     warperLeft.setTargetRect(ofRectangle(0, 0, gameFbo.getWidth() / 2, gameFbo.getHeight()));
     warperLeft.setup();
@@ -38,232 +38,48 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     warperRight.load("_Tetris/warper_right.json");
     
     //create objects
-    objects = shared_ptr<GameObjectContainer>(new GameObjectContainer(&params));
-    objects->initPhysics();
-    ofAddListener(params.gameEvent, this, &Tetris::onGameEvent);
+	components->gameControl()->initPhysics(gameParams->settings["physics"]["gravity"].get<float>());
+    ofAddListener(components->events()->gameEvent, this, &Tetris::onGameEvent);
     
     //create GameControl
-    gameObjects = shared_ptr<GameControl>(new GameControl(objects));
-    ofAddListener(params.controlEvent, this, &Tetris::onControlEvent);
+	gameControl = shared_ptr<GameControl>(new GameControl(components->gameControl(), components->events()));
+    ofAddListener(components->events()->controlEvent, this, &Tetris::onControlEvent);
     
     // add contact listener
-    objects->physics.enableEvents();
-    ofAddListener(objects->physics.contactStartEvents, this, &Tetris::contactStart);
+	components->gameControl()->physics.enableEvents();
     
     //add Background
-    objects->addGameObject(GameFactory::makeBackgroundObject(objects, &params));
+	components->gameControl()->addGameObject(GameFactory::makeBackgroundObject(components));
     
     
     //add paddles
-    shared_ptr<Paddle> p1 =  GameFactory::makePaddle(objects,Paddle::paddleNameLeft,&params);
-    objects->addPaddle(p1);
+	shared_ptr<Paddle> p1 =  GameFactory::makePaddle(components,Paddle::paddleNameLeft);
+	components->gameControl()->addPaddle(p1);
     
-    shared_ptr<Paddle> p2 =  GameFactory::makePaddle(objects,Paddle::paddleNameRight,&params);
-    objects->addPaddle(p2);
+	shared_ptr<Paddle> p2 =  GameFactory::makePaddle(components,Paddle::paddleNameRight);
+	components->gameControl()->addPaddle(p2);
     
-    playerControl.setup(objects->paddles, &params);
+	playerControl.setup(components);
     
     //add rules
-    objects->addRule(GameFactory::makeDeleteOutOfScreenRule(&params));
-    objects->addRule(GameFactory::makeGameControlRule(&params,objects.get()));
-    objects->addRule(GameFactory::makeGameEventRule(&params));
-	objects->addRule(GameFactory::makeStoneControlRule(&params));
-    
+	components->gameControl()->addRule(GameFactory::makeDeleteOutOfScreenRule(components));
+	components->gameControl()->addRule(GameFactory::makeGameControlRule(components));
+	components->gameControl()->addRule(GameFactory::makeGameEventRule(components));
+	components->gameControl()->addRule(GameFactory::makeStoneControlRule(components));
+	components->gameControl()->addRule(GameFactory::makeStoneCreationRule(components));
+
     ofRegisterKeyEvents(this);
 }
 
-void Tetris::contactStart(ofxBox2dContactArgs &e) {
-    if(e.a != NULL && e.b != NULL) {
-        TetrisStone * stone;
-        
-        if((TetrisStone*)e.a->GetBody()->GetUserData()){
-            stone = (TetrisStone*)e.a->GetBody()->GetUserData();
-            collisionHandler(stone);
-        }
-        
-        if((TetrisStone*)e.b->GetBody()->GetUserData()){
-            stone = (TetrisStone*)e.b->GetBody()->GetUserData();
-            collisionHandler(stone);
-        }
-    }
-}
 
-void Tetris::collisionHandler(TetrisStone* stone) {
-    int minimumYPosToCreateStoneOnCollide = 1000;
-    //check colliding objects produce new stone immediately on first collision of last created stone
-    if(stone->getBody().size()>0) {
-        
-        if(!stone->collided){
-            if(stone->getBody()[0]->getPosition().y > minimumYPosToCreateStoneOnCollide){
-                if(stone->getPlayerId()==1){
-                    lastStoneProductionTimePlayer1 =0;
-                } else if(stone->getPlayerId()==2){
-                    lastStoneProductionTimePlayer2 =0;
-                }
-            }
-            stone->collide();
-        }
-    }
-}
+
 
 //------------------------------------------------------------------
 void Tetris::stopModule() {
     
 }
 
-//------------------------------------------------------------------
-void Tetris::produceStoneByIntervall() {
-    if(lastStoneProductionTimePlayer1 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()){
-        produceStone(1);
-    }
-    if(lastStoneProductionTimePlayer2 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()){
-        produceStone(2);
-    }
-}
 
-void Tetris::produceStone(int player) {
-    
-        if(getLastCreatedStone(player) == nullptr || getLastCreatedStone(player)->getBody()[0]->getPosition().y >500){
-                //create stone
-                auto stone = GameFactory::makeTetrisStone(objects,&params, params.nextCreationRule[player-1]);
-                stone->setPlayer(player);
-            
-				params.soundPlayer.play("newBlock", player);
-
-                //notify effect if present
-                if (params.nextCreationRule[player - 1] != "base") {
-                    ofJson out;
-                    out["function"] = "effect";
-                    out["effect"] = params.nextCreationRule[player - 1];
-                    out["player"] = player;
-                    params.notifyGameEvent(out);
-                }
-            
-                if (params.nextCreationRule[player - 1] == "quicky") {
-                    // collided stones get gravity effects
-                    stone->collide();
-                    stone->getBody()[0]->addForce(ofVec2f(0, 1), 10000);
-                }
-                if (params.nextCreationRule[player - 1] == "rotary") {
-                    // collided stones get gravity effects
-                    stone->collide();
-                    stone->getBody()[0]->addImpulseForce(stone->getBody()[0]->getB2DPosition()+ofVec2f(10,0), ofVec2f(0,5000));
-                }
-            
-                // set stone effect for active player back to base
-                params.nextCreationRule[player-1] = "base";
-            
-                int minimumDistanceToBorder= 200;
-                int middle = params.params["width"].get<int>()/2;
-                if(player == 1) {
-                    lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis();
-                    stone->setPosition(ofVec2f(ofRandom(minimumDistanceToBorder, middle -minimumDistanceToBorder),0));
-                }
-                if(player == 2){
-                    lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis();
-                    stone->setPosition(ofVec2f(ofRandom(middle + minimumDistanceToBorder, 2*middle -minimumDistanceToBorder),0));
-                }
-                objects->addGameObject(stone);
-                objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
-				objects->getRule("StoneControlRule")->addObject(stone);
-                gameObjects->registerEraseEvent(stone->eraseEvent);
-        } else{
-            if(player == 1) {
-                lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis() +produceStoneIntervallInMillis/2 ;
-            }
-            if(player == 2){
-                lastStoneProductionTimePlayer2 = ofGetElapsedTimeMillis()
-                    +produceStoneIntervallInMillis/2 ;
-            }
-        }
-}
-
-float Tetris::getMinimalDistanceToOtherTowerStonesOrPaddle(shared_ptr<TetrisStone> stone, shared_ptr<Paddle> paddle) {
-    
-    float minimumDistance = 100000;
-    float distance = 0;
-    // check all stones and set sistance if its
-    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        if(objects->gameObjects[i]->getName() == "TetrisStone" && objects->gameObjects[i]->getId() != stone->getId()){
-            shared_ptr<TetrisStone> otherStone = std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
-            if(otherStone->getBody().size()>0 && otherStone->getIsPartOfTower()){
-                distance = (stone->getBody()[0]->getPosition()-otherStone->getBody()[0]->getPosition()).length();
-                if(distance < minimumDistance){
-                    minimumDistance = distance;
-                }
-            }
-        }
-    }
-    distance = (paddle->getPaddleBodyPosition() - stone->getBody()[0]->getPosition()).length();
-    if(distance < minimumDistance){
-        minimumDistance = distance;
-    }
-    return minimumDistance;
-}
-
-/**
- * setTetrisStoneRelativeToPaddlePosition
- * set Stone Position and get towerheight
- */
-void Tetris::setTetrisStoneRelativeToPaddlePosition() {
-    
-    int towerHeightPaddleLeft = 0;
-    int towerHeightPaddleRight = 0;
-    
-    // get Paddles
-    shared_ptr<Paddle> paddleLeft = objects->getPaddle(Paddle::paddleNameLeft);
-    shared_ptr<Paddle> paddleRight = objects->getPaddle(Paddle::paddleNameRight);
-    
-    // iterate over tetrisstones
-    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        if(objects->gameObjects[i]->getName() == "TetrisStone"){
-            if(objects->gameObjects[i]){
-                shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
-                
-                int pId = stone->getPlayerId();
-                int y = 10000;
-                
-                
-                if(stone->getBody().size()>0 && stone->collided){
-                    // get Height if its part of the tower
-                    if(stone->getIsPartOfTower()){
-                        y = stone->getBody()[0]->getPosition().y;
-                    }
-                    
-                    if(pId == 1) {
-                        ofVec2f plp =paddleLeft->getPaddleBodyPosition();
-                        float distanceToPaddleOrOtherTetrisStone = getMinimalDistanceToOtherTowerStonesOrPaddle(stone,paddleLeft);
-                        stone->updateRelativeToPaddlePosition(plp,distanceToPaddleOrOtherTetrisStone);
-                        towerHeightPaddleLeft = max(towerHeightPaddleLeft,max(0, (int)plp.y-y));
-                        paddleLeft->towerHeight = towerHeightPaddleLeft;
-                        
-                    }else if(pId == 2) {
-                        ofVec2f prp =paddleRight->getPaddleBodyPosition();
-                        float distanceToPaddleOrOtherTetrisStone = getMinimalDistanceToOtherTowerStonesOrPaddle(stone,paddleRight);
-                        stone->updateRelativeToPaddlePosition(prp,distanceToPaddleOrOtherTetrisStone);
-                        towerHeightPaddleRight  = max(towerHeightPaddleRight,max(0, (int)prp.y-y));
-                        paddleRight->towerHeight = towerHeightPaddleRight;
-                    }
-                }
-            }
-        };
-    }
-}
-
-
-shared_ptr<TetrisStone> Tetris::getLastCreatedStone(int playerId) {
-    for (size_t i = objects->gameObjects.size()-1; i > 0; --i) {
-        shared_ptr<TetrisStone> stone= std::static_pointer_cast<TetrisStone>(objects->gameObjects[i]);
-        
-        if(stone->getName() == "TetrisStone"){
-            int pId = stone->getPlayerId();
-            if(pId == playerId) {
-                return stone;
-            }
-        };
-    }
-    return nullptr;
-}
 
 void Tetris::onOscMessage(ofxOscMessage & message)
 {
@@ -274,9 +90,9 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 
 void Tetris::onControlEvent(ofJson & event)
 {
-    if (params.gamestate == "game") {
+    if (components->events()->gamestate == "game") {
         if (event["control"] != nullptr && event["control"] == "pedal") {
-            shared_ptr<TetrisStone> stone = getLastCreatedStone(event["player"]);
+           /* shared_ptr<TetrisStone> stone = getLastCreatedStone(event["player"]);
             if (event["direction"] == "left") {
                 if(getLastCreatedStone(event["player"]) != nullptr){
                     stone->rotateLeft();
@@ -285,9 +101,9 @@ void Tetris::onControlEvent(ofJson & event)
                 if(stone!= nullptr){
                     stone->rotateRight();
                 }
-            }
+            }*/
         } else if (event["control"] != nullptr && event["control"] == "buzzer") {
-            params.setRandomNextEffect();
+            components->events()->setRandomNextEffect();
         }
     }
 }
@@ -296,18 +112,18 @@ void Tetris::onGameEvent(ofJson & event)
 {
     if (event["function"] != nullptr && event["function"] == "createWorldEffect") {
 
-		auto rule = GameFactory::makeWorldEffect(&params, event["params"]);
+		auto rule = GameFactory::makeWorldEffect(components, event["params"]);
 
-		for (auto obj : objects->gameObjects) {
+		/*for (auto obj : components->objects()->objects) {
 			if (obj->getName() == "TetrisStone") rule->addObject(obj);
-		}
-        objects->addRule(rule);
+		}*/
+        components->gameControl()->addRule(rule);
         
         ofJson out;
         out["function"] = "effect";
         out["effect"] = event["params"]["state"];
         out["player"] = 0;
-        params.notifyGameEvent(out);
+        components->events()->notifyGameEvent(out);
     }
 }
 
@@ -315,9 +131,8 @@ void Tetris::onGameEvent(ofJson & event)
 //------------------------------------------------------------------
 void Tetris::update() {
     playerControl.update();
-    gameObjects->update();
-	if(params.gamestate == "game") produceStoneByIntervall();
-    setTetrisStoneRelativeToPaddlePosition();
+    gameControl->update();
+	//if(components->events()->gamestate == "game") produceStoneByIntervall();
 }
 
 
@@ -328,14 +143,14 @@ void Tetris::draw() {
     //draw game
     gameFbo.begin();
     ofClear(0, 0);
-    gameObjects->render();
+    gameControl->render();
     gameFbo.end();
     
     //do warping
     drawWarpedFbo(warperLeft,false);
     drawWarpedFbo(warperRight, true);
     
-    //ofDrawBitmapString("Anzahl der Objekte: " + ofToString(objects->physics.getBodyCount()), 50, 50);
+    ofDrawBitmapString("Anzahl der Objekte: " + ofToString(components->gameControl()->physics.getBodyCount()), 50, 50);
     
 }
 
@@ -347,22 +162,22 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
             { "function","gamestate" },
             { "gamestate" , "end1" }
         };
-        params.notifyGameEvent(state);
+		components->events()->notifyGameEvent(state);
     }
     
     if (key.key == 'a') {
         // left Player
-        auto stone = GameFactory::makeTetrisStone(objects, &params, params.nextCreationRule[0]);
+		auto stone = GameFactory::makeTetrisStone(components, components->events()->nextCreationRule[0]);
         stone->setPlayer(1);
-        objects->addGameObject(stone);
-        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+		components->gameControl()->addGameObject(stone);
+		//components->objects()->getRule("DeleteOutOfScreenRule")->addObject(stone);
         
         // right Player
-        auto stone2 = GameFactory::makeTetrisStone(objects, &params, params.nextCreationRule[1]);
+        auto stone2 = GameFactory::makeTetrisStone(components, components->events()->nextCreationRule[1]);
         stone2->setPosition(ofVec2f(600, 0));
         stone2->setPlayer(2);
-        objects->addGameObject(stone2);
-        objects->getRule("DeleteOutOfScreenRule")->addObject(stone2);
+		components->gameControl()->addGameObject(stone2);
+		//components->objects()->getRule("DeleteOutOfScreenRule")->addObject(stone2);
     }
     
     if (key.key == 't' ) {
@@ -381,16 +196,16 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
     }
     
     if (key.key == '#') {
-        gameObjects->reloadRenderer();
+        gameControl->reloadRenderer();
     }
     
     if (key.key == 'b') {
-        auto stone = GameFactory::makeTetrisStone(objects, &params, "base");
-        objects->addGameObject(stone);
-        objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
+        auto stone = GameFactory::makeTetrisStone(components, "base");
+        components->gameControl()->addGameObject(stone);
+      //  objects->getRule("DeleteOutOfScreenRule")->addObject(stone);
     }
     
-    if (key.key == '2') {
+   /* if (key.key == '2') {
         getLastCreatedStone(1)->makeBouncy();
     }
     
@@ -405,33 +220,33 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
         if(getLastCreatedStone(1) != nullptr){
             getLastCreatedStone(1)->rotateLeft();
         }
-    }
+    }*/
     
     if (key.key == 'i') {
         for (size_t i = 0; i < 2; ++i) {
-            objects->paddles[i]->setDampingDiff(0.1f);
+			components->gameControl()->paddles[i]->setDampingDiff(0.1f);
         }
     }
     if (key.key == 'k') {
         for (size_t i = 0; i < 2; ++i) {
-            objects->paddles[i]->setDampingDiff(-0.1f);
+			components->gameControl()->paddles[i]->setDampingDiff(-0.1f);
         }
     }
     if (key.key == 'o') {
         for (size_t i = 0; i < 2; ++i) {
-            objects->paddles[i]->setFrequencyDiff(0.1f);
+			components->gameControl()->paddles[i]->setFrequencyDiff(0.1f);
         }
     }
     if (key.key == 'l') {
         for (size_t i = 0; i < 2; ++i) {
-            objects->paddles[i]->setFrequencyDiff(-0.1f);
+			components->gameControl()->paddles[i]->setFrequencyDiff(-0.1f);
         }
     }
     if (key.key == 'm') {
-		params.setRandomNextEffect();
+		components->events()->setRandomNextEffect();
     }
     if (key.key == 'n') {
-        params.setNextEffect("wind");
+		components->events()->setNextEffect("wind");
     }
     
 }

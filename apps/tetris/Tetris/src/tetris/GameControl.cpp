@@ -1,9 +1,10 @@
 #include "GameControl.h"
 
 
-GameControl::GameControl(shared_ptr<GameObjectContainer> objects_)
+GameControl::GameControl(shared_ptr<GameObjectContainer> gameControl, shared_ptr<GameEvents> events)
 {
-	objects = objects_;
+	objectContainer = gameControl;
+	ofAddListener(events->objectEraseEvent, this, &GameControl::onEraseEvent);
 }
 
 GameControl::~GameControl()
@@ -13,16 +14,16 @@ GameControl::~GameControl()
 void GameControl::update()
 {	
 	//update paddles
-	for (auto& obj : objects->paddles) {
+	for (auto& obj : objectContainer->paddles) {
 		obj->updatePosition();
 	}
 
 	//apply current rules
-	for (auto& rule : objects->rules) {
+	for (auto& rule : objectContainer->rules) {
 		rule->applyRule();
 	}
 	//update physics
-	objects->physics.update();
+	objectContainer->physics.update();
 
 	//remove Elements erased elements
 	removeErasedElements();
@@ -33,28 +34,23 @@ void GameControl::update()
 
 void GameControl::render()
 {
-	for (auto& obj : objects->gameObjects) {
+	for (auto& obj : objectContainer->gameControl) {
 		obj->render();
 	}
 
-	for (auto& rule : objects->rules) {
+	for (auto& rule : objectContainer->rules) {
 		rule->draw();
 	}
 }
 
-void GameControl::onEraseEvent(long & id)
+void GameControl::onEraseEvent(uint64_t & id)
 {
 	toDeleteIds.push_back(id);
 }
 
-void GameControl::registerEraseEvent(ofEvent<long>& ev)
-{
-	ofAddListener(ev, this, &GameControl::onEraseEvent);
-}
-
 void GameControl::reloadRenderer()
 {
-	for (auto& obj : objects->gameObjects) {
+	for (auto& obj : objectContainer->gameControl) {
 		obj->reloadRenderer();
 	}
 }
@@ -63,16 +59,16 @@ void GameControl::removeErasedElements()
 {
 	for (auto& id : toDeleteIds) {
 		
-		auto position = find_if(objects->gameObjects.begin(), objects->gameObjects.end(),
+		auto position = find_if(objectContainer->gameControl.begin(), objectContainer->gameControl.end(),
 			[&id](const shared_ptr<GameObject> elem) { return elem->getId() == id; });
 		
-		if (position != objects->gameObjects.end()) {
-			for (auto& r : objects->rules) {
+		if (position != objectContainer->gameControl.end()) {
+			/*for (auto& r : objectContainer->rules) {
 				r->removeObject(id);
-			}
+			}*/
 			
 			//cout << "erase remove " << id << "  " << toDeleteIds.size() << endl;
-			objects->gameObjects.erase(position);
+			objectContainer->gameControl.erase(position);
 		}
 	}
 	toDeleteIds.clear();
@@ -84,7 +80,7 @@ void GameControl::removeDeprecatedRules()
 	vector<int> toDel;
 	auto now = ofGetElapsedTimeMillis();
 	size_t i = 0;
-	for (auto& rule : objects->rules) {
+	for (auto& rule : objectContainer->rules) {
 		if (rule->getRuntime() != 0 && now - rule->getCreationTime() > rule->getRuntime()) {
 			toDel.push_back(i);
 		}
@@ -93,6 +89,6 @@ void GameControl::removeDeprecatedRules()
 
 	for (std::vector<int>::size_type i = toDel.size() - 1;
 		i != (std::vector<int>::size_type) - 1; i--) {
-		objects->rules.erase(objects->rules.begin() + toDel[i]);
+		objectContainer->rules.erase(objectContainer->rules.begin() + toDel[i]);
 	}
 }

@@ -3,23 +3,11 @@
 #include "ofxBox2d.h"
 #include "GameParameters.h"
 
-//class PaddlePosition {
-//public:
-//	void update(ofVec2f pos, float rot) {
-//		position = pos;
-//		rotation = rot;
-//		hasChanged = true;
-//	}
-//	ofVec2f position;
-//	float rotation;
-//	bool hasChanged = false;
-//};
-
 class Paddle : public GameObject
 {
     
 public:
-	Paddle(string name, GameParameters* params_);
+	Paddle(string name, shared_ptr<GameParameters> settings);
 	~Paddle();
     void createBody(b2World* world);
     void render();
@@ -58,7 +46,7 @@ private:
     ofxBox2dJoint anchorJointBottomLeftStatic;
     ofxBox2dJoint anchorJointBottomRightStatic;
     
-    GameParameters* params;
+	shared_ptr<GameParameters> settings;
     
 	bool positionChanged = false;
     int paddleWidth = 300;

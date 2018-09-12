@@ -1,15 +1,15 @@
 #pragma once
-#include "Rule.h"
-#include "GameObjectContainer.h"
+#include "GameRule.h"
+#include "GameComponents.h"
 #include "InfoPanel.h"
 
 
 /// \brief controles game start and cleanup
 class GameControlRule :
-	public Rule
+	public GameRule
 {
 public:
-	GameControlRule(GameParameters* params, GameObjectContainer* gameObjects);
+	GameControlRule(shared_ptr<GameComponents> components);
 	~GameControlRule();
 
 	void applyRule();
@@ -36,7 +36,7 @@ private:
 	int lastCountdownSwitch=0;
 
 	vector<bool> paddleReady;
-	GameObjectContainer* gameObjects;
+	shared_ptr<GameObjectContainer> gameControl;
 
 };
 

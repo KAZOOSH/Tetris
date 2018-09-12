@@ -29,7 +29,7 @@ void BrotliBuildMetaBlock(MemoryManager* m,
                           const uint8_t* ringbuffer,
                           const size_t pos,
                           const size_t mask,
-                          const BrotliEncoderParams* params,
+                          const BrotliEncoderParams* settings,
                           uint8_t prev_byte,
                           uint8_t prev_byte2,
                           const Command* cmds,
@@ -46,7 +46,7 @@ void BrotliBuildMetaBlock(MemoryManager* m,
   size_t i;
 
   BrotliSplitBlock(m, cmds, num_commands,
-                   ringbuffer, pos, mask, params,
+                   ringbuffer, pos, mask, settings,
                    &mb->literal_split,
                    &mb->command_split,
                    &mb->distance_split);

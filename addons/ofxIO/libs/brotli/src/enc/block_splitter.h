@@ -39,7 +39,7 @@ BROTLI_INTERNAL void BrotliSplitBlock(MemoryManager* m,
                                       const uint8_t* data,
                                       const size_t offset,
                                       const size_t mask,
-                                      const BrotliEncoderParams* params,
+                                      const BrotliEncoderParams* settings,
                                       BlockSplit* literal_split,
                                       BlockSplit* insert_and_copy_split,
                                       BlockSplit* dist_split);
