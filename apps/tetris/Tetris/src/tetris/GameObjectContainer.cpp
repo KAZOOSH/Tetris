@@ -19,6 +19,11 @@ void GameObjectContainer::initPhysics(float gravity)
     physics.setFPS(60.0);
 }
 
+void GameObjectContainer::setPhysics(float gravity)
+{
+ physics.setGravity(0, gravity);
+}
+
 void GameObjectContainer::addGameObject(shared_ptr<GameObject> object)
 {
     gameControl.push_back(object);

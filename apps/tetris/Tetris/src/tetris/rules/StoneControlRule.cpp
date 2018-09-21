@@ -23,6 +23,7 @@ void StoneControlRule::enableGravity()
 					int velocity = components->params()->settings["tetrisStone"]["startVelocity"].get<int>();
 					body->setVelocity(0, velocity);
 					body->enableGravity(false);
+                    
 				};
 			} else {
 				for (auto& body : stone->getBody()) {
