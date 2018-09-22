@@ -139,13 +139,12 @@ void GameControlRule::draw()
 
 		
 	}else if (gamestate == "end2") {
+		drawFadeOut();	
+	} else if (gamestate == "end1") {
 		ofPushMatrix();
 		ofTranslate(components->params()->settings["width"].get<int>() * 0.5, 0);
 		drawFadeOut();
 		ofPopMatrix();
-		
-	} else if (gamestate == "end1") {
-		drawFadeOut();
 	}
 
 	

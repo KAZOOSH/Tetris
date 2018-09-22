@@ -21,6 +21,14 @@ void StoneControlRule::enableGravity()
 			if (!stone->collided) {
 				for (auto& body : stone->getBody()) {
 					int velocity = components->params()->settings["tetrisStone"]["startVelocity"].get<int>();
+
+					int tLeft = components->events()->tGamestateChange + components->params()->settings["gameplay"]["maxDuration"].get<int>() - ofGetElapsedTimeMillis();
+
+					if (tLeft < components->params()->settings["gameplay"]["startHeightReduction"].get<int>()) {
+						velocity = ofMap(tLeft, components->params()->settings["gameplay"]["startHeightReduction"].get<int>(), 0,
+							components->params()->settings["tetrisStone"]["startVelocity"].get<int>(), components->params()->settings["tetrisStone"]["endVelocity"].get<int>());
+					}
+
 					body->setVelocity(0, velocity);
 					body->enableGravity(false);
 				};

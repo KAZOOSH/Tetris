@@ -34,7 +34,6 @@ public:
     static shared_ptr<TetrisStone> makeTetrisStone(shared_ptr<GameComponents> components, string activeEffect);
     static shared_ptr<GameObject> makeBackgroundObject(shared_ptr<GameComponents> components);
     
-    
     //rules
     static shared_ptr<DeleteOutOfScreenRule> makeDeleteOutOfScreenRule(shared_ptr<GameComponents> components);
     static shared_ptr<GameControlRule> makeGameControlRule(shared_ptr<GameComponents> components);

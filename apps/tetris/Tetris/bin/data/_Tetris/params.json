@@ -1,11 +1,11 @@
 {
   "width": 2160,
   "height": 1920,
-  "gameplay":{
-  	"winningHeightMin":0.10,
-  	"winningHeightMax":0.25,
-  	"maxDuration":80000,
-  	"startHeightReduction":20000
+  "gameplay": {
+    "winningHeightMin": 0.10,
+    "winningHeightMax": 0.25,
+    "maxDuration": 80000,
+    "startHeightReduction": 20000
   },
   "paddleArea": [
     1150,
@@ -21,8 +21,8 @@
     "main": "fonts/tetris2.ttf",
     "sub": "fonts/Arial Unicode.ttf"
   },
-  "physics":{
-  	"gravity":50.0
+  "physics": {
+    "gravity": 50.0
   },
   "textFields": {
     "main": {
@@ -37,8 +37,10 @@
   "tetrisStone": {
     "density": 1.0,
     "produceEveryMilliseconds": 8000,
-    "scale":20,
-    "startVelocity": 10
+    "produceEveryMillisecondsMin": 3000,
+    "scale": 20,
+    "startVelocity": 10,
+    "endVelocity": 25
   },
   "paddle": {
     "width": 450,
@@ -55,5 +57,28 @@
       "x": 1500,
       "y": 1500
     }
+  },
+  "stoneCreator": {
+    "speed": 10,
+    "textures": [
+      {
+        "pic": "pics/laika.png",
+        "width": 300,
+        "dx": -0.5
+      },
+      {
+        "pic": "pics/sigi.png",
+        "width": 300,
+        "dx": -0.1
+      }
+    ]
+  },
+  "background":{
+    "fadeStripes": 2000,
+    "break":500,
+    "fadePilot" : 1500,
+    "nStripes":20, 
+    "maxHeight":0.7,
+    "sizeAvatar":700
   }
 }

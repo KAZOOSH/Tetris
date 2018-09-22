@@ -19,11 +19,13 @@ public:
 	void notifyControlEvent(ofJson eventText);
 	void notifyEraseEvent(uint64_t& eraseId);
 
+	
 	void setRandomNextEffect();
 	void setNextEffect(string name);
 
 	vector<string> nextCreationRule;
 	string gamestate = "idle";
+	uint64_t tGamestateChange = 0;
 
 	float winningHeight = 0.9;
 	
@@ -32,6 +34,7 @@ public:
 private:
 	shared_ptr<GameParameters> settings;
 	vector<string> nextEffectList;
-};
+	
+ };
 
 #endif // GAMEEVENTS_H

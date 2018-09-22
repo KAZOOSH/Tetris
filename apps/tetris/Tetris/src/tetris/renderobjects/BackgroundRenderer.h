@@ -3,6 +3,7 @@
 #include "GameObjectContainer.h"
 #include "GameParameters.h"
 #include "GameComponents.h"
+#include "ofxEasing.h"
 
 class BackgroundRenderer: public RenderObject
 {
@@ -15,6 +16,13 @@ public:
 
 	void onGamestate(ofJson& state);
 
+protected:
+	void drawGameBackground();
+	void drawWinBackground();
+
+	void drawArc(float x, float y, float width, float height, float start, float stop);
+
+	void loadKosmonaut(ofJson desc);
 private:
 	shared_ptr<GameComponents> components;
 	shared_ptr<GameParameters> settings;
@@ -25,5 +33,10 @@ private:
 	ofFbo paddleTex;
 
 	bool isCountDown = false;
+	uint64_t endStart = 0;
+
+	int dxBackground = 0;
+
+	vector<ofTexture> avatars;
 };
 

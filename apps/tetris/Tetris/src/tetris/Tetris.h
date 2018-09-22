@@ -44,7 +44,7 @@ public:
         
 	private:
 		shared_ptr<GameComponents> components;
-
+		ofxOscReceiver receiver;
 
         
     shared_ptr<GameControl> gameControl;

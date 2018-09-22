@@ -15,8 +15,9 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	auto gameParams = components->params();
     //create osc
     if (gameParams->settings["isOsc"]) {
-        addOSCServer(new OSCServer(12346));
-        ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
+		receiver.setup(12346);
+       // addOSCServer(new OSCServer(12346));
+       // ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
     }
 
 	
@@ -50,7 +51,6 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
     
     //add Background
 	components->gameControl()->addGameObject(GameFactory::makeBackgroundObject(components));
-    
     
     //add paddles
 	shared_ptr<Paddle> p1 =  GameFactory::makePaddle(components,Paddle::paddleNameLeft);
@@ -130,6 +130,15 @@ void Tetris::onGameEvent(ofJson & event)
 
 //------------------------------------------------------------------
 void Tetris::update() {
+
+	while (receiver.hasWaitingMessages()) {
+
+		// get the next message
+		ofxOscMessage m;
+		receiver.getNextMessage(m);
+		onOscMessage(m);
+	}
+
     playerControl.update();
     gameControl->update();
 	//if(components->events()->gamestate == "game") produceStoneByIntervall();
@@ -150,7 +159,7 @@ void Tetris::draw() {
     drawWarpedFbo(warperLeft,false);
     drawWarpedFbo(warperRight, true);
     
-    ofDrawBitmapString("Anzahl der Objekte: " + ofToString(components->gameControl()->physics.getBodyCount()), 50, 50);
+    //ofDrawBitmapString("Anzahl der Objekte: " + ofToString(components->gameControl()->physics.getBodyCount()), 50, 50);
     
 }
 
@@ -253,7 +262,7 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
-    //cout << e.message.dump(4) << endl;
+    cout << e.message.dump(4) << endl;
     //set paddle position
     if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle2Position")){
         playerControl.onPaddleMove(e.message);

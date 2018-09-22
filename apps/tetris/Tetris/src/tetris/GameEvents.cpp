@@ -17,6 +17,7 @@ void GameEvents::notifyGameEvent(ofJson eventText)
 
 	if (eventText["function"] != nullptr && eventText["function"] == "gamestate") {
 		gamestate = eventText["gamestate"].get<string>();
+		tGamestateChange = ofGetElapsedTimeMillis();
 	}
 }
 
