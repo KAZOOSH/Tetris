@@ -1,7 +1,5 @@
 #include "WindRule.h"
 
-
-
 WindRule::WindRule(shared_ptr<GameComponents> components,int runtime):GameRule("WindRule", components,runtime)
 {
 

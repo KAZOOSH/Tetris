@@ -65,6 +65,9 @@ void GameControlRule::applyRule()
 		}
 	} else if (gamestate == "countdown3" && isTSwitch) {
 		components->events()->winningHeight = components->params()->settings["gameplay"]["winningHeightMax"].get<float>();
+        
+        components->events()->stoneCreationIntervall = components->params()->settings["tetrisStone"]["stoneCreationIntervalMax"].get<float>();
+        components->events()->velocityBeforeCollision = components->params()->settings["tetrisStone"]["velocityBeforeCollisionMin"].get<float>();
 		changeGamestate("countdown2");
 	} else if (gamestate == "countdown2" && isTSwitch) {
 		changeGamestate("countdown1");
@@ -79,9 +82,24 @@ void GameControlRule::applyRule()
 		else if (gameControl->paddles[1]->towerHeight > winningHeight) {
 			changeGamestate("end2");
 		}
+        
 
 		//reduce winning height
 		if (now - startState > components->params()->settings["gameplay"]["startHeightReduction"].get<int>()){
+ 
+            components->events()->velocityBeforeCollision =
+            ofMap(now - startState, components->params()->settings["gameplay"]["startHeightReduction"].get<int>(),
+                  components->params()->settings["gameplay"]["maxDuration"].get<int>(),
+                  components->params()->settings["tetrisStone"]["velocityBeforeCollisionMin"].get<float>(),
+                  components->params()->settings["tetrisStone"]["velocityBeforeCollisionMax"].get<float>(),true);
+            
+            components->events()->stoneCreationIntervall =
+            ofMap(now - startState, components->params()->settings["gameplay"]["startHeightReduction"].get<int>(),
+                  components->params()->settings["gameplay"]["maxDuration"].get<int>(),
+                  components->params()->settings["tetrisStone"]["stoneCreationIntervalMax"].get<float>(),
+                  components->params()->settings["tetrisStone"]["stoneCreationIntervalMin"].get<float>(),true);
+            
+            
 			components->events()->winningHeight = 
 				ofMap(now - startState, components->params()->settings["gameplay"]["startHeightReduction"].get<int>(),
 				components->params()->settings["gameplay"]["maxDuration"].get<int>(),

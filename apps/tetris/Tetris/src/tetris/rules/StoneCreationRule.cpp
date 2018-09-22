@@ -4,7 +4,7 @@
 
 StoneCreationRule::StoneCreationRule(shared_ptr<GameComponents> components) :GameRule("StoneControlRule", components)
 {
-	produceStoneIntervallInMillis = components->params()->settings["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
+	produceStoneIntervallInMillis = components->params()->settings["tetrisStone"]["stoneCreationIntervalMax"].get<uint64_t>();
 	ofAddListener(components->gameControl()->physics.contactStartEvents, this, &StoneCreationRule::contactStart);
 }
 
@@ -14,7 +14,10 @@ StoneCreationRule::~StoneCreationRule()
 }
 
 void StoneCreationRule::applyRule() {
-	if (components->events()->gamestate == "game") produceStoneByIntervall();
+    if (components->events()->gamestate == "game"){
+        produceStoneByIntervall();
+        produceStoneIntervallInMillis = components->events()->stoneCreationIntervall;
+    }
 }
 
 void StoneCreationRule::produceStoneByIntervall() {
@@ -28,7 +31,7 @@ void StoneCreationRule::produceStoneByIntervall() {
 
 void StoneCreationRule::produceStone(int player) {
 
-	if (getLastCreatedStone(player) == nullptr || getLastCreatedStone(player)->getBody()[0]->getPosition().y >500) {
+	if (getLastCreatedStone(player) == nullptr || getLastCreatedStone(player)->getBody()[0]->getPosition().y >300) {
 		//create stone
 		auto stone = GameFactory::makeTetrisStone(components, components->events()->nextCreationRule[player - 1]);
 		stone->setPlayer(player);
