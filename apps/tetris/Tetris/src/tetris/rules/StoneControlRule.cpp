@@ -20,7 +20,7 @@ void StoneControlRule::enableGravity()
 			shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(obj);
 			if (!stone->collided) {
 				for (auto& body : stone->getBody()) {
-					int velocity = components->params()->settings["tetrisStone"]["startVelocity"].get<int>();
+                    int velocity = components->events()->velocityBeforeCollision;
 					body->setVelocity(0, velocity);
 					body->enableGravity(false);
                     

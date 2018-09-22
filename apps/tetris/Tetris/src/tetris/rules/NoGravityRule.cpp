@@ -1,9 +1,6 @@
 #include "NoGravityRule.h"
 
-
-
-NoGravityRule::NoGravityRule(GameParameters* params,int runtime):Rule("NoGravityRule", params,runtime)
-{
+NoGravityRule::NoGravityRule(shared_ptr<GameComponents> components,int runtime):GameRule("WindRule", components,runtime){
     
 }
 

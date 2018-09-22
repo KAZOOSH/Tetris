@@ -1,11 +1,11 @@
 #pragma once
-#include "Rule.h"
+#include "GameRule.h"
 #include "TetrisStone.h"
 class NoGravityRule :
-    public Rule
+    public GameRule
 {
 public:
-    NoGravityRule(GameParameters* params,int runtime);
+    NoGravityRule(shared_ptr<GameComponents> components,int runtime);
     bool gravityDisabled = false;
     void applyRule();
 };

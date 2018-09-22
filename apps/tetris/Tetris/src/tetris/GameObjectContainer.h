@@ -18,7 +18,7 @@ public:
 	void addGameObject(shared_ptr<GameObject> object);
 	void addPaddle(shared_ptr<Paddle> object);
 	void addRule(shared_ptr<Rule> rule);
-
+    void setPhysics(float gravity);
 	shared_ptr<Rule> getRule(string name);
     shared_ptr<Paddle> getPaddle(string name);
 	vector<shared_ptr<Paddle>> paddles;

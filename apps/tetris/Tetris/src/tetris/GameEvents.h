@@ -26,7 +26,8 @@ public:
 	string gamestate = "idle";
 
 	float winningHeight = 0.9;
-	
+    float velocityBeforeCollision = 10;
+	float stoneCreationIntervall = 3000;
 	void registerEraseEvent(ofEvent<uint64_t>& ev);
 
 private:
