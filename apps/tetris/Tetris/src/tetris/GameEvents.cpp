@@ -48,12 +48,18 @@ void GameEvents::setRandomNextEffect(){
 	} else {
 		nextCreationRule[0] = nextEffectList.back();
 		nextCreationRule[1] = nextEffectList.back();
+
+		//cout << nextCreationRule[0] << endl;
 	}
+	cout << nextEffectList.back() << endl;
+
 	nextEffectList.pop_back();
 }
 
 void GameEvents::setNextEffect(string name)
 {
+	
+
 	if (settings->getEffect(name)["type"] == "world") {
 		ofJson out;
 		out["function"] = "createWorldEffect";

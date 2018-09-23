@@ -39,7 +39,7 @@ public:
     static ofEvent<ofxOscMessage> packetIn;
     
     void setup(int port){
-		//ofxOscReceiver::setup(port);
+		ofxOscReceiver::setup(port);
         enable();
     }
     

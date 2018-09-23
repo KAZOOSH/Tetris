@@ -33,7 +33,12 @@ shared_ptr<TetrisStone> GameFactory::makeTetrisStone(shared_ptr<GameComponents> 
     } else if (activeEffect == "big") {
         settings->getRandomColorScheme(base, highlight);
         renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight,"BigStoneRenderer",25,40,5));
-    } else if (activeEffect == "small") {
+    } else if (activeEffect == "icy") {
+		ofJson c = settings->colorSchemes["icy"];
+		base = ofColor(c["base"][0], c["base"][1], c["base"][2], c["base"][3]);
+		highlight = ofColor(c["highlight"][0], c["highlight"][1], c["highlight"][2], c["highlight"][3]);
+		renderer = shared_ptr<TetrisStoneRenderer>(new IcyStoneRenderer(stone, base, highlight));
+	} else if (activeEffect == "small") {
         settings->getRandomColorScheme(base, highlight);
         renderer = shared_ptr<TetrisStoneRenderer>(new TetrisStoneRenderer(stone, base, highlight, "SmallStoneRenderer", 25,0,0));
     } else {

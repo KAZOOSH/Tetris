@@ -255,14 +255,14 @@ void Tetris::keyPressed(ofKeyEventArgs & key)
 		components->events()->setRandomNextEffect();
     }
     if (key.key == 'n') {
-		components->events()->setNextEffect("wind");
+		components->events()->setNextEffect("icy");
     }
     
 }
 
 void Tetris::proceedModuleEvent(ModuleEvent &e)
 {
-    cout << e.message.dump(4) << endl;
+   // cout << e.message.dump(4) << endl;
     //set paddle position
     if(e.message["function"] != nullptr && (e.message["function"] == "paddle1Position" || e.message["function"] == "paddle2Position")){
         playerControl.onPaddleMove(e.message);

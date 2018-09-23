@@ -28,16 +28,12 @@ protected:
 
 private:
 
-	void setNextStoneCreationPosition(int player);
-	ofVec2f getStoneCreationPosition(int player);
 
 	void updateStoneCreatorPosition(int player);
 
 	uint64_t produceStoneIntervallInMillis = 3000;
 	uint64_t lastStoneProductionTimePlayer1 = 0;
 	uint64_t lastStoneProductionTimePlayer2 = 0;
-
-	vector<ofVec2f> stoneCreationPositions;
 
 	int minimumDistanceToBorder = 200;
 	int middle;

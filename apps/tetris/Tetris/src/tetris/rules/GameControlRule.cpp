@@ -157,8 +157,13 @@ void GameControlRule::changeGamestate(string message)
 
 	panels[gamestate].start();
 
-	if (gamestate == "game") components->soundPlayer()->play("start", 1);
-	if (gamestate == "game") components->soundPlayer()->play("start", 2);
+	if (gamestate == "game") {
+		components->soundPlayer()->play("start", 1);
+		components->soundPlayer()->play("start", 2);
+	}else if (gamestate == "idle") {
+		gameControl->paddles[0]->towerHeight = 0;
+		gameControl->paddles[1]->towerHeight = 0;
+	}
 
 	ofJson state = ofJson{
 		{"function","gamestate"},

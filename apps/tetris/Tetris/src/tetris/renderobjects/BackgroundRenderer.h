@@ -35,6 +35,7 @@ private:
 	bool isCountDown = false;
 	uint64_t endStart = 0;
 
+	string lastState = "endEven";
 	int dxBackground = 0;
 
 	vector<ofTexture> avatars;

@@ -11,6 +11,7 @@
 #include "BackgroundRenderer.h"
 #include "HeavyStoneRenderer.h"
 #include "BouncyStoneRenderer.h"
+#include "IcyStoneRenderer.h"
 
 //game objects
 #include "Paddle.h"

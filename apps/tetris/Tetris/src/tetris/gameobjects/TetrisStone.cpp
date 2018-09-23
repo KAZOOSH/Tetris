@@ -12,17 +12,24 @@ TetrisStone::TetrisStone(string name, shared_ptr<GameParameters> params_, string
 	scale = params->settings["tetrisStone"]["scale"].get<int>();
     float density = params->settings["tetrisStone"]["density"].get<float>();
     
+	if (activeEffect == "big") {
+		scale = scale * 1.5;
+	}else if (activeEffect == "small") {
+		scale = scale * 0.75;
+	}
+
     auto vertsAndType = getRandomVertecies();
     vertecies = vertsAndType.second;
     stoneType = vertsAndType.first;
     
     body->addVertices(vertecies);
-    
-    
+
+	
+
     if (activeEffect == "heavy") {
         body->setPhysics(10.0, 0, 1.0);
     }  else if (activeEffect == "icy") {
-        body->setPhysics(1.0, 0, 0.1);
+        body->setPhysics(1.0, 0, 0.01);
     } else {
         body->setPhysics(1.0, 0.0, 1.0);
     }

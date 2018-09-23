@@ -15,7 +15,7 @@ void WindRule::applyRule()
 	for (auto& obj : gameControl) {
 			auto bodies = obj->getBody();
 			if (obj->getName() == "TetrisStone") {
-				float v = ofSignedNoise(now*0.4 +i*112) * 20;
+				float v = ofSignedNoise(now*0.4 +i*112) * 30;
 				shared_ptr<TetrisStone> stone = std::static_pointer_cast<TetrisStone>(obj);
 				if (!stone->collided) {
 					for (auto& body : bodies) {

@@ -29,7 +29,7 @@
 		"sub":"(Wind)",
 		"time": 2000,
 		"sound":"Wind.mp3",
-		"runtime":4000,
+		"runtime":7000,
 		"type":"world"
 	}
 ]

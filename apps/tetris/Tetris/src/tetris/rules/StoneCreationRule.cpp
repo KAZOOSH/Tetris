@@ -10,8 +10,6 @@ StoneCreationRule::StoneCreationRule(shared_ptr<GameComponents> components) :Gam
 	middle = components->params()->settings["width"].get<int>() / 2;
 
 	//init stone creator
-	stoneCreationPositions.push_back(ofVec2f());
-	stoneCreationPositions.push_back(ofVec2f());
 
 	loadKosmonaut(1,components->params()->settings["stoneCreator"]["textures"][0]);
 	loadKosmonaut(2,components->params()->settings["stoneCreator"]["textures"][1]);
@@ -27,6 +25,7 @@ StoneCreationRule::~StoneCreationRule()
 void StoneCreationRule::applyRule() {
 
 	if (components->events()->gamestate == "game") {
+
 		int tLeft = components->events()->tGamestateChange + components->params()->settings["gameplay"]["maxDuration"].get<int>() - ofGetElapsedTimeMillis();
 
 		if (tLeft < components->params()->settings["gameplay"]["startHeightReduction"].get<int>()) {
@@ -38,6 +37,8 @@ void StoneCreationRule::applyRule() {
 		updateStoneCreatorPosition(1);
 		updateStoneCreatorPosition(2);
 		produceStoneByIntervall();
+	} else if (components->events()->gamestate == "afterEnd") {
+		produceStoneIntervallInMillis = components->params()->settings["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
 	}
 }
 
@@ -61,12 +62,10 @@ void StoneCreationRule::draw()
 }
 
 void StoneCreationRule::produceStoneByIntervall() {
-	if (lastStoneProductionTimePlayer1 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis() && kosmonauts[0].position.x > getStoneCreationPosition(1).x - abs(kosmonauts[0].speed)&&
-		kosmonauts[0].position.x < getStoneCreationPosition(1).x + abs(kosmonauts[0].speed)) {
+	if (lastStoneProductionTimePlayer1 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()) {
 		produceStone(1);
 	}
-	if (lastStoneProductionTimePlayer2 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis() && kosmonauts[1].position.x > getStoneCreationPosition(2).x - abs(kosmonauts[1].speed) &&
-		kosmonauts[1].position.x < getStoneCreationPosition(2).x + abs(kosmonauts[1].speed)) {
+	if (lastStoneProductionTimePlayer2 + produceStoneIntervallInMillis < ofGetElapsedTimeMillis()) {
 		produceStone(2);
 	}
 }
@@ -103,11 +102,10 @@ void StoneCreationRule::produceStone(int player) {
 		// set stone effect for active player back to base
 		components->events()->nextCreationRule[player - 1] = "base";
 
-		stone->setPosition(getStoneCreationPosition(player));
+		stone->setPosition(ofVec2f(kosmonauts[player -1].position.x, kosmonauts[player - 1].dimension.y*0.75));
 
 		components->gameControl()->addGameObject(stone);
 		components->events()->registerEraseEvent(stone->eraseEvent);
-		setNextStoneCreationPosition(player);
 	} else {
 		if (player == 1) {
 			lastStoneProductionTimePlayer1 = ofGetElapsedTimeMillis() + produceStoneIntervallInMillis / 2;
@@ -168,20 +166,6 @@ void StoneCreationRule::contactStart(ofxBox2dContactArgs &e) {
 	}
 }
 
-void StoneCreationRule::setNextStoneCreationPosition(int player)
-{
-	if (player == 1)
-		stoneCreationPositions[0] = ofVec2f(ofRandom(minimumDistanceToBorder, middle - minimumDistanceToBorder), kosmonauts[player-1].dimension.y*0.75);
-	else
-		stoneCreationPositions[1] = ofVec2f(ofRandom(middle + minimumDistanceToBorder, 2*middle - minimumDistanceToBorder), kosmonauts[player - 1].dimension.y*0.75);
-}
-
-ofVec2f StoneCreationRule::getStoneCreationPosition(int player)
-{
-	if (player == 1) return stoneCreationPositions[0];
-	else return stoneCreationPositions[1];
-}
-
 ///\brief: move stone creators laika and sigi
 void StoneCreationRule::updateStoneCreatorPosition(int player){
 	kosmonauts[player - 1].position.x += kosmonauts[player - 1].speed;
@@ -210,7 +194,8 @@ void StoneCreationRule::loadKosmonaut(int player, ofJson desc)
 
 	kosmonauts.back().speed = components->params()->settings["stoneCreator"]["speed"];
 
-	setNextStoneCreationPosition(player);
-	kosmonauts.back().position = getStoneCreationPosition(player);
+	int dx = 0;
+	if (player == 2) dx = components->params()->settings["width"].get<int>()*0.5;
+	kosmonauts.back().position.x = dx + ofRandom(minimumDistanceToBorder, middle - minimumDistanceToBorder);
 	kosmonauts.back().position.y = 40;
 }

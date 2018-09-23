@@ -80,6 +80,7 @@ void PlayerControl::onPaddleMove(const ofJson & json)
 		float y_min = h - settings->settings["paddleArea"][1].get<float>()- settings->settings["paddleArea"][2].get<float>();
 		float y_max = h - settings->settings["paddleArea"][2].get<float>();
 
+
 		//map input to movement area
 		ofVec2f pos1 = ofVec2f(ofMap(json["paddle"][0]["x"].get<float>(), 0.0,1.0,x_min,x_max),
 			ofMap(json["paddle"][0]["y"].get<float>(), 0.0, 1.0, y_min, y_max));

@@ -110,6 +110,12 @@ void BackgroundRenderer::drawGameBackground()
 
 	shader.end();
 
+	if (isCountDown && ofGetElapsedTimeMillis() / 300 % 2) {
+		ofSetColor(255, 0, 0);
+		int x = 0;
+		gameControl->paddles[1]->towerHeight > gameControl->paddles[0]->towerHeight ? x = 0: x = settings->settings["width"].get<int>()/2;
+		ofDrawRectangle(x, 0, settings->settings["width"].get<int>() / 2, settings->settings["height"]);
+	}
 
 	ofSetColor(0);
 	int h = settings->settings["height"].get<int>();
@@ -186,6 +192,9 @@ void BackgroundRenderer::drawWinBackground()
 		int y = 300;
 		avatars[index].draw(x, y, sizeAvatar, h);
 	}
+
+	ofSetColor(0);
+	ofDrawRectangle(0, height - 100, width, 100);
 }
 
 void BackgroundRenderer::drawArc(float x, float y, float width, float height, float start, float stop)
@@ -220,11 +229,15 @@ void BackgroundRenderer::onGamestate(ofJson & state)
 	} else if (state["function"] != nullptr && state["function"] == "gamestate") {
 		isCountDown = false;
 
+		lastState = state["gamestate"].get<string>();
 		if (state["gamestate"] == "end1") {
 			dxBackground = 0;
+			
 			endStart = ofGetElapsedTimeMillis();
 		}else if (state["gamestate"] == "end2") {
 			dxBackground = components->params()->settings["width"].get<int>() * 0.5;
+			endStart = ofGetElapsedTimeMillis();
+		} else if (state["gamestate"] == "endEven") {
 			endStart = ofGetElapsedTimeMillis();
 		}
 	}

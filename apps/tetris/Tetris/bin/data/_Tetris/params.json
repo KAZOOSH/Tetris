@@ -4,7 +4,7 @@
   "gameplay": {
     "winningHeightMin": 0.10,
     "winningHeightMax": 0.25,
-    "maxDuration": 80000,
+    "maxDuration": 25000,
     "startHeightReduction": 20000
   },
   "paddleArea": [
@@ -36,8 +36,8 @@
   },
   "tetrisStone": {
     "density": 1.0,
-    "produceEveryMilliseconds": 8000,
-    "produceEveryMillisecondsMin": 3000,
+    "produceEveryMilliseconds": 5000,
+    "produceEveryMillisecondsMin": 2500,
     "scale": 20,
     "startVelocity": 10,
     "endVelocity": 25

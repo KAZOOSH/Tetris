@@ -210,3 +210,5 @@ apps/tetris/Tetris/bin/Tetris_debug
 apps/tetris/Tetris/Tetris\.qbs
 
 apps/tetris/Tetris/bin/libfmodex\.so
+apps/tetris/Tetris/bin/Tetris.iobj
+apps/tetris/Tetris/bin/Tetris.ipdb
