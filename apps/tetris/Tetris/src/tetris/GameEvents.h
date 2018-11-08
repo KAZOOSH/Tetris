@@ -31,6 +31,8 @@ public:
 	
 	void registerEraseEvent(ofEvent<uint64_t>& ev);
 
+	void onBuzzer(ofJson& msg);
+
 private:
 	shared_ptr<GameParameters> settings;
 	vector<string> nextEffectList;

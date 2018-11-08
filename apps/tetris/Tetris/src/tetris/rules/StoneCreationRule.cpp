@@ -6,6 +6,7 @@ StoneCreationRule::StoneCreationRule(shared_ptr<GameComponents> components) :Gam
 {
 	produceStoneIntervallInMillis = components->params()->settings["tetrisStone"]["produceEveryMilliseconds"].get<uint64_t>();
 	ofAddListener(components->gameControl()->physics.contactStartEvents, this, &StoneCreationRule::contactStart);
+	ofAddListener(components->events()->controlEvent, this, &StoneCreationRule::onControlEvent);
 
 	middle = components->params()->settings["width"].get<int>() / 2;
 
@@ -162,6 +163,24 @@ void StoneCreationRule::contactStart(ofxBox2dContactArgs &e) {
 		if ((TetrisStone*)e.b->GetBody()->GetUserData()) {
 			stone = (TetrisStone*)e.b->GetBody()->GetUserData();
 			collisionHandler(stone);
+		}
+	}
+}
+
+void StoneCreationRule::onControlEvent(ofJson & event)
+{
+	if (components->events()->gamestate == "game") {
+		if (event["control"] != nullptr && event["control"] == "pedal") {
+			shared_ptr<TetrisStone> stone = getLastCreatedStone(event["player"]);
+			if (event["direction"] == "left") {
+				if (getLastCreatedStone(event["player"]) != nullptr) {
+					stone->rotateLeft();
+				}
+			} else {
+				if (stone != nullptr) {
+					stone->rotateRight();
+				}
+			}
 		}
 	}
 }

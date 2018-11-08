@@ -15,9 +15,9 @@ Tetris::Tetris(string moduleName):ModuleDrawable("Tetris",moduleName,false){
 	auto gameParams = components->params();
     //create osc
     if (gameParams->settings["isOsc"]) {
-		receiver.setup(12346);
-       // addOSCServer(new OSCServer(12346));
-       // ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
+		//receiver.setup(12346);
+       addOSCServer(new OSCServer(12346));
+       ofAddListener(oscServer->oscEvent, this, &Tetris::onOscMessage);
     }
 
 	
@@ -85,27 +85,16 @@ void Tetris::onOscMessage(ofxOscMessage & message)
 {
     if (message.getAddress() == "paddlePosition") {
         playerControl.onPaddleMove(ofJson::parse(message.getArgAsString(0)));
-    }
+	} else if (message.getAddress() == "buzzer") {
+		ofJson out;
+		out["control"] = "buzzer";
+		components->events()->notifyControlEvent(out);
+	}
 }
 
 void Tetris::onControlEvent(ofJson & event)
 {
-    if (components->events()->gamestate == "game") {
-        if (event["control"] != nullptr && event["control"] == "pedal") {
-           /* shared_ptr<TetrisStone> stone = getLastCreatedStone(event["player"]);
-            if (event["direction"] == "left") {
-                if(getLastCreatedStone(event["player"]) != nullptr){
-                    stone->rotateLeft();
-                }
-            } else {
-                if(stone!= nullptr){
-                    stone->rotateRight();
-                }
-            }*/
-        } else if (event["control"] != nullptr && event["control"] == "buzzer") {
-            components->events()->setRandomNextEffect();
-        }
-    }
+
 }
 
 void Tetris::onGameEvent(ofJson & event)
@@ -131,13 +120,13 @@ void Tetris::onGameEvent(ofJson & event)
 //------------------------------------------------------------------
 void Tetris::update() {
 
-	while (receiver.hasWaitingMessages()) {
+	//while (receiver.hasWaitingMessages()) {
 
-		// get the next message
-		ofxOscMessage m;
-		receiver.getNextMessage(m);
-		onOscMessage(m);
-	}
+	//	// get the next message
+	//	ofxOscMessage m;
+	//	receiver.getNextMessage(m);
+	//	onOscMessage(m);
+	//}
 
     playerControl.update();
     gameControl->update();

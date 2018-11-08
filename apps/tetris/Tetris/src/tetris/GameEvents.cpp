@@ -9,6 +9,7 @@ GameEvents::GameEvents()
 void GameEvents::setup(shared_ptr<GameParameters> params_)
 {
 	settings = params_;
+	ofAddListener(controlEvent, this, &GameEvents::onBuzzer);
 }
 
 void GameEvents::notifyGameEvent(ofJson eventText)
@@ -75,4 +76,10 @@ void GameEvents::setNextEffect(string name)
 void GameEvents::registerEraseEvent(ofEvent<uint64_t>& ev)
 {
 	ofAddListener(ev, this, &GameEvents::notifyEraseEvent);
+}
+
+void GameEvents::onBuzzer(ofJson & msg)
+{
+	if(msg["control"] != nullptr && msg["control"] == "buzzer")
+		setRandomNextEffect();
 }

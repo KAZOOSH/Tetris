@@ -9,6 +9,8 @@ public:
 	~StoneControlRule();
 	void applyRule();
 
+	
+
 protected:
 	void enableGravity();
 	void setTetrisStoneRelativeToPaddlePosition();

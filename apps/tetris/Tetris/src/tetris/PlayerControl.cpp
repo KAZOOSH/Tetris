@@ -82,10 +82,10 @@ void PlayerControl::onPaddleMove(const ofJson & json)
 
 
 		//map input to movement area
-		ofVec2f pos1 = ofVec2f(ofMap(json["paddle"][0]["x"].get<float>(), 0.0,1.0,x_min,x_max),
-			ofMap(json["paddle"][0]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
+		ofVec2f pos1 = ofVec2f(ofMap(json["paddle"][0]["x"].get<float>(), 0.2,0.8,x_min,x_max,true),
+			ofMap(json["paddle"][0]["y"].get<float>(), 0.0, 1.0, y_min, y_max,true));
 		
-		ofVec2f pos2 = ofVec2f(ofMap(json["paddle"][1]["x"].get<float>(), 0.0, 1.0, x_min, x_max),
+		ofVec2f pos2 = ofVec2f(ofMap(json["paddle"][1]["x"].get<float>(), 0.2, 0.8, x_min, x_max,true),
 			ofMap(json["paddle"][1]["y"].get<float>(), 0.0, 1.0, y_min, y_max));
 
 		paddles[nPaddle]->setAnchorPosition(pos1, pos2);

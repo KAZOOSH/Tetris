@@ -26,6 +26,7 @@ protected:
 	void collisionHandler(TetrisStone* stone);
 	void contactStart(ofxBox2dContactArgs &e);
 
+	void onControlEvent(ofJson & event);
 private:
 
 
