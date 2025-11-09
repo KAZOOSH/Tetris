@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<parameters>
-	<deviceId>2</deviceId>
-	<width>640</width>
-	<height>480</height>
-	<isOsc>1</isOsc>
-	<nPaddle>1</nPaddle>
-	<hostIp>192.168.1.246</hostIp>
-</parameters>

@@ -1,0 +1,35 @@
+﻿[
+	{
+		"state":"heavy",
+		"main":"тяжелый камень",
+		"sub":"(schwerer Stein)",
+		"time": 2000,
+		"sound":"Schwerer Stein.mp3",
+		"type":"stone"
+	},
+	{
+		"state":"icy",
+		"main":"ледяной камень",
+		"sub":"Eisiger Stein",
+		"time":2000,
+		"sound":"Eisiger Stein.mp3",
+		"type":"stone"
+	},
+	{
+		"state":"big",
+		"main":"большой камень",
+		"sub":"(großer Stein)",
+		"time": 2000,
+		"sound":"Grosser Stein.mp3",
+		"type":"stone"
+	},
+	{
+		"state":"wind",
+		"main":"ветер",
+		"sub":"(Wind)",
+		"time": 2000,
+		"sound":"Wind.mp3",
+		"runtime":7000,
+		"type":"world"
+	}
+]

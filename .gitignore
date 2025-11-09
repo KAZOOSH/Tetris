@@ -212,3 +212,13 @@ apps/tetris/Tetris/Tetris\.qbs
 apps/tetris/Tetris/bin/libfmodex\.so
 apps/tetris/Tetris/bin/Tetris.iobj
 apps/tetris/Tetris/bin/Tetris.ipdb
+*.iobj
+*.so
+*.ipdb
+Tetris/bin/Tetris_debug
+Tetris/Tetris.code-workspace
+Tetris/Tetris.qbs
+Tetris_noCam/bin/Tetris_debug
+Tetris_noCam/bin/Tetris_noCam_debug
+Tetris_noCam/Tetris_noCam.code-workspace
+Tetris_noCam/Tetris_noCam.qbs

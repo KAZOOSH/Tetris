@@ -1,0 +1,9 @@
+[
+	{
+		"type":"MouseInput"
+	},
+	{
+		"type":"Tetris",
+		"inputs":["MouseInput"]
+	}
+]
